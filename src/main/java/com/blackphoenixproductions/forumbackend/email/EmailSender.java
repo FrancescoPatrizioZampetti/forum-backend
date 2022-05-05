@@ -3,7 +3,6 @@ package com.blackphoenixproductions.forumbackend.email;
 
 import com.blackphoenixproductions.forumbackend.entity.Post;
 import com.blackphoenixproductions.forumbackend.entity.User;
-import dto.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +46,7 @@ public class EmailSender {
     }
 
 
-    public void sendSigninEmail(UserDTO user) {
+    public void sendSigninEmail(User user) {
         StringBuilder message = new StringBuilder();
         message.append("<h1>Benvenuto nel nostro forum "+user.getUsername()+"!</h1><br>");
         message.append("<h2>Ti ringraziamo per esserti registrato, ora puoi partecipare attivamente alla nostra community!</h2><br>");

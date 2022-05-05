@@ -1,11 +1,11 @@
 package com.blackphoenixproductions.forumbackend.service.impl;
 
+import com.blackphoenixproductions.forumbackend.dto.Filter;
+import com.blackphoenixproductions.forumbackend.dto.openApi.exception.CustomException;
 import com.blackphoenixproductions.forumbackend.entity.VTopic;
 import com.blackphoenixproductions.forumbackend.repository.VTopicRepository;
 import com.blackphoenixproductions.forumbackend.repository.specification.SpecificationBuilder;
 import com.blackphoenixproductions.forumbackend.service.IVTopicService;
-import dto.Filter;
-import dto.openApi.exception.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

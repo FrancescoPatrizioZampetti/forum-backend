@@ -1,9 +1,8 @@
 package com.blackphoenixproductions.forumbackend;
 
-import dto.SimpleTopicDTO;
-import dto.TokenContainerDTO;
-import dto.UserDTO;
-import dto.openApi.exception.CustomException;
+
+import com.blackphoenixproductions.forumbackend.entity.Topic;
+import com.blackphoenixproductions.forumbackend.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -40,72 +38,27 @@ public class BackendRestAPITest {
         webClient = WebClient.create(BACKEND_PATH);
     }
 
-    @Test
-    public void test_login() {
-        String jwtToken = null;
-        try {
-            jwtToken = webClient.post()
-                    .uri(uriBuilder -> uriBuilder
-                            .path("/api/login")
-                            .queryParam("username", "admin")
-                            .queryParam("password", "test1234")
-                            .build())
-                    .retrieve()
-                    .bodyToMono(String.class).block();
-        } catch (Exception e) {
-            WebClientResponseException errorResponse = (WebClientResponseException ) e;
-            if(errorResponse.getStatusCode().equals(HttpStatus.UNPROCESSABLE_ENTITY)){
-                throw new CustomException("Utente non presente nel sistema.", HttpStatus.UNPROCESSABLE_ENTITY);
-            }
-            e.printStackTrace();
-        }
-        assertNotNull(jwtToken);
-    }
-
-
-    @Test
-    public void test_login_restTemplate() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
-        map.add("username", "admin");
-        map.add("password", "test1234");
-
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
-
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<EntityModel<TokenContainerDTO>> tokenResponse = null;
-        try {
-            tokenResponse = restTemplate.exchange(BACKEND_PATH + "/api/login", HttpMethod.POST, request, new ParameterizedTypeReference<EntityModel<TokenContainerDTO>>(){});
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        assertNotNull(tokenResponse);
-    }
-
 
     @Test
     public void test_signin_restTemplate() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        UserDTO userDTO = new UserDTO();
+        User userDTO = new User();
         userDTO.setUsername("ciao_mondo");
-        userDTO.setPassword("test1234");
         userDTO.setEmail("test@test.com");
 
-        HttpEntity<UserDTO> request = new HttpEntity<>(userDTO, headers);
+        HttpEntity<User> request = new HttpEntity<>(userDTO, headers);
         // se dovessi in aggiunta mettere dei query param dovrei inserirli nella url, vedi UriComponentsBuilder
 
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<EntityModel<TokenContainerDTO>> tokenResponse = null;
+        ResponseEntity<EntityModel<User>> resp = null;
         try {
-            tokenResponse = restTemplate.exchange(BACKEND_PATH + "/api/signin", HttpMethod.POST, request, new ParameterizedTypeReference<EntityModel<TokenContainerDTO>>(){});
+            resp = restTemplate.exchange(BACKEND_PATH + "/api/signin", HttpMethod.POST, request, new ParameterizedTypeReference<EntityModel<User>>(){});
         } catch (Exception e) {
             e.printStackTrace();
         }
-        assertNotNull(tokenResponse);
+        assertNotNull(resp);
     }
 
 
@@ -120,9 +73,9 @@ public class BackendRestAPITest {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
 
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<EntityModel<SimpleTopicDTO>> response = null;
+        ResponseEntity<EntityModel<Topic>> response = null;
         try {
-            response = restTemplate.exchange(BACKEND_PATH + "/api/findTopic", HttpMethod.POST, request, new ParameterizedTypeReference<EntityModel<SimpleTopicDTO>>(){});
+            response = restTemplate.exchange(BACKEND_PATH + "/api/findTopic", HttpMethod.POST, request, new ParameterizedTypeReference<EntityModel<Topic>>(){});
         } catch (Exception e) {
             e.printStackTrace();
         }

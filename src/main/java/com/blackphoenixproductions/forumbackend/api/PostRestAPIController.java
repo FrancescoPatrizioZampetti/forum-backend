@@ -1,11 +1,11 @@
 package com.blackphoenixproductions.forumbackend.api;
 
-import com.blackphoenixproductions.forumbackend.assembler.PostDTOAssembler;
+import com.blackphoenixproductions.forumbackend.assembler.PostAssembler;
+import com.blackphoenixproductions.forumbackend.dto.openApi.post.EditPostDTO;
+import com.blackphoenixproductions.forumbackend.dto.openApi.post.InsertPostDTO;
+import com.blackphoenixproductions.forumbackend.entity.Post;
 import com.blackphoenixproductions.forumbackend.service.INotificationService;
 import com.blackphoenixproductions.forumbackend.service.IPostService;
-import dto.PostDTO;
-import dto.openApi.post.EditPostDTO;
-import dto.openApi.post.InsertPostDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -43,10 +43,10 @@ public class PostRestAPIController {
 
     private final IPostService postService;
     private final INotificationService notificationService;
-    private final PostDTOAssembler postDTOAssembler;
+    private final PostAssembler postDTOAssembler;
 
     @Autowired
-    public PostRestAPIController(IPostService postService, INotificationService notificationService, PostDTOAssembler postDTOAssembler) {
+    public PostRestAPIController(IPostService postService, INotificationService notificationService, PostAssembler postDTOAssembler) {
         this.postService = postService;
         this.notificationService = notificationService;
         this.postDTOAssembler = postDTOAssembler;
@@ -67,12 +67,12 @@ public class PostRestAPIController {
     })
     @Operation(summary = "Cerca tutti i post contenuti in una pagina di un topic.", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping(value = "/findPostsByPage")
-    public ResponseEntity<PagedModel<EntityModel<PostDTO>>> findPostsByPage (@RequestParam Long topicId,
-                                                                             @ParameterObject @PageableDefault(sort = {"createDate"}, direction = Sort.Direction.ASC) Pageable pageable,
-                                                                             PagedResourcesAssembler<PostDTO> pagedResourcesAssembler){
-        Page<PostDTO> pagedPosts = postService.getPagedPosts(topicId, pageable);
-        PagedModel<EntityModel<PostDTO>> pagedModel = pagedResourcesAssembler.toModel(pagedPosts, postDTOAssembler);
-        return new ResponseEntity<PagedModel<EntityModel<PostDTO>>> (pagedModel, HttpStatus.OK);
+    public ResponseEntity<PagedModel<EntityModel<Post>>> findPostsByPage (@RequestParam Long topicId,
+                                                                          @ParameterObject @PageableDefault(sort = {"createDate"}, direction = Sort.Direction.ASC) Pageable pageable,
+                                                                          PagedResourcesAssembler<Post> pagedResourcesAssembler){
+        Page<Post> pagedPosts = postService.getPagedPosts(topicId, pageable);
+        PagedModel<EntityModel<Post>> pagedModel = pagedResourcesAssembler.toModel(pagedPosts, postDTOAssembler);
+        return new ResponseEntity<PagedModel<EntityModel<Post>>> (pagedModel, HttpStatus.OK);
     }
 
     @ApiResponses(value = {
@@ -83,13 +83,13 @@ public class PostRestAPIController {
     @Operation(summary = "Crea un nuovo post.", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping(value = "createPost")
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK') or hasRole('ROLE_GOOGLE')")
-    public ResponseEntity<EntityModel<PostDTO>> createPost(@RequestBody InsertPostDTO postDTO){
+    public ResponseEntity<EntityModel<Post>> createPost(@RequestBody InsertPostDTO postDTO){
         logger.info("Start createPost - post owner username : {}", postDTO.getUsername());
-        PostDTO savedPost = postService.createPost(postDTO);
+        Post savedPost = postService.createPost(postDTO);
         notificationService.notifyTopicAuthor(savedPost);
-        EntityModel<PostDTO> entityModel = EntityModel.of(savedPost, linkTo(methodOn(PostRestAPIController.class).createPost(postDTO)).withSelfRel());
+        EntityModel<Post> entityModel = EntityModel.of(savedPost, linkTo(methodOn(PostRestAPIController.class).createPost(postDTO)).withSelfRel());
         logger.info("End createPost");
-        return new ResponseEntity<EntityModel<PostDTO>>(entityModel, HttpStatus.OK);
+        return new ResponseEntity<EntityModel<Post>>(entityModel, HttpStatus.OK);
     }
 
     @ApiResponses(value = {
@@ -101,12 +101,12 @@ public class PostRestAPIController {
     @Operation(summary = "Modifica un post.", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping(value = "editPost")
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK') or hasRole('ROLE_GOOGLE')")
-    public ResponseEntity<EntityModel<PostDTO>> editPost(@RequestBody EditPostDTO postDTO, HttpServletRequest req){
+    public ResponseEntity<EntityModel<Post>> editPost(@RequestBody EditPostDTO postDTO, HttpServletRequest req){
         logger.info("Start editPost - post id : {}", postDTO.getId());
-        PostDTO editedPost = postService.editPost(postDTO, req);
-        EntityModel<PostDTO> entityModel = EntityModel.of(editedPost, linkTo(methodOn(PostRestAPIController.class).editPost(postDTO, req)).withSelfRel());
+        Post editedPost = postService.editPost(postDTO, req);
+        EntityModel<Post> entityModel = EntityModel.of(editedPost, linkTo(methodOn(PostRestAPIController.class).editPost(postDTO, req)).withSelfRel());
         logger.info("End editPost");
-        return new ResponseEntity<EntityModel<PostDTO>>(entityModel, HttpStatus.OK);
+        return new ResponseEntity<EntityModel<Post>>(entityModel, HttpStatus.OK);
     }
 
 }

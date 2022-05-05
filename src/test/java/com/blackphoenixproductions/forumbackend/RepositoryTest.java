@@ -1,26 +1,22 @@
 package com.blackphoenixproductions.forumbackend;
 
+import com.blackphoenixproductions.forumbackend.dto.Filter;
 import com.blackphoenixproductions.forumbackend.entity.User;
 import com.blackphoenixproductions.forumbackend.entity.VTopic;
 import com.blackphoenixproductions.forumbackend.entity.VTopic_;
+import com.blackphoenixproductions.forumbackend.enums.BooleanOperator;
+import com.blackphoenixproductions.forumbackend.enums.Pagination;
+import com.blackphoenixproductions.forumbackend.enums.QueryOperator;
 import com.blackphoenixproductions.forumbackend.repository.TopicRepository;
 import com.blackphoenixproductions.forumbackend.repository.UserRepository;
 import com.blackphoenixproductions.forumbackend.repository.VTopicRepository;
-import com.blackphoenixproductions.forumbackend.repository.projection.IUser;
 import com.blackphoenixproductions.forumbackend.repository.specification.SpecificationBuilder;
-import com.blackphoenixproductions.forumbackend.repository.specification.VTopicSpecification;
-import dto.Filter;
-import dto.SimpleUserDTO;
-import enums.BooleanOperator;
-import enums.Pagination;
-import enums.QueryOperator;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Propagation;
@@ -30,7 +26,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import java.util.*;
@@ -63,26 +58,7 @@ public class RepositoryTest {
         assertNotNull(user);
     }
 
-    @Test
-    @Transactional(readOnly = true)
-    public void test_nativeQueryMappingToDTO(){
-        List<SimpleUserDTO> userDTOs = userRepository.findAllUsers();
-        List<IUser> userProjection = userRepository.findUser();
-        String role = userRepository.findUserRole("normal_user");
-        assertNotNull(userDTOs);
-        assertNotNull(userProjection);
-        assertNotNull(role);
-    }
 
-    @Test
-    @Transactional(readOnly = true)
-    public void test_nativeQueryMappingToDTO_entityManager(){
-        Query query = entityManager.createNativeQuery("SELECT u.id, u.username, u.email, u.role from users u where u.username = :username", "SimpleUserDTOResult");
-        query.setParameter("username", "normal_user");
-        @SuppressWarnings("unchecked")
-        List<SimpleUserDTO> userDTOs = query.getResultList();
-        assertNotNull(userDTOs);
-    }
 
     @Test
     @Transactional(readOnly = true)

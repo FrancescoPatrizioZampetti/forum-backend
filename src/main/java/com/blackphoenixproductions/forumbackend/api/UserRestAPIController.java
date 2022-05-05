@@ -1,13 +1,10 @@
+/*
 package com.blackphoenixproductions.forumbackend.api;
 
 
 import com.blackphoenixproductions.forumbackend.email.EmailSender;
 import com.blackphoenixproductions.forumbackend.entity.User;
-import dto.SimpleUserDTO;
-import dto.TokenContainerDTO;
-import dto.UserDTO;
 import com.blackphoenixproductions.forumbackend.service.IUserService;
-import enums.Roles;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -50,81 +47,7 @@ public class UserRestAPIController {
     }
 
 
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "Bad request.", content = @Content(schema = @Schema(hidden = true))),
-            @ApiResponse(responseCode = "422", description = "Unprocessable entity: username/password non valido.", content = @Content(schema = @Schema(hidden = true))),
-    })
-    @Operation(summary = "Log in normale.")
-    @PostMapping (value = "/login")
-    public ResponseEntity<EntityModel<TokenContainerDTO>> login (@RequestParam String username,
-                                          @RequestParam String password) {
-        logger.info("Start login - username : {}", username);
-        String jwtToken = userService.login(username, password);
-        String refreshJwtToken = userService.refresh(username);
-        TokenContainerDTO tokenContainerDTO = new TokenContainerDTO(jwtToken, refreshJwtToken);
-        EntityModel<TokenContainerDTO> tokenContainerModel = EntityModel.of(tokenContainerDTO, linkTo(methodOn(UserRestAPIController.class).login(username, password)).withSelfRel());
-        logger.info("End login");
-        return new ResponseEntity<EntityModel<TokenContainerDTO>>(tokenContainerModel, HttpStatus.OK);
-    }
 
-
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "Bad request.", content = @Content(schema = @Schema(hidden = true))),
-    })
-    @Operation(summary = "Log in tramite Facebook.")
-    @PostMapping (value = "/loginFacebook")
-    public ResponseEntity<EntityModel<TokenContainerDTO>> loginFacebook (@RequestParam String email) {
-        logger.info("Start loginFacebook");
-        TokenContainerDTO tokenContainerDTO = null;
-        UserDTO userDTO = userService.getUserFromEmail(email);
-        if(userDTO == null){ // utente non ancora registrato
-          logger.info("Registro nuovo utente");
-          UserDTO newUser = new UserDTO();
-          newUser.setRole(Roles.ROLE_FACEBOOK.getValue());
-          String jwtToken = signInSocialUser(email, newUser);
-          String refreshJwtToken = userService.refresh(newUser.getUsername());
-          tokenContainerDTO = new TokenContainerDTO(jwtToken, refreshJwtToken);
-        }
-        else{
-          String jwtToken = userService.getJwtToken(userDTO.getUsername(), userDTO.getPassword());
-          String refreshJwtToken = userService.refresh(userDTO.getUsername());
-          tokenContainerDTO = new TokenContainerDTO(jwtToken, refreshJwtToken);
-        }
-        EntityModel<TokenContainerDTO> tokenContainerModel = EntityModel.of(tokenContainerDTO, linkTo(methodOn(UserRestAPIController.class).loginFacebook(email)).withSelfRel());
-        logger.info("End loginFacebook");
-        return new ResponseEntity<EntityModel<TokenContainerDTO>>(tokenContainerModel, HttpStatus.OK);
-    }
-
-
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "Bad request.", content = @Content(schema = @Schema(hidden = true))),
-    })
-    @Operation(summary = "Log in tramite Google.")
-    @PostMapping (value = "/loginGoogle")
-    public ResponseEntity<EntityModel<TokenContainerDTO>> loginGoogle (@RequestParam String email) {
-        logger.info("Start loginGoogle");
-        TokenContainerDTO tokenContainerDTO = null;
-        UserDTO userDTO = userService.getUserFromEmail(email);
-        if(userDTO == null){ // utente non ancora registrato
-            logger.info("Registro nuovo utente");
-            UserDTO newUser = new UserDTO();
-            newUser.setRole(Roles.ROLE_GOOGLE.getValue());
-            String jwtToken = signInSocialUser(email, newUser);
-            String refreshJwtToken = userService.refresh(newUser.getUsername());
-            tokenContainerDTO = new TokenContainerDTO(jwtToken, refreshJwtToken);
-        }
-        else{
-            String jwtToken = userService.getJwtToken(userDTO.getUsername(), userDTO.getPassword());
-            String refreshJwtToken = userService.refresh(userDTO.getUsername());
-            tokenContainerDTO = new TokenContainerDTO(jwtToken, refreshJwtToken);
-        }
-        EntityModel<TokenContainerDTO> tokenContainerModel = EntityModel.of(tokenContainerDTO, linkTo(methodOn(UserRestAPIController.class).loginGoogle(email)).withSelfRel());
-        logger.info("End loginGoogle");
-        return new ResponseEntity<EntityModel<TokenContainerDTO>>(tokenContainerModel, HttpStatus.OK);
-    }
 
 
     @ApiResponses(value = {
@@ -234,3 +157,5 @@ public class UserRestAPIController {
 
 
 }
+
+ */

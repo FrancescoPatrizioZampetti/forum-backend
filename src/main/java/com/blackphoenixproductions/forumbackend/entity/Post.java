@@ -45,11 +45,7 @@ public class Post {
     @JoinColumn(name="USER_ID", nullable=false)
     private User user;
 
-    /**
-     * NB: Non è possibile stabilire l'uguaglianza di due instanze transient.
-     * @param o
-     * @return
-     */
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -1,7 +1,8 @@
 package com.blackphoenixproductions.forumbackend.dto;
 
-import enums.BooleanOperator;
-import enums.QueryOperator;
+
+import com.blackphoenixproductions.forumbackend.enums.BooleanOperator;
+import com.blackphoenixproductions.forumbackend.enums.QueryOperator;
 import lombok.*;
 
 import java.util.List;

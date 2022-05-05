@@ -1,12 +1,11 @@
 package com.blackphoenixproductions.forumbackend.dto;
 
-import dto.SimpleTopicDTO;
-import dto.SimpleUserDTO;
+import com.blackphoenixproductions.forumbackend.entity.Topic;
+import com.blackphoenixproductions.forumbackend.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Date;
 
@@ -17,9 +16,9 @@ import java.util.Date;
 public class NotificationDTO implements Comparable<NotificationDTO>{
 
     private Long id;
-    private dto.SimpleUserDTO fromUser;
-    private SimpleUserDTO toUser;
-    private SimpleTopicDTO topic;
+    private User fromUser;
+    private User toUser;
+    private Topic topic;
     private String message;
     private Date createDate;
     private String timeDifferenceFromNow;

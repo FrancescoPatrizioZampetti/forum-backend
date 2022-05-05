@@ -1,13 +1,13 @@
 package com.blackphoenixproductions.forumbackend.service.impl;
 
+import com.blackphoenixproductions.forumbackend.dto.NotificationDTO;
+import com.blackphoenixproductions.forumbackend.entity.Post;
+import com.blackphoenixproductions.forumbackend.entity.User;
+import com.blackphoenixproductions.forumbackend.enums.Pagination;
 import com.blackphoenixproductions.forumbackend.service.INotificationService;
 import com.blackphoenixproductions.forumbackend.service.IPostService;
 import com.blackphoenixproductions.forumbackend.sse.SsePushNotificationService;
 import com.blackphoenixproductions.forumbackend.utility.DateUtility;
-import dto.NotificationDTO;
-import dto.PostDTO;
-import dto.SimpleUserDTO;
-import enums.Pagination;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +40,10 @@ public class NotificationService implements INotificationService {
 
     @Transactional
     @Override
-    public void notifyTopicAuthor(PostDTO postDTO) {
-        if (userIsNotTopicAuthor(postDTO)){
-            String topicAuthorUsername = postDTO.getTopic().getUser().getUsername();
-            NotificationDTO notification = createUserNotification(postDTO);
+    public void notifyTopicAuthor(Post post) {
+        if (userIsNotTopicAuthor(post)){
+            String topicAuthorUsername = post.getTopic().getUser().getUsername();
+            NotificationDTO notification = createUserNotification(post);
             List<NotificationDTO> userNotificationList = addToUserNotifications(topicAuthorUsername, notification);
             removeOldestNotification(userNotificationList);
             updateStatusAndstoreUserNotification(topicAuthorUsername, userNotificationList);
@@ -52,21 +52,21 @@ public class NotificationService implements INotificationService {
         }
     }
 
-    private boolean userIsNotTopicAuthor(PostDTO postDTO) {
-        return !postDTO.getUser().equals(postDTO.getTopic().getUser());
+    private boolean userIsNotTopicAuthor(Post post) {
+        return !post.getUser().equals(post.getTopic().getUser());
     }
 
-    private NotificationDTO createUserNotification(PostDTO postDTO) {
+    private NotificationDTO createUserNotification(Post post) {
         NotificationDTO notification = new NotificationDTO();
         notification.setId(idCounter.getAndIncrement());
-        notification.setFromUser(postDTO.getUser());
-        notification.setToUser(postDTO.getTopic().getUser());
-        notification.setTopic(postDTO.getTopic());
+        notification.setFromUser(post.getUser());
+        notification.setToUser(post.getTopic().getUser());
+        notification.setTopic(post.getTopic());
         notification.setCreateDate(new Date());
         notification.setTimeDifferenceFromNow(DateUtility.setTimeDifferenceFromNow(notification.getCreateDate()));
-        notification.setMessage(setNotificationMessage(postDTO.getMessage()));
-        int lastTopicPageNumber = postService.getPagedPosts(postDTO.getTopic().getId(), PageRequest.of(0, Math.toIntExact(Pagination.POST_PAGINATION.getValue()), Sort.by("createDate").ascending())).getTotalPages()-1;
-        notification.setUrl("/viewtopic?id=" + postDTO.getTopic().getId() + "&page=" + lastTopicPageNumber);
+        notification.setMessage(setNotificationMessage(post.getMessage()));
+        int lastTopicPageNumber = postService.getPagedPosts(post.getTopic().getId(), PageRequest.of(0, Math.toIntExact(Pagination.POST_PAGINATION.getValue()), Sort.by("createDate").ascending())).getTotalPages()-1;
+        notification.setUrl("/viewtopic?id=" + post.getTopic().getId() + "&page=" + lastTopicPageNumber);
         return notification;
     }
 
@@ -97,8 +97,8 @@ public class NotificationService implements INotificationService {
     }
 
     @Override
-    public List<NotificationDTO> getUserNotification(SimpleUserDTO simpleUserDTO) {
-        List<NotificationDTO> userNotifications = notificationStore.get(simpleUserDTO.getUsername());
+    public List<NotificationDTO> getUserNotification(User user) {
+        List<NotificationDTO> userNotifications = notificationStore.get(user.getUsername());
         if(userNotifications != null) {
             userNotifications.stream()
                     .sorted()
@@ -108,14 +108,14 @@ public class NotificationService implements INotificationService {
     }
 
     @Override
-    public Boolean getUserNotificationStatus(SimpleUserDTO simpleUserDTO) {
-        Boolean notificationsStatus = usersNotificationStatus.get(simpleUserDTO.getUsername());
+    public Boolean getUserNotificationStatus(User user) {
+        Boolean notificationsStatus = usersNotificationStatus.get(user.getUsername());
         return notificationsStatus;
     }
 
     @Override
-    public void setReadedNotificationStatus(SimpleUserDTO simpleUserDTO) {
-        usersNotificationStatus.put(simpleUserDTO.getUsername(), false);
+    public void setReadedNotificationStatus(User user) {
+        usersNotificationStatus.put(user.getUsername(), false);
     }
 
     @Override

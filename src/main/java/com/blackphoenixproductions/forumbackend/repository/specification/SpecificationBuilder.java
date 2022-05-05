@@ -1,7 +1,7 @@
 package com.blackphoenixproductions.forumbackend.repository.specification;
 
-import dto.Filter;
-import enums.BooleanOperator;
+import com.blackphoenixproductions.forumbackend.dto.Filter;
+import com.blackphoenixproductions.forumbackend.enums.BooleanOperator;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.text.ParseException;

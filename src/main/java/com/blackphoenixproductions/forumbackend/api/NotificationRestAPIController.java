@@ -1,10 +1,10 @@
 package com.blackphoenixproductions.forumbackend.api;
 
 
+import com.blackphoenixproductions.forumbackend.dto.NotificationDTO;
+import com.blackphoenixproductions.forumbackend.entity.User;
 import com.blackphoenixproductions.forumbackend.service.INotificationService;
 import com.blackphoenixproductions.forumbackend.service.IUserService;
-import dto.NotificationDTO;
-import dto.SimpleUserDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -58,12 +57,8 @@ public class NotificationRestAPIController {
     public ResponseEntity<CollectionModel<NotificationDTO>> getUserNotificationList(HttpServletRequest req){
         logger.info("Start getUserNotificationList");
         CollectionModel<NotificationDTO> userNotificationModel = null;
-        SimpleUserDTO simpleUserDTO = userService.getUserFromToken(req);
-        List<NotificationDTO> userNotification = notificationService.getUserNotification(simpleUserDTO);
-//        List<EntityModel<NotificationDTO>> userNotificationModel = userNotification.stream().
-//                map(n -> EntityModel.of(n, linkTo(methodOn(NotificationRestAPIController.class).getUserNotificationList(req)).withSelfRel()))
-//                .collect(Collectors.toList());
-//        CollectionModel<EntityModel<NotificationDTO>> response = CollectionModel.of(userNotification, linkTo(methodOn(NotificationRestAPIController.class).getUserNotificationList(req)).withSelfRel());
+        User user = userService.getUserFromToken(req);
+        List<NotificationDTO> userNotification = notificationService.getUserNotification(user);
         if(userNotification != null) {
             userNotificationModel = CollectionModel.of(userNotification, linkTo(methodOn(NotificationRestAPIController.class).getUserNotificationList(req)).withSelfRel());
         }
@@ -80,8 +75,8 @@ public class NotificationRestAPIController {
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK') or hasRole('ROLE_GOOGLE')")
     public ResponseEntity<Boolean> getUserNotificationStatus(HttpServletRequest req){
         logger.info("Start getUserNotificationStatus");
-        SimpleUserDTO simpleUserDTO = userService.getUserFromToken(req);
-        Boolean notificationStatus = notificationService.getUserNotificationStatus(simpleUserDTO);
+        User user = userService.getUserFromToken(req);
+        Boolean notificationStatus = notificationService.getUserNotificationStatus(user);
         logger.info("End getUserNotificationStatus");
         return new ResponseEntity<Boolean>(notificationStatus, HttpStatus.OK);
     }
@@ -95,8 +90,8 @@ public class NotificationRestAPIController {
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK') or hasRole('ROLE_GOOGLE')")
     public ResponseEntity<String> setReadedNotificationStatus(HttpServletRequest req){
         logger.info("Start setReadedNotificationStatus");
-        SimpleUserDTO simpleUserDTO = userService.getUserFromToken(req);
-        notificationService.setReadedNotificationStatus(simpleUserDTO);
+        User user = userService.getUserFromToken(req);
+        notificationService.setReadedNotificationStatus(user);
         logger.info("End setReadedNotificationStatus");
         return new ResponseEntity<String>("Le notifiche sono state lette.", HttpStatus.OK);
     }
