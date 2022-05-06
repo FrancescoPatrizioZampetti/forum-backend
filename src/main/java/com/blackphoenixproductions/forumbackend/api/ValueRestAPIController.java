@@ -25,7 +25,7 @@ public class ValueRestAPIController {
     }
 
 
-    @Operation(summary = "Restituisce la versione del forum-backend.")
+    @Operation(summary = "Restituisce la versione del forum-backend.", hidden = true)
     @GetMapping(value = "/getBuildVersionBackEnd")
     public ResponseEntity<String> getBuildVersionBackEnd (HttpServletRequest req){
         return new ResponseEntity<String>(buildVersion, HttpStatus.OK);

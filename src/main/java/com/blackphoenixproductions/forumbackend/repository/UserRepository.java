@@ -12,12 +12,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
     User findByUsername(String username);
     User findByUsernameOrEmail(String username, String email);
-    User findByEmailAndRole(String email, String role);
-    User findByUsernameAndRole(String email, String role);
-    @Query(value = "SELECT u.username, u.role from users u", nativeQuery=true)
+    @Query(value = "SELECT u.username, u.email from users u", nativeQuery=true)
     List<IUser> findUser();
-    @Query(value = "SELECT u.role from users u where u.username = ?1", nativeQuery=true)
-    String findUserRole(String username);
-
+    @Query(value = "SELECT u.email from users u where u.username = ?1", nativeQuery=true)
+    String findUserEmail(String username);
 
 }

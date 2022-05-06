@@ -7,13 +7,6 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@OpenAPIDefinition(info = @Info(title = "Whiteboard API", version = "v1", description = "N.B.: Per utilizzare gli endpoint protetti è prima necessario chiamare l'endpoint /login dopodiché incollare l'accessToken ottenuto nella finestra di Authorize."))
-@SecurityScheme(
-        name = "bearerAuth",
-        type = SecuritySchemeType.HTTP,
-        bearerFormat = "JWT",
-        scheme = "bearer"
-)
+@OpenAPIDefinition(info = @Info(title = "Forum API", version = "v1", description = ""))
 public class OpenApi30Config {
-
 }

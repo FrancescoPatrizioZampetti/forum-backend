@@ -65,7 +65,7 @@ public class PostRestAPIController {
             @ApiResponse(responseCode = "400", description = "Bad request.", content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content(schema = @Schema(hidden = true))),
     })
-    @Operation(summary = "Cerca tutti i post contenuti in una pagina di un topic.", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Cerca tutti i post contenuti in una pagina di un topic.")
     @PostMapping(value = "/findPostsByPage")
     public ResponseEntity<PagedModel<EntityModel<Post>>> findPostsByPage (@RequestParam Long topicId,
                                                                           @ParameterObject @PageableDefault(sort = {"createDate"}, direction = Sort.Direction.ASC) Pageable pageable,
@@ -80,9 +80,8 @@ public class PostRestAPIController {
             @ApiResponse(responseCode = "400", description = "Bad request.", content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content(schema = @Schema(hidden = true))),
     })
-    @Operation(summary = "Crea un nuovo post.", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Crea un nuovo post.")
     @PostMapping(value = "createPost")
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK') or hasRole('ROLE_GOOGLE')")
     public ResponseEntity<EntityModel<Post>> createPost(@RequestBody InsertPostDTO postDTO){
         logger.info("Start createPost - post owner username : {}", postDTO.getUsername());
         Post savedPost = postService.createPost(postDTO);
@@ -98,9 +97,8 @@ public class PostRestAPIController {
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "401", description = "Unauthorized.", content = @Content(schema = @Schema(hidden = true))),
     })
-    @Operation(summary = "Modifica un post.", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Modifica un post.")
     @PostMapping(value = "editPost")
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK') or hasRole('ROLE_GOOGLE')")
     public ResponseEntity<EntityModel<Post>> editPost(@RequestBody EditPostDTO postDTO, HttpServletRequest req){
         logger.info("Start editPost - post id : {}", postDTO.getId());
         Post editedPost = postService.editPost(postDTO, req);

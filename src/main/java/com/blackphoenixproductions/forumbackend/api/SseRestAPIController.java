@@ -27,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 @RequestMapping("/api")
-@Tag(name = "5. SSE", description = "endpoints riguardanti i SSE.")
+@Tag(name = "5. SSE", description = "endpoints riguardanti gli SSE.")
 public class SseRestAPIController {
 
     private final SsePushNotificationService service;
@@ -43,8 +43,7 @@ public class SseRestAPIController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content(schema = @Schema(hidden = true))),
     })
-    @Operation(summary = "Endpoint per la sottoscrizione delle notifiche push.", security = @SecurityRequirement(name = "bearerAuth"))
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK') or hasRole('ROLE_GOOGLE')")
+    @Operation(summary = "Endpoint per la sottoscrizione delle notifiche push.")
     @GetMapping("/subscribe")
     public ResponseEntity<SseEmitter> subscribe(@RequestParam String username){
         // 60000L * 5 = 5 min

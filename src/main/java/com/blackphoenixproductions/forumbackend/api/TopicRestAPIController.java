@@ -96,9 +96,8 @@ public class TopicRestAPIController {
             @ApiResponse(responseCode = "400", description = "Bad request.", content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content(schema = @Schema(hidden = true))),
     })
-    @Operation(summary = "Creazione di un topic.", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Creazione di un topic.")
     @PostMapping(value = "createTopic")
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK') or hasRole('ROLE_GOOGLE')")
     public ResponseEntity<EntityModel<Topic>> createTopic(@RequestBody InsertTopicDTO insertTopicDTO){
         logger.info("Start createTopic - topic owner username : {}", insertTopicDTO.getUsername());
         Topic savedTopic = topicService.createTopic(insertTopicDTO);
@@ -114,9 +113,8 @@ public class TopicRestAPIController {
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "401", description = "Unauthorized.", content = @Content(schema = @Schema(hidden = true))),
     })
-    @Operation(summary = "Modifica di un topic.", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Modifica di un topic.")
     @PostMapping(value = "editTopic")
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK') or hasRole('ROLE_GOOGLE')")
     public ResponseEntity<EntityModel<Topic>> editTopic(@RequestBody EditTopicDTO topicDTO, HttpServletRequest req){
         logger.info("Start editTopic - topic id: {}", topicDTO.getId());
         Topic editedTopic = topicService.editTopic(topicDTO, req);

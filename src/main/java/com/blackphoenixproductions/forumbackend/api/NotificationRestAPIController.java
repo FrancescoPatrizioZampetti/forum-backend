@@ -49,11 +49,10 @@ public class NotificationRestAPIController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content(schema = @Schema(hidden = true))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized: JWT token scaduto oppure non valido.", content = @Content(schema = @Schema(hidden = true)))
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(hidden = true)))
     })
-    @Operation(summary = "Restituisce tutte le notifiche di un utente.", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Restituisce tutte le notifiche di un utente.")
     @GetMapping(value = "getUserNotificationList")
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK') or hasRole('ROLE_GOOGLE')")
     public ResponseEntity<CollectionModel<NotificationDTO>> getUserNotificationList(HttpServletRequest req){
         logger.info("Start getUserNotificationList");
         CollectionModel<NotificationDTO> userNotificationModel = null;
@@ -70,9 +69,8 @@ public class NotificationRestAPIController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content(schema = @Schema(hidden = true))),
     })
-    @Operation(summary = "Restituisce lo status delle notifiche di un utente. Permette di capire se un utente ha almeno una notfica da leggere.", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Restituisce lo status delle notifiche di un utente. Permette di capire se un utente ha almeno una notfica da leggere.", hidden = true)
     @GetMapping(value = "getUserNotificationStatus")
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK') or hasRole('ROLE_GOOGLE')")
     public ResponseEntity<Boolean> getUserNotificationStatus(HttpServletRequest req){
         logger.info("Start getUserNotificationStatus");
         User user = userService.getUserFromToken(req);
@@ -85,9 +83,8 @@ public class NotificationRestAPIController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content(schema = @Schema(hidden = true))),
     })
-    @Operation(summary = "Imposta lo status delle notifiche di un utente a 'tutte lette'.", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Imposta lo status delle notifiche di un utente a 'tutte lette'.", hidden = true)
     @GetMapping(value = "setReadedNotificationStatus")
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK') or hasRole('ROLE_GOOGLE')")
     public ResponseEntity<String> setReadedNotificationStatus(HttpServletRequest req){
         logger.info("Start setReadedNotificationStatus");
         User user = userService.getUserFromToken(req);
