@@ -27,7 +27,7 @@ public class UserService implements IUserService {
     public User signin(User user) {
         User findedUser = userRepository.findByUsernameOrEmail(user.getUsername(), user.getEmail());
         if(findedUser == null) {
-            return userRepository.save(user);
+            return userRepository.saveAndFlush(user);
         } else {
             throw new CustomException("Username e/o Email gia' utilizzati", HttpStatus.CONFLICT);
         }

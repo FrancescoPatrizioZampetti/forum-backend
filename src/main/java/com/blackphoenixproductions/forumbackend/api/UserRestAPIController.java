@@ -1,4 +1,3 @@
-/*
 package com.blackphoenixproductions.forumbackend.api;
 
 
@@ -18,8 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,19 +30,15 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class UserRestAPIController {
 
     private final IUserService userService;
-    private final PasswordEncoder passwordEncoder;
     private final EmailSender emailSender;
 
     private static final Logger logger = LoggerFactory.getLogger(UserRestAPIController.class);
 
     @Autowired
-    public UserRestAPIController(IUserService userService, PasswordEncoder passwordEncoder, EmailSender emailSender) {
+    public UserRestAPIController(IUserService userService, EmailSender emailSender) {
         this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
         this.emailSender = emailSender;
     }
-
-
 
 
 
@@ -56,17 +49,15 @@ public class UserRestAPIController {
     })
     @Operation(summary = "Registrazione.")
     @PostMapping (value = "/signin")
-    public ResponseEntity<EntityModel<TokenContainerDTO>> signin (@RequestBody UserDTO userDTO) {
-        logger.info("Start signin - username : {}", userDTO.getUsername());
-        TokenContainerDTO tokenContainerDTO = null;
-        userDTO.setRole(Roles.ROLE_USER.getValue());
-        String jwtToken = userService.signin(userDTO);
-        String refreshJwtToken = userService.refresh(userDTO.getUsername());
-        tokenContainerDTO = new TokenContainerDTO(jwtToken, refreshJwtToken);
-        emailSender.sendSigninEmail(userDTO);
-        EntityModel<TokenContainerDTO> tokenContainerModel = EntityModel.of(tokenContainerDTO, linkTo(methodOn(UserRestAPIController.class).signin(userDTO)).withSelfRel());
+    public ResponseEntity<EntityModel<User>> signin (HttpServletRequest req, @RequestBody User user) {
+        // todo capire come interagire con keycloak, prendere email dalla request e poi chiamare kc?
+        // todo va chiamato anche in caso di registrazione social, in caso generare randomicamente username?
+        logger.info("Start signin - username : {}", user.getUsername());
+        User savedUser = userService.signin(user);
+        emailSender.sendSigninEmail(user);
+        EntityModel<User> userEntityModel = EntityModel.of(user, linkTo(methodOn(UserRestAPIController.class).signin(req, user)).withSelfRel());
         logger.info("End signin");
-        return new ResponseEntity<EntityModel<TokenContainerDTO>>(tokenContainerModel, HttpStatus.OK);
+        return new ResponseEntity<EntityModel<User>>(userEntityModel, HttpStatus.OK);
     }
 
 
@@ -77,10 +68,11 @@ public class UserRestAPIController {
     })
     @Operation(summary = "Restuisce l'utente a cui appartiene il token.")
     @GetMapping (value = "/getUserFromToken")
-    public ResponseEntity<EntityModel<SimpleUserDTO>> getUserFromToken (HttpServletRequest req){
-        SimpleUserDTO simpleUserDTO = userService.getUserFromToken(req);
-        EntityModel<SimpleUserDTO> simpleUserDTOModel = EntityModel.of(simpleUserDTO, linkTo(methodOn(UserRestAPIController.class).getUserFromToken(req)).withSelfRel());
-        return new ResponseEntity<EntityModel<SimpleUserDTO>>(simpleUserDTOModel, HttpStatus.OK);
+    public ResponseEntity<EntityModel<User>> getUserFromToken (HttpServletRequest req){
+        // todo prendere mail dalla request
+        User user = userService.getUserFromToken(req);
+        EntityModel<User> userEntityModel = EntityModel.of(user, linkTo(methodOn(UserRestAPIController.class).getUserFromToken(req)).withSelfRel());
+        return new ResponseEntity<EntityModel<User>>(userEntityModel, HttpStatus.OK);
     }
 
 
@@ -99,15 +91,10 @@ public class UserRestAPIController {
     })
     @Operation(summary = "Endpoint che permette il reset delle credenziali.")
     @PostMapping("/finishResetCredentials")
-    public ResponseEntity finishResetCredentials(@RequestParam String username, @RequestParam String password, @RequestParam String token) {
-        logger.info("Start finishResetCredentials - username: {}", username);
-        User userDB = userService.getUserFromUsernameWithRoleUser(username);
-        if(userDB != null) {
-            userService.isValidResetToken(token, userDB);
-            userService.finishResetCredentials(password, userDB);
-        } else{
-            logger.error("Utente con ruolo USER non trovato durante il completamento della procedura di reset.");
-        }
+    public ResponseEntity finishResetCredentials(HttpServletRequest req) {
+        logger.info("Start finishResetCredentials");
+        // todo vedere come implementarlo chiamando kc e verificando un token generato precedentemente
+        //userService.finishResetCredentials();
         logger.info("End finishResetCredentials");
         return ResponseEntity.ok("Procedura di reset password completata con successo.");
     }
@@ -119,33 +106,12 @@ public class UserRestAPIController {
     })
     @Operation(summary = "Manda una email di reset credenziali creando un reset token.")
     @PostMapping("/initResetCredentials")
-    public ResponseEntity initResetCredentials(@RequestParam String email) {
+    public ResponseEntity initResetCredentials(HttpServletRequest req) {
         logger.info("Start initResetCredentials");
-        User userDB = userService.getUserFromEmailWithRoleUser(email);
-        // non restituisco exception per motivi di sicurezza
-        if (userDB != null) {
-            String resetToken = userService.getResetToken(userDB.getUsername(), userDB.getPassword());
-            emailSender.sendResetCredentialsEmail(userDB, resetToken);
-        } else{
-            logger.error("Utente con ruolo USER non trovato durante la procedura di reset.");
-        }
+        // todo recuperare email dalla req e poi capire come implementarlo con kc
+        // emailSender.sendResetCredentialsEmail(userDB, resetToken);
         logger.info("End initResetCredentials");
         return ResponseEntity.ok("Procedura di reset password iniziata con successo.");
     }
 
-
-    private String signInSocialUser(@RequestParam String email, UserDTO newUser) {
-        logger.info("Start signInSocialUser");
-        // genero username e password randomicamente
-        newUser.setUsername(RandomStringUtils.random(8, true, true));
-        newUser.setPassword(passwordEncoder.encode(RandomStringUtils.random(8, true, true)));
-        newUser.setEmail(email);
-        // registro l'utente
-        logger.info("End signInSocialUser");
-        return userService.signin(newUser);
-    }
-
-
 }
-
- */
