@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
@@ -76,9 +75,8 @@ public class UserRestAPIController {
             @ApiResponse(responseCode = "400", description = "Bad request.", content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content(schema = @Schema(hidden = true))),
     })
-    @Operation(summary = "Restuisce l'utente a cui appartiene il token.", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Restuisce l'utente a cui appartiene il token.")
     @GetMapping (value = "/getUserFromToken")
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK') or hasRole('ROLE_GOOGLE')")
     public ResponseEntity<EntityModel<SimpleUserDTO>> getUserFromToken (HttpServletRequest req){
         SimpleUserDTO simpleUserDTO = userService.getUserFromToken(req);
         EntityModel<SimpleUserDTO> simpleUserDTOModel = EntityModel.of(simpleUserDTO, linkTo(methodOn(UserRestAPIController.class).getUserFromToken(req)).withSelfRel());
@@ -91,14 +89,6 @@ public class UserRestAPIController {
     public ResponseEntity<Long> getTotalUsers (HttpServletRequest req){
         Long totalUsers = userService.getTotalUsers();
         return new ResponseEntity<Long>(totalUsers, HttpStatus.OK);
-    }
-
-
-    @Operation(summary = "Endpoint Utilizzato per prolungare l'accesso dell'utente senza un nuovo Login. Restituisce un nuovo access token.")
-    @GetMapping("/refreshToken")
-    @PreAuthorize("hasRole('ROLE_REFRESH')")
-    public String getNewAccessTokenFromRefreshToken(HttpServletRequest req) {
-        return userService.getNewAccessTokenFromRefreshToken(req);
     }
 
 
