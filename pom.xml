@@ -25,6 +25,7 @@
         <spring-boot-maven-plugin.version>2.4.4</spring-boot-maven-plugin.version>
         <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <version.keycloak>18.0.0</version.keycloak>
     </properties>
 
     <dependencies>
@@ -112,6 +113,12 @@
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-spring-boot-starter</artifactId>
+            <version>${version.keycloak}</version>
         </dependency>
 
     </dependencies>

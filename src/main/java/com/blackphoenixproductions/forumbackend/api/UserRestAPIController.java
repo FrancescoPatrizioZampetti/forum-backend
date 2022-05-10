@@ -3,6 +3,7 @@ package com.blackphoenixproductions.forumbackend.api;
 
 import com.blackphoenixproductions.forumbackend.email.EmailSender;
 import com.blackphoenixproductions.forumbackend.entity.User;
+import com.blackphoenixproductions.forumbackend.security.KeycloakUtility;
 import com.blackphoenixproductions.forumbackend.service.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.keycloak.representations.AccessToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.Set;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -70,6 +74,9 @@ public class UserRestAPIController {
     @GetMapping (value = "/getUserFromToken")
     public ResponseEntity<EntityModel<User>> getUserFromToken (HttpServletRequest req){
         // todo prendere mail dalla request
+        Set<String> roles = KeycloakUtility.getRoles(req);
+        AccessToken token = KeycloakUtility.getAccessToken(req);
+
         User user = userService.getUserFromToken(req);
         EntityModel<User> userEntityModel = EntityModel.of(user, linkTo(methodOn(UserRestAPIController.class).getUserFromToken(req)).withSelfRel());
         return new ResponseEntity<EntityModel<User>>(userEntityModel, HttpStatus.OK);

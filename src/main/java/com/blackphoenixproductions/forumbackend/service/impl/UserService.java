@@ -21,7 +21,11 @@ public class UserService implements IUserService {
         this.userRepository = userRepository;
     }
 
-
+    /**
+     * TODO SALVARE L'UTENTE SOLO DURANTE INSERIMENTO TOPIC/POST (SE NON ESISTE)
+     * @param user
+     * @return
+     */
     @Override
     @Transactional
     public User signin(User user) {
@@ -63,7 +67,7 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public User finishResetCredentials(String password, User user) {
-        // todo
+        // todo tramite keycloak
         return null;
     }
 
