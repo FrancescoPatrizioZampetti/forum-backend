@@ -3,6 +3,7 @@ package com.blackphoenixproductions.forumbackend.api;
 
 import com.blackphoenixproductions.forumbackend.dto.NotificationDTO;
 import com.blackphoenixproductions.forumbackend.entity.User;
+import com.blackphoenixproductions.forumbackend.security.KeycloakUtility;
 import com.blackphoenixproductions.forumbackend.service.INotificationService;
 import com.blackphoenixproductions.forumbackend.service.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -54,7 +55,7 @@ public class NotificationRestAPIController {
     public ResponseEntity<CollectionModel<NotificationDTO>> getUserNotificationList(HttpServletRequest req){
         logger.info("Start getUserNotificationList");
         CollectionModel<NotificationDTO> userNotificationModel = null;
-        User user = userService.getUserFromToken(req);
+        User user = userService.getUserFromEmail(KeycloakUtility.getAccessToken(req).getPreferredUsername());
         List<NotificationDTO> userNotification = notificationService.getUserNotification(user);
         if(userNotification != null) {
             userNotificationModel = CollectionModel.of(userNotification, linkTo(methodOn(NotificationRestAPIController.class).getUserNotificationList(req)).withSelfRel());
@@ -71,7 +72,7 @@ public class NotificationRestAPIController {
     @GetMapping(value = "getUserNotificationStatus")
     public ResponseEntity<Boolean> getUserNotificationStatus(HttpServletRequest req){
         logger.info("Start getUserNotificationStatus");
-        User user = userService.getUserFromToken(req);
+        User user = userService.getUserFromEmail(KeycloakUtility.getAccessToken(req).getPreferredUsername());
         Boolean notificationStatus = notificationService.getUserNotificationStatus(user);
         logger.info("End getUserNotificationStatus");
         return new ResponseEntity<Boolean>(notificationStatus, HttpStatus.OK);
@@ -85,7 +86,7 @@ public class NotificationRestAPIController {
     @GetMapping(value = "setReadedNotificationStatus")
     public ResponseEntity<String> setReadedNotificationStatus(HttpServletRequest req){
         logger.info("Start setReadedNotificationStatus");
-        User user = userService.getUserFromToken(req);
+        User user = userService.getUserFromEmail(KeycloakUtility.getAccessToken(req).getPreferredUsername());
         notificationService.setReadedNotificationStatus(user);
         logger.info("End setReadedNotificationStatus");
         return new ResponseEntity<String>("Le notifiche sono state lette.", HttpStatus.OK);

@@ -19,11 +19,7 @@ public class UserService implements IUserService {
         this.userRepository = userRepository;
     }
 
-    /**
-     * TODO SALVARE L'UTENTE SOLO DURANTE INSERIMENTO TOPIC/POST (SE NON ESISTE)
-     * @param
-     * @return
-     */
+
     @Override
     @Transactional
     public User registerOrRetriveUser(AccessToken accessToken) {
@@ -53,12 +49,5 @@ public class UserService implements IUserService {
         return userRepository.count();
     }
 
-
-    @Override
-    @Transactional
-    public User finishResetCredentials(String password, User user) {
-        // todo tramite keycloak, vanno aggiornate le credenziali tramite api
-        return null;
-    }
 
 }

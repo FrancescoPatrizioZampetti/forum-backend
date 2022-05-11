@@ -15,6 +15,4 @@ public interface IUserService {
 
     Long getTotalUsers();
 
-    User finishResetCredentials(String password, User user);
-
 }
