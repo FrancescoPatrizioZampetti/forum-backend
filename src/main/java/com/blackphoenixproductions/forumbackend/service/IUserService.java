@@ -1,15 +1,13 @@
 package com.blackphoenixproductions.forumbackend.service;
 
 import com.blackphoenixproductions.forumbackend.entity.User;
+import org.keycloak.representations.AccessToken;
 
 
-import javax.servlet.http.HttpServletRequest;
 
 public interface IUserService {
 
-    User signin(User user);
-
-    User getUserFromToken(HttpServletRequest req);
+    User registerOrRetriveUser(AccessToken accessToken);
 
     User getUserFromUsername(String username);
 

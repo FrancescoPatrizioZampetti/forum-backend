@@ -80,11 +80,11 @@ public class PostRestAPIController {
     })
     @Operation(summary = "Crea un nuovo post.")
     @PostMapping(value = "createPost")
-    public ResponseEntity<EntityModel<Post>> createPost(@RequestBody InsertPostDTO postDTO){
+    public ResponseEntity<EntityModel<Post>> createPost(@RequestBody InsertPostDTO postDTO, HttpServletRequest req){
         logger.info("Start createPost - post owner username : {}", postDTO.getUsername());
-        Post savedPost = postService.createPost(postDTO);
+        Post savedPost = postService.createPost(postDTO, req);
         notificationService.notifyTopicAuthor(savedPost);
-        EntityModel<Post> entityModel = EntityModel.of(savedPost, linkTo(methodOn(PostRestAPIController.class).createPost(postDTO)).withSelfRel());
+        EntityModel<Post> entityModel = EntityModel.of(savedPost, linkTo(methodOn(PostRestAPIController.class).createPost(postDTO, req)).withSelfRel());
         logger.info("End createPost");
         return new ResponseEntity<EntityModel<Post>>(entityModel, HttpStatus.OK);
     }

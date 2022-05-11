@@ -15,7 +15,7 @@ public interface IPostService {
 
     Page<Post> getPagedPosts(Long topicId, Pageable pageable);
 
-    Post createPost(InsertPostDTO postDTO);
+    Post createPost(InsertPostDTO postDTO, HttpServletRequest req);
 
     Post editPost(EditPostDTO postDTO, HttpServletRequest req);
 

@@ -7,9 +7,11 @@ import com.blackphoenixproductions.forumbackend.email.EmailSender;
 import com.blackphoenixproductions.forumbackend.entity.Post;
 import com.blackphoenixproductions.forumbackend.entity.Topic;
 import com.blackphoenixproductions.forumbackend.entity.User;
+import com.blackphoenixproductions.forumbackend.enums.Roles;
 import com.blackphoenixproductions.forumbackend.repository.PostRepository;
 import com.blackphoenixproductions.forumbackend.repository.TopicRepository;
 import com.blackphoenixproductions.forumbackend.repository.UserRepository;
+import com.blackphoenixproductions.forumbackend.security.KeycloakUtility;
 import com.blackphoenixproductions.forumbackend.service.IPostService;
 import com.blackphoenixproductions.forumbackend.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,9 +60,9 @@ public class PostService implements IPostService {
 
     @Transactional
     @Override
-    public Post createPost(InsertPostDTO postDTO) {
+    public Post createPost(InsertPostDTO postDTO, HttpServletRequest req) {
         Post post = new Post();
-        User user = userRepository.findByUsername(postDTO.getUsername());
+        User user = userService.registerOrRetriveUser(KeycloakUtility.getAccessToken(req));
         if (user == null) {
             throw new CustomException("Utente non trovato.", HttpStatus.NOT_FOUND);
         }
@@ -86,13 +88,10 @@ public class PostService implements IPostService {
         if(!post.isPresent()){
             throw new CustomException("Post con id: " + postDTO.getId() + " non trovato.", HttpStatus.BAD_REQUEST);
         }
-        User user = userService.getUserFromToken(req);
-        // todo convertire con keycloak
-        /*
-        if (!simpleUserDTO.getRole().equals(Roles.ROLE_STAFF) && !simpleUserDTO.getUsername().equals(post.get().getUser().getUsername())){
+        if(!KeycloakUtility.getRoles(req).contains(Roles.ROLE_STAFF.getValue())
+                && !post.get().getUser().getEmail().equals(KeycloakUtility.getAccessToken(req).getPreferredUsername())){
             throw new CustomException("Utente non autorizzato alla modifica del post.", HttpStatus.UNAUTHORIZED);
         }
-         */
         Post postToEdit = post.get();
         postToEdit.setEditDate(new Date());
         postToEdit.setMessage(postDTO.getMessage());

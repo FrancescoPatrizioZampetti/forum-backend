@@ -34,6 +34,10 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Topic> topics;
 
+    public User(String username, String email) {
+        this.username = username;
+        this.email = email;
+    }
 
     @Override
     public boolean equals(Object o) {

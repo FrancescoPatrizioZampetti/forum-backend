@@ -45,44 +45,6 @@ public class UserRestAPIController {
     }
 
 
-
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "Bad request.", content = @Content(schema = @Schema(hidden = true))),
-            @ApiResponse(responseCode = "409", description = "Conflict: Username e/o Email gia' utilizzati.", content = @Content(schema = @Schema(hidden = true))),
-    })
-    @Operation(summary = "Registrazione.")
-    @PostMapping (value = "/signin")
-    public ResponseEntity<EntityModel<User>> signin (HttpServletRequest req, @RequestBody User user) {
-        // todo capire come interagire con keycloak, prendere email dalla request e poi chiamare kc?
-        // todo va chiamato anche in caso di registrazione social, in caso generare randomicamente username?
-        logger.info("Start signin - username : {}", user.getUsername());
-        User savedUser = userService.signin(user);
-        emailSender.sendSigninEmail(user);
-        EntityModel<User> userEntityModel = EntityModel.of(user, linkTo(methodOn(UserRestAPIController.class).signin(req, user)).withSelfRel());
-        logger.info("End signin");
-        return new ResponseEntity<EntityModel<User>>(userEntityModel, HttpStatus.OK);
-    }
-
-
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "Bad request.", content = @Content(schema = @Schema(hidden = true))),
-            @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content(schema = @Schema(hidden = true))),
-    })
-    @Operation(summary = "Restuisce l'utente a cui appartiene il token.")
-    @GetMapping (value = "/getUserFromToken")
-    public ResponseEntity<EntityModel<User>> getUserFromToken (HttpServletRequest req){
-        // todo prendere mail dalla request
-        Set<String> roles = KeycloakUtility.getRoles(req);
-        AccessToken token = KeycloakUtility.getAccessToken(req);
-
-        User user = userService.getUserFromToken(req);
-        EntityModel<User> userEntityModel = EntityModel.of(user, linkTo(methodOn(UserRestAPIController.class).getUserFromToken(req)).withSelfRel());
-        return new ResponseEntity<EntityModel<User>>(userEntityModel, HttpStatus.OK);
-    }
-
-
     @Operation(summary = "Restituisce il numero totale degli utenti.")
     @GetMapping (value = "/getTotalUsers")
     public ResponseEntity<Long> getTotalUsers (HttpServletRequest req){

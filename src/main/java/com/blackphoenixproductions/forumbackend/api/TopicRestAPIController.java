@@ -96,10 +96,10 @@ public class TopicRestAPIController {
     })
     @Operation(summary = "Creazione di un topic.")
     @PostMapping(value = "createTopic")
-    public ResponseEntity<EntityModel<Topic>> createTopic(@RequestBody InsertTopicDTO insertTopicDTO){
+    public ResponseEntity<EntityModel<Topic>> createTopic(@RequestBody InsertTopicDTO insertTopicDTO, HttpServletRequest req){
         logger.info("Start createTopic - topic owner username : {}", insertTopicDTO.getUsername());
-        Topic savedTopic = topicService.createTopic(insertTopicDTO);
-        EntityModel<Topic> entityModel = EntityModel.of(savedTopic).add(linkTo(methodOn(TopicRestAPIController.class).createTopic(insertTopicDTO)).withSelfRel());
+        Topic savedTopic = topicService.createTopic(insertTopicDTO, req);
+        EntityModel<Topic> entityModel = EntityModel.of(savedTopic).add(linkTo(methodOn(TopicRestAPIController.class).createTopic(insertTopicDTO, req)).withSelfRel());
         logger.info("End createTopic");
         return new ResponseEntity<EntityModel<Topic>>(entityModel, HttpStatus.OK);
     }

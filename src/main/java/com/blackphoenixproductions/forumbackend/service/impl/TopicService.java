@@ -5,8 +5,10 @@ import com.blackphoenixproductions.forumbackend.dto.openApi.topic.EditTopicDTO;
 import com.blackphoenixproductions.forumbackend.dto.openApi.topic.InsertTopicDTO;
 import com.blackphoenixproductions.forumbackend.entity.Topic;
 import com.blackphoenixproductions.forumbackend.entity.User;
+import com.blackphoenixproductions.forumbackend.enums.Roles;
 import com.blackphoenixproductions.forumbackend.repository.TopicRepository;
 import com.blackphoenixproductions.forumbackend.repository.UserRepository;
+import com.blackphoenixproductions.forumbackend.security.KeycloakUtility;
 import com.blackphoenixproductions.forumbackend.service.ITopicService;
 import com.blackphoenixproductions.forumbackend.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +45,8 @@ public class TopicService implements ITopicService {
 
     @Transactional
     @Override
-    public Topic createTopic(InsertTopicDTO insertTopicDTO) {
-        User userTopic = userRepository.findByUsername(insertTopicDTO.getUsername());
+    public Topic createTopic(InsertTopicDTO insertTopicDTO, HttpServletRequest req) {
+        User userTopic = userService.registerOrRetriveUser(KeycloakUtility.getAccessToken(req));
         if (userTopic == null){
             throw new CustomException("Utente non trovato.", HttpStatus.NOT_FOUND);
         }
@@ -61,13 +63,9 @@ public class TopicService implements ITopicService {
     @Transactional
     @Override
     public Topic editTopic(EditTopicDTO topicDTO, HttpServletRequest req) {
-        User user = userService.getUserFromToken(req);
-        // todo rivedere con keycloak
-        /*
-        if (!simpleUserDTO.getRole().equals(Roles.ROLE_STAFF)){
+        if(!KeycloakUtility.getRoles(req).contains(Roles.ROLE_STAFF.getValue())){
             throw new CustomException("Utente non autorizzato alla modifica di un topic.", HttpStatus.UNAUTHORIZED);
         }
-        */
         Optional<Topic> topic = topicRepository.findById(topicDTO.getId());
         if(!topic.isPresent()){
             throw new CustomException("Topic con id: " + topicDTO.getId() + " non trovato.", HttpStatus.BAD_REQUEST);

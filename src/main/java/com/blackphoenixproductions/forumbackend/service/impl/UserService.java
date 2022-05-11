@@ -1,15 +1,13 @@
 package com.blackphoenixproductions.forumbackend.service.impl;
 
-import com.blackphoenixproductions.forumbackend.dto.openApi.exception.CustomException;
 import com.blackphoenixproductions.forumbackend.repository.UserRepository;
 import com.blackphoenixproductions.forumbackend.service.IUserService;
 import com.blackphoenixproductions.forumbackend.entity.User;
+import org.keycloak.representations.AccessToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 
 @Service
 public class UserService implements IUserService {
@@ -23,25 +21,17 @@ public class UserService implements IUserService {
 
     /**
      * TODO SALVARE L'UTENTE SOLO DURANTE INSERIMENTO TOPIC/POST (SE NON ESISTE)
-     * @param user
+     * @param
      * @return
      */
     @Override
     @Transactional
-    public User signin(User user) {
-        User findedUser = userRepository.findByUsernameOrEmail(user.getUsername(), user.getEmail());
+    public User registerOrRetriveUser(AccessToken accessToken) {
+        User findedUser = userRepository.findByEmail(accessToken.getPreferredUsername());
         if(findedUser == null) {
-            return userRepository.saveAndFlush(user);
-        } else {
-            throw new CustomException("Username e/o Email gia' utilizzati", HttpStatus.CONFLICT);
+            return userRepository.saveAndFlush(new User(accessToken.getNickName(), accessToken.getPreferredUsername()));
         }
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public User getUserFromToken(HttpServletRequest req) {
-        // todo
-        return null;
+        return findedUser;
     }
 
     @Override
@@ -67,7 +57,7 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public User finishResetCredentials(String password, User user) {
-        // todo tramite keycloak
+        // todo tramite keycloak, vanno aggiornate le credenziali tramite api
         return null;
     }
 

@@ -10,7 +10,7 @@ public interface ITopicService {
 
     Long getTotalTopics();
 
-    Topic createTopic(InsertTopicDTO insertTopicDTO);
+    Topic createTopic(InsertTopicDTO insertTopicDTO, HttpServletRequest req);
 
     Topic editTopic(EditTopicDTO topicDTO, HttpServletRequest req);
 
