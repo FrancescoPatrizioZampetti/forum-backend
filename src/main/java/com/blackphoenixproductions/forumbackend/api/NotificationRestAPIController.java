@@ -56,9 +56,11 @@ public class NotificationRestAPIController {
         logger.info("Start getUserNotificationList");
         CollectionModel<NotificationDTO> userNotificationModel = null;
         User user = userService.getUserFromEmail(KeycloakUtility.getAccessToken(req).getPreferredUsername());
-        List<NotificationDTO> userNotification = notificationService.getUserNotification(user);
-        if(userNotification != null) {
-            userNotificationModel = CollectionModel.of(userNotification, linkTo(methodOn(NotificationRestAPIController.class).getUserNotificationList(req)).withSelfRel());
+        if(user != null) {
+            List<NotificationDTO> userNotification = notificationService.getUserNotification(user);
+            if (userNotification != null) {
+                userNotificationModel = CollectionModel.of(userNotification, linkTo(methodOn(NotificationRestAPIController.class).getUserNotificationList(req)).withSelfRel());
+            }
         }
         logger.info("End getUserNotificationList");
         return new ResponseEntity<CollectionModel<NotificationDTO>>(userNotificationModel, HttpStatus.OK);
@@ -72,8 +74,11 @@ public class NotificationRestAPIController {
     @GetMapping(value = "getUserNotificationStatus")
     public ResponseEntity<Boolean> getUserNotificationStatus(HttpServletRequest req){
         logger.info("Start getUserNotificationStatus");
+        Boolean notificationStatus = null;
         User user = userService.getUserFromEmail(KeycloakUtility.getAccessToken(req).getPreferredUsername());
-        Boolean notificationStatus = notificationService.getUserNotificationStatus(user);
+        if(user != null) {
+            notificationStatus = notificationService.getUserNotificationStatus(user);
+        }
         logger.info("End getUserNotificationStatus");
         return new ResponseEntity<Boolean>(notificationStatus, HttpStatus.OK);
     }
@@ -87,7 +92,9 @@ public class NotificationRestAPIController {
     public ResponseEntity<String> setReadedNotificationStatus(HttpServletRequest req){
         logger.info("Start setReadedNotificationStatus");
         User user = userService.getUserFromEmail(KeycloakUtility.getAccessToken(req).getPreferredUsername());
-        notificationService.setReadedNotificationStatus(user);
+        if(user != null) {
+            notificationService.setReadedNotificationStatus(user);
+        }
         logger.info("End setReadedNotificationStatus");
         return new ResponseEntity<String>("Le notifiche sono state lette.", HttpStatus.OK);
     }
