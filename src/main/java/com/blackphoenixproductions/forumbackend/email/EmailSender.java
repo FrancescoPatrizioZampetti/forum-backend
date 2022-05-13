@@ -28,7 +28,6 @@ public class EmailSender {
         this.domain = domain;
     }
 
-
     private void send(String to, String subject, String body)  {
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
@@ -45,15 +44,6 @@ public class EmailSender {
         }
     }
 
-
-    public void sendSigninEmail(User user) {
-        StringBuilder message = new StringBuilder();
-        message.append("<h1>Benvenuto nel nostro forum "+user.getUsername()+"!</h1><br>");
-        message.append("<h2>Ti ringraziamo per esserti registrato, ora puoi partecipare attivamente alla nostra community!</h2><br>");
-        setEmailFooter(message);
-        send(user.getEmail(), "Black Phoenix Productions ti da il benvenuto!", message.toString());
-    }
-
     public void sendTopicReplyEmail(User user, User userReply, Post post) {
         String url = domain + "/forum";
         StringBuilder message = new StringBuilder();
@@ -62,15 +52,6 @@ public class EmailSender {
         message.append("<h2>Accedi al <a href=\"" + url + "\">forum</a> per rispondere.</h2><br>");
         setEmailFooter(message);
         send(user.getEmail(), "Qualcuno ha risposto al tuo topic!", message.toString());
-    }
-
-    public void sendResetCredentialsEmail(User user, String token) {
-        StringBuilder message = new StringBuilder();
-        message.append("<h2>Ciao " + user.getUsername() + ", hai avviato la procedura di reset della password.<br><br>Per completarla procedi cliccando nel link sotto entro 15 minuti dall'arrivo di questa email.</h2><br>");
-        String url = domain + "/finishresetcredentials?token=" + token + "&username=" + user.getUsername();
-        message.append("<h2><a href=\"" + url + "\">Clicca qui per continuare con la procedura di reset.</a></h2><br>");
-        setEmailFooter(message);
-        send(user.getEmail(), "Black Phoenix Productions - Reset Credenziali", message.toString());
     }
 
     private void setEmailFooter(StringBuilder body){
