@@ -19,10 +19,16 @@ public class UserService implements IUserService {
         this.userRepository = userRepository;
     }
 
-
+    /**
+     * Recupera l'utente registrato.
+     * Nota bene: l'utente viene persistito nell'applicativo durante la registrazione con Keycloak,
+     * tuttavia se non lo trova lo salva.
+     * @param accessToken
+     * @return
+     */
     @Override
     @Transactional
-    public User registerOrRetriveUser(AccessToken accessToken) {
+    public User retriveUser(AccessToken accessToken) {
         User findedUser = userRepository.findByEmail(accessToken.getPreferredUsername());
         if(findedUser == null) {
             return userRepository.saveAndFlush(new User(accessToken.getNickName(), accessToken.getPreferredUsername()));

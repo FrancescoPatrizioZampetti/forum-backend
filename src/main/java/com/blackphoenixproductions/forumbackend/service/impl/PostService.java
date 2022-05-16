@@ -62,7 +62,7 @@ public class PostService implements IPostService {
     @Override
     public Post createPost(InsertPostDTO postDTO, HttpServletRequest req) {
         Post post = new Post();
-        User user = userService.registerOrRetriveUser(KeycloakUtility.getAccessToken(req));
+        User user = userService.retriveUser(KeycloakUtility.getAccessToken(req));
         if (user == null) {
             throw new CustomException("Utente non trovato.", HttpStatus.NOT_FOUND);
         }

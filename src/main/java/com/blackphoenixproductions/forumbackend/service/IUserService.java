@@ -7,7 +7,7 @@ import org.keycloak.representations.AccessToken;
 
 public interface IUserService {
 
-    User registerOrRetriveUser(AccessToken accessToken);
+    User retriveUser(AccessToken accessToken);
 
     User getUserFromUsername(String username);
 

@@ -46,7 +46,7 @@ public class TopicService implements ITopicService {
     @Transactional
     @Override
     public Topic createTopic(InsertTopicDTO insertTopicDTO, HttpServletRequest req) {
-        User userTopic = userService.registerOrRetriveUser(KeycloakUtility.getAccessToken(req));
+        User userTopic = userService.retriveUser(KeycloakUtility.getAccessToken(req));
         if (userTopic == null){
             throw new CustomException("Utente non trovato.", HttpStatus.NOT_FOUND);
         }
