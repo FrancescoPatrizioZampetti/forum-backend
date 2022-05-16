@@ -1,7 +1,6 @@
 package com.blackphoenixproductions.forumbackend.api;
 
 
-import com.blackphoenixproductions.forumbackend.email.EmailSender;
 import com.blackphoenixproductions.forumbackend.service.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,14 +20,12 @@ import javax.servlet.http.HttpServletRequest;
 public class UserRestAPIController {
 
     private final IUserService userService;
-    private final EmailSender emailSender;
 
     private static final Logger logger = LoggerFactory.getLogger(UserRestAPIController.class);
 
     @Autowired
-    public UserRestAPIController(IUserService userService, EmailSender emailSender) {
+    public UserRestAPIController(IUserService userService) {
         this.userService = userService;
-        this.emailSender = emailSender;
     }
 
 
