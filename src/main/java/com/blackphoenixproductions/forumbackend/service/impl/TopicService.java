@@ -7,7 +7,6 @@ import com.blackphoenixproductions.forumbackend.entity.Topic;
 import com.blackphoenixproductions.forumbackend.entity.User;
 import com.blackphoenixproductions.forumbackend.enums.Roles;
 import com.blackphoenixproductions.forumbackend.repository.TopicRepository;
-import com.blackphoenixproductions.forumbackend.repository.UserRepository;
 import com.blackphoenixproductions.forumbackend.security.KeycloakUtility;
 import com.blackphoenixproductions.forumbackend.service.ITopicService;
 import com.blackphoenixproductions.forumbackend.service.IUserService;
@@ -26,13 +25,11 @@ import java.util.Optional;
 public class TopicService implements ITopicService {
 
     private final TopicRepository topicRepository;
-    private final UserRepository userRepository;
     private final IUserService userService;
 
     @Autowired
-    public TopicService(TopicRepository topicRepository, UserRepository userRepository, IUserService userService) {
+    public TopicService(TopicRepository topicRepository, IUserService userService) {
         this.topicRepository = topicRepository;
-        this.userRepository = userRepository;
         this.userService = userService;
     }
 
