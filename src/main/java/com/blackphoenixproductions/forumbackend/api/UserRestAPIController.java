@@ -27,14 +27,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class UserRestAPIController {
 
     private final IUserService userService;
-    private final UserRepository userRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(UserRestAPIController.class);
 
     @Autowired
-    public UserRestAPIController(IUserService userService, UserRepository userRepository) {
-        this.userService = userService;
-        this.userRepository = userRepository;
+    public UserRestAPIController(IUserService userService) {
+        this.userService = userService;;
     }
 
 

@@ -29,18 +29,16 @@ import java.util.*;
 public class PostService implements IPostService {
 
     private final PostRepository postRepository;
-    private final UserRepository userRepository;
     private final IUserService userService;
     private final TopicRepository topicRepository;
     private final EmailSender emailSender;
 
 
     @Autowired
-    public PostService(PostRepository postRepository, UserRepository userRepository, IUserService userService, TopicRepository topicRepository, EmailSender emailSender) {
+    public PostService(PostRepository postRepository, IUserService userService, TopicRepository topicRepository, EmailSender emailSender) {
         this.postRepository = postRepository;
         this.userService = userService;
         this.emailSender = emailSender;
-        this.userRepository = userRepository;
         this.topicRepository = topicRepository;
     }
 

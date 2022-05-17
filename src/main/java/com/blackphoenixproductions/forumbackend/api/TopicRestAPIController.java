@@ -42,14 +42,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class TopicRestAPIController {
 
     private static final Logger logger = LoggerFactory.getLogger(TopicRestAPIController.class);
-    private final TopicAssembler simpleTopicDTOAssembler;
     private final ITopicService topicService;
     private final VTopicAssembler vTopicAssembler;
     private final VTopicService vTopicService;
 
     @Autowired
-    public TopicRestAPIController(TopicAssembler simpleTopicDTOAssembler, ITopicService topicService, VTopicAssembler vTopicAssembler, VTopicService vTopicService) {
-        this.simpleTopicDTOAssembler = simpleTopicDTOAssembler;
+    public TopicRestAPIController(ITopicService topicService, VTopicAssembler vTopicAssembler, VTopicService vTopicService) {
         this.topicService = topicService;
         this.vTopicAssembler = vTopicAssembler;
         this.vTopicService = vTopicService;
