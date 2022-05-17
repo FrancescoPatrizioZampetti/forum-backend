@@ -55,7 +55,7 @@ public class NotificationRestAPIController {
     public ResponseEntity<CollectionModel<NotificationDTO>> getUserNotificationList(HttpServletRequest req){
         logger.info("Start getUserNotificationList");
         CollectionModel<NotificationDTO> userNotificationModel = null;
-        User user = userService.getUserFromEmail(KeycloakUtility.getAccessToken(req).getPreferredUsername());
+        User user = userService.getUserFromEmail(KeycloakUtility.getAccessToken(req).getEmail());
         if(user != null) {
             List<NotificationDTO> userNotification = notificationService.getUserNotification(user);
             if (userNotification != null) {
@@ -75,7 +75,7 @@ public class NotificationRestAPIController {
     public ResponseEntity<Boolean> getUserNotificationStatus(HttpServletRequest req){
         logger.info("Start getUserNotificationStatus");
         Boolean notificationStatus = null;
-        User user = userService.getUserFromEmail(KeycloakUtility.getAccessToken(req).getPreferredUsername());
+        User user = userService.getUserFromEmail(KeycloakUtility.getAccessToken(req).getEmail());
         if(user != null) {
             notificationStatus = notificationService.getUserNotificationStatus(user);
         }
@@ -91,7 +91,7 @@ public class NotificationRestAPIController {
     @GetMapping(value = "setReadedNotificationStatus")
     public ResponseEntity<String> setReadedNotificationStatus(HttpServletRequest req){
         logger.info("Start setReadedNotificationStatus");
-        User user = userService.getUserFromEmail(KeycloakUtility.getAccessToken(req).getPreferredUsername());
+        User user = userService.getUserFromEmail(KeycloakUtility.getAccessToken(req).getEmail());
         if(user != null) {
             notificationService.setReadedNotificationStatus(user);
         }

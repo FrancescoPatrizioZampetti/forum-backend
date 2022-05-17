@@ -29,9 +29,9 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public User retriveUser(AccessToken accessToken) {
-        User findedUser = userRepository.findByEmail(accessToken.getPreferredUsername());
+        User findedUser = userRepository.findByEmail(accessToken.getEmail());
         if(findedUser == null) {
-            return userRepository.saveAndFlush(new User(accessToken.getNickName(), accessToken.getPreferredUsername()));
+            return userRepository.saveAndFlush(new User(accessToken.getPreferredUsername(), accessToken.getEmail()));
         }
         return findedUser;
     }

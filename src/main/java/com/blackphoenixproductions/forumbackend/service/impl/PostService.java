@@ -89,7 +89,7 @@ public class PostService implements IPostService {
             throw new CustomException("Post con id: " + postDTO.getId() + " non trovato.", HttpStatus.BAD_REQUEST);
         }
         if(!KeycloakUtility.getRoles(req).contains(Roles.ROLE_STAFF.getValue())
-                && !post.get().getUser().getEmail().equals(KeycloakUtility.getAccessToken(req).getPreferredUsername())){
+                && !post.get().getUser().getEmail().equals(KeycloakUtility.getAccessToken(req).getEmail())){
             throw new CustomException("Utente non autorizzato alla modifica del post.", HttpStatus.UNAUTHORIZED);
         }
         Post postToEdit = post.get();

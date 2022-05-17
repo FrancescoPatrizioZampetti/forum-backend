@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 
 @RestController
 @RequestMapping("/api")
@@ -46,9 +49,9 @@ public class UserRestAPIController {
     @GetMapping (value = "/findUser")
     public ResponseEntity<EntityModel<User>> findUser (HttpServletRequest req){
         logger.info("Start findUser");
-        User findedUser = userService.getUserFromEmail(KeycloakUtility.getAccessToken(req).getPreferredUsername());
+        User findedUser = userService.getUserFromEmail(KeycloakUtility.getAccessToken(req).getEmail());
         logger.info("End findUser");
-        return new ResponseEntity<EntityModel<User>>(EntityModel.of(findedUser), HttpStatus.OK);
+        return new ResponseEntity<EntityModel<User>>(EntityModel.of(findedUser).add(linkTo(methodOn(UserRestAPIController.class).findUser(req)).withSelfRel()), HttpStatus.OK);
     }
 
 
