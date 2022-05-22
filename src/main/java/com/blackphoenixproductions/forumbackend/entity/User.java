@@ -28,15 +28,19 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
+    @Column(unique = true, nullable = false)
+    private String keycloak_id;
+
     @OneToMany(mappedBy = "user")
     private Set<Post> posts;
 
     @OneToMany(mappedBy = "user")
     private Set<Topic> topics;
 
-    public User(String username, String email) {
+    public User(String username, String email, String keycloak_id) {
         this.username = username;
         this.email = email;
+        this.keycloak_id = keycloak_id;
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.blackphoenixproductions.forumbackend.repository.UserRepository;
 import com.blackphoenixproductions.forumbackend.security.KeycloakUtility;
 import com.blackphoenixproductions.forumbackend.service.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +51,15 @@ public class UserRestAPIController {
         User findedUser = userService.getUserFromEmail(KeycloakUtility.getAccessToken(req).getEmail());
         logger.info("End findUser");
         return new ResponseEntity<EntityModel<User>>(EntityModel.of(findedUser).add(linkTo(methodOn(UserRestAPIController.class).findUser(req)).withSelfRel()), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Cambia l'username dell'utente loggato.")
+    @GetMapping (value = "/changeUserUsername")
+    public ResponseEntity<EntityModel<User>> changeUserUsername (HttpServletRequest req, @Parameter(description = "Il nuovo username") String newUsername){
+        logger.info("Start changeUserUsername");
+        User user = userService.changeUserUsername(KeycloakUtility.getAccessToken(req).getEmail(), newUsername);
+        logger.info("End changeUserUsername");
+        return new ResponseEntity<EntityModel<User>>(EntityModel.of(user).add(linkTo(methodOn(UserRestAPIController.class).changeUserUsername(req, newUsername)).withSelfRel()), HttpStatus.OK);
     }
 
 
