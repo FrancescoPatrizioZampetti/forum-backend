@@ -80,7 +80,7 @@ public class TopicRestAPIController {
             @ApiResponse(responseCode = "400", description = "Bad request: topic non trovato.", content = @Content(schema = @Schema(hidden = true))),
     })
     @Operation(summary = "Ricerca di un topic.")
-    @PostMapping(value = "/findTopic")
+    @GetMapping(value = "/findTopic")
     public ResponseEntity<EntityModel<Topic>> findTopic (@Parameter(description = "L'id del topic da cercare.") @RequestParam Long id){
         Topic topicDTO = topicService.getTopic(id);
         EntityModel<Topic> entityModel = EntityModel.of(topicDTO).add(linkTo(methodOn(TopicRestAPIController.class).findTopic(id)).withSelfRel());
