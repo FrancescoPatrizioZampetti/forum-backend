@@ -26,12 +26,16 @@ public class UserService implements IUserService {
     private String KEYCLOAK_SERVER_URL;
     private String KEYCLOAK_REALM;
     private String KEYCLOAK_RESOURCE;
+    private String SERVICE_USER_USERNAME;
+    private String SERVICE_USER_PASSWORD;
 
     @Autowired
     public UserService(UserRepository userRepository,
                        @Value("${keycloak.auth-server-url}") String KEYCLOAK_SERVER_URL,
                        @Value("${keycloak.realm}") String KEYCLOAK_REALM,
-                       @Value("${keycloak.resource}") String KEYCLOAK_RESOURCE)  {
+                       @Value("${keycloak.resource}") String KEYCLOAK_RESOURCE,
+                       @Value("${service.user.username}") String SERVICE_USER_USERNAME,
+                       @Value("${service.user.password}") String SERVICE_USER_PASSWORD)  {
         this.userRepository = userRepository;
         this.KEYCLOAK_SERVER_URL = KEYCLOAK_SERVER_URL;
         this.KEYCLOAK_REALM = KEYCLOAK_REALM;
@@ -78,8 +82,8 @@ public class UserService implements IUserService {
             Keycloak kc = KeycloakBuilder.builder()
                     .serverUrl(KEYCLOAK_SERVER_URL)
                     .realm(KEYCLOAK_REALM)
-                    .username("helpdesk")
-                    .password("test1234")
+                    .username(SERVICE_USER_USERNAME)
+                    .password(SERVICE_USER_PASSWORD)
                     .clientId(KEYCLOAK_RESOURCE)
                     .build();
 
