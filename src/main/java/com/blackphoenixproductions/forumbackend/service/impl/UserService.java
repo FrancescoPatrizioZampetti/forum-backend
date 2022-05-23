@@ -40,6 +40,8 @@ public class UserService implements IUserService {
         this.KEYCLOAK_SERVER_URL = KEYCLOAK_SERVER_URL;
         this.KEYCLOAK_REALM = KEYCLOAK_REALM;
         this.KEYCLOAK_RESOURCE = KEYCLOAK_RESOURCE;
+        this.SERVICE_USER_USERNAME = SERVICE_USER_USERNAME;
+        this.SERVICE_USER_PASSWORD = SERVICE_USER_PASSWORD;
     }
 
     /**
