@@ -5,8 +5,7 @@ public enum Roles {
 
     ROLE_USER ("USER"),
     ROLE_STAFF ("STAFF"),
-    ROLE_FACEBOOK ("FACEBOOK"),
-    ROLE_GOOGLE ("GOOGLE");
+    ROLE_HELPDESK ("HELPDESK");
 
     private final String value;
 

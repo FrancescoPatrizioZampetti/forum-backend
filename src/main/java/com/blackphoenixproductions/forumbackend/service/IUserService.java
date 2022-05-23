@@ -13,7 +13,7 @@ public interface IUserService {
 
     User getUserFromEmail (String email);
 
-    User changeUserUsername (String email, String username);
+    User changeUserUsername (AccessToken accessToken, String username);
 
     Long getTotalUsers();
 

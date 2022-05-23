@@ -5,10 +5,12 @@ import com.blackphoenixproductions.forumbackend.repository.UserRepository;
 import com.blackphoenixproductions.forumbackend.service.IUserService;
 import com.blackphoenixproductions.forumbackend.entity.User;
 import org.keycloak.representations.AccessToken;
+import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -21,17 +23,22 @@ public class UserService implements IUserService {
 
     private final UserRepository userRepository;
     private final RestTemplate restTemplate;
+    private String KEYCLOAK_SERVER_URL;
+    private String KEYCLOAK_REALM;
 
     @Autowired
-    public UserService(UserRepository userRepository, RestTemplate restTemplate) {
+    public UserService(UserRepository userRepository, RestTemplate restTemplate, @Value("${keycloak.auth-server-url}") String KEYCLOAK_SERVER_URL,
+                       @Value("${keycloak.realm}") String KEYCLOAK_REALM) {
         this.userRepository = userRepository;
         this.restTemplate = restTemplate;
+        this.KEYCLOAK_SERVER_URL = KEYCLOAK_SERVER_URL;
+        this.KEYCLOAK_REALM = KEYCLOAK_REALM;
     }
 
     /**
      * Recupera l'utente registrato.
      * Nota bene: l'utente viene persistito nell'applicativo durante la registrazione con Keycloak tramite un plugin custom,
-     * tuttavia se non dovesse trovarlo (anomalia) lo salva ora.
+     * tuttavia se non dovesse trovarlo (anomalia o demo) lo salva ora.
      * @param accessToken
      * @return
      */
@@ -41,7 +48,7 @@ public class UserService implements IUserService {
         User findedUser = userRepository.findByEmail(accessToken.getEmail());
         if(findedUser == null) {
             logger.warn("Utente non trovato nell'applicativo, procedo a salvarlo...");
-            return userRepository.saveAndFlush(new User(accessToken.getPreferredUsername(), accessToken.getEmail(), accessToken.getId()));
+            findedUser = userRepository.saveAndFlush(new User(accessToken.getPreferredUsername(), accessToken.getEmail()));
         }
         return findedUser;
     }
@@ -60,20 +67,17 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional
-    public User changeUserUsername(String email, String username) {
-        User user = userRepository.findByEmail(email);
-        if(user == null){
-            throw new CustomException("Utente non trovato.", HttpStatus.NOT_FOUND);
-        }
+    public User changeUserUsername(AccessToken accessToken, String username) {
+        User user = retriveUser(accessToken);
         user.setUsername(username);
         user = userRepository.saveAndFlush(user);
-
-
-        // chiamo keycloak, l'id è quello di keycloak
-        // GET /{realm}/users/{id}
-        // PUT /{realm}/users/{id}
-        // nel body UserRepresentation
-
+        try {
+            UserRepresentation response = restTemplate.getForObject(KEYCLOAK_SERVER_URL + "/" + KEYCLOAK_REALM + "/users/{id}", UserRepresentation.class, accessToken.getId());
+            response.setUsername(username);
+            restTemplate.put(KEYCLOAK_SERVER_URL + "/" + KEYCLOAK_REALM + "/users/{id}", response, accessToken.getId());
+        } catch (Exception e) {
+            throw new CustomException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         return user;
     }
 

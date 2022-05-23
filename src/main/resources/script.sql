@@ -3,8 +3,7 @@ CREATE DATABASE forum_db_2;
 CREATE TABLE USERS (
 id bigserial primary key not null,
 username varchar(255) UNIQUE not null,
-email varchar(255) UNIQUE not null,
-keycloak_id varchar(255) UNIQUE not null);
+email varchar(255) UNIQUE not null);
 
 create table TOPICS (
 id bigserial primary key not null,

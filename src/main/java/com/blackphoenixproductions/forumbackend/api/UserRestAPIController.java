@@ -2,7 +2,6 @@ package com.blackphoenixproductions.forumbackend.api;
 
 
 import com.blackphoenixproductions.forumbackend.entity.User;
-import com.blackphoenixproductions.forumbackend.repository.UserRepository;
 import com.blackphoenixproductions.forumbackend.security.KeycloakUtility;
 import com.blackphoenixproductions.forumbackend.service.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -57,7 +56,7 @@ public class UserRestAPIController {
     @GetMapping (value = "/changeUserUsername")
     public ResponseEntity<EntityModel<User>> changeUserUsername (HttpServletRequest req, @Parameter(description = "Il nuovo username") String newUsername){
         logger.info("Start changeUserUsername");
-        User user = userService.changeUserUsername(KeycloakUtility.getAccessToken(req).getEmail(), newUsername);
+        User user = userService.changeUserUsername(KeycloakUtility.getAccessToken(req), newUsername);
         logger.info("End changeUserUsername");
         return new ResponseEntity<EntityModel<User>>(EntityModel.of(user).add(linkTo(methodOn(UserRestAPIController.class).changeUserUsername(req, newUsername)).withSelfRel()), HttpStatus.OK);
     }
