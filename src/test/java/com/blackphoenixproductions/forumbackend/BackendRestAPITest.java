@@ -24,6 +24,8 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 
+import javax.ws.rs.core.Response;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -65,24 +67,56 @@ public class BackendRestAPITest {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
 
         RestTemplate restTemplate = new RestTemplate();
-        String result = restTemplate.postForObject(builder.toUri(), request, String.class);
-        result.toString();
+        AccessTokenResponse accessTokenResponse = restTemplate.postForObject(builder.toUri(), request, AccessTokenResponse.class);
 
+        HttpHeaders headers2 = new HttpHeaders();
+        headers2.setContentType(MediaType.APPLICATION_JSON);
+        headers2.setBearerAuth(accessTokenResponse.getToken());
 
-        //UserRepresentation response = restTemplate.getForObject("http://localhost:8080/forum/users/{id}", UserRepresentation.class, "6625043e-2c1b-46e0-bc95-c8ffa3deee9a");
+        HttpEntity<MultiValueMap<String, String>> request2 = new HttpEntity<>(headers2);
+
+        ResponseEntity<UserRepresentation> resp = null;
+        try {
+            resp = restTemplate.exchange("http://localhost:8080/admin/realms/forum/users/6625043e-2c1b-46e0-bc95-c8ffa3deee9a", HttpMethod.GET, request2, UserRepresentation.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        UserRepresentation user = resp.getBody();
+        user.setUsername("test-user3");
+
+        HttpEntity<Object> request3 = new HttpEntity<>(user, headers2);
+
+        ResponseEntity<Void> resp2 = null;
+        try {
+            resp2 = restTemplate.exchange("http://localhost:8080/admin/realms/forum/users/6625043e-2c1b-46e0-bc95-c8ffa3deee9a", HttpMethod.PUT, request3, Void.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if(resp2.getStatusCode().is2xxSuccessful()) {
+            System.out.println("Username cambiato!");
+        }
+
     }
 
    @Test
    public void test_keycloak_builder(){
        Keycloak kc = KeycloakBuilder.builder()
                .serverUrl("http://localhost:8080/")
-               .realm("master")
-               .username("admin")
-               .password("admin")
-               .clientId("admin-cli")
+               .realm("forum")
+               .username("helpdesk")
+               .password("test1234")
+               .clientId("forum-client")
                .build();
+
        UserRepresentation user = kc.realm("forum").users().get("6625043e-2c1b-46e0-bc95-c8ffa3deee9a").toRepresentation();
-       user.getEmail();
+       user.setUsername("test-ciccio_2");
+       kc.realm("forum").users().get("6625043e-2c1b-46e0-bc95-c8ffa3deee9a").update(user);
+
+       UserRepresentation updatedUser = kc.realm("forum").users().get("6625043e-2c1b-46e0-bc95-c8ffa3deee9a").toRepresentation();
+       updatedUser.getUsername();
+
    }
 
 
