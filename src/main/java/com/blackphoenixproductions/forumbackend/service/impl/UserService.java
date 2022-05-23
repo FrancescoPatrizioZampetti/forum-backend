@@ -4,6 +4,8 @@ import com.blackphoenixproductions.forumbackend.dto.openApi.exception.CustomExce
 import com.blackphoenixproductions.forumbackend.repository.UserRepository;
 import com.blackphoenixproductions.forumbackend.service.IUserService;
 import com.blackphoenixproductions.forumbackend.entity.User;
+import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
@@ -13,7 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 
 @Service
@@ -22,17 +23,19 @@ public class UserService implements IUserService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
-    private final RestTemplate restTemplate;
     private String KEYCLOAK_SERVER_URL;
     private String KEYCLOAK_REALM;
+    private String KEYCLOAK_RESOURCE;
 
     @Autowired
-    public UserService(UserRepository userRepository, RestTemplate restTemplate, @Value("${keycloak.auth-server-url}") String KEYCLOAK_SERVER_URL,
-                       @Value("${keycloak.realm}") String KEYCLOAK_REALM) {
+    public UserService(UserRepository userRepository,
+                       @Value("${keycloak.auth-server-url}") String KEYCLOAK_SERVER_URL,
+                       @Value("${keycloak.realm}") String KEYCLOAK_REALM,
+                       @Value("${keycloak.resource}") String KEYCLOAK_RESOURCE)  {
         this.userRepository = userRepository;
-        this.restTemplate = restTemplate;
         this.KEYCLOAK_SERVER_URL = KEYCLOAK_SERVER_URL;
         this.KEYCLOAK_REALM = KEYCLOAK_REALM;
+        this.KEYCLOAK_RESOURCE = KEYCLOAK_RESOURCE;
     }
 
     /**
@@ -72,9 +75,18 @@ public class UserService implements IUserService {
         user.setUsername(username);
         user = userRepository.saveAndFlush(user);
         try {
-            UserRepresentation response = restTemplate.getForObject(KEYCLOAK_SERVER_URL + "/" + KEYCLOAK_REALM + "/users/{id}", UserRepresentation.class, accessToken.getId());
-            response.setUsername(username);
-            restTemplate.put(KEYCLOAK_SERVER_URL + "/" + KEYCLOAK_REALM + "/users/{id}", response, accessToken.getId());
+            Keycloak kc = KeycloakBuilder.builder()
+                    .serverUrl(KEYCLOAK_SERVER_URL)
+                    .realm(KEYCLOAK_REALM)
+                    .username("helpdesk")
+                    .password("test1234")
+                    .clientId(KEYCLOAK_RESOURCE)
+                    .build();
+
+            UserRepresentation keycloakUser = kc.realm(KEYCLOAK_REALM).users().get(accessToken.getSubject()).toRepresentation();
+            keycloakUser.setUsername(username);
+            kc.realm(KEYCLOAK_REALM).users().get(accessToken.getSubject()).update(keycloakUser);
+
         } catch (Exception e) {
             throw new CustomException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

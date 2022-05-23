@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
-import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.AccessTokenResponse;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,7 +23,6 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 
-import javax.ws.rs.core.Response;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -45,6 +43,24 @@ public class BackendRestAPITest {
     @BeforeEach
     public void loadBeforeAllTests(){
         webClient = WebClient.create(BACKEND_PATH);
+    }
+
+    @Test
+    public void test_keycloak_builder(){
+        Keycloak kc = KeycloakBuilder.builder()
+                .serverUrl("http://localhost:8080/")
+                .realm("forum")
+                .username("helpdesk")
+                .password("test1234")
+                .clientId("forum-client")
+                .build();
+
+        UserRepresentation user = kc.realm("forum").users().get("6625043e-2c1b-46e0-bc95-c8ffa3deee9a").toRepresentation();
+        user.setUsername("test-ciccio_2");
+        kc.realm("forum").users().get("6625043e-2c1b-46e0-bc95-c8ffa3deee9a").update(user);
+        // verifico update
+        UserRepresentation updatedUser = kc.realm("forum").users().get("6625043e-2c1b-46e0-bc95-c8ffa3deee9a").toRepresentation();
+        updatedUser.getUsername();
     }
 
 
@@ -99,25 +115,6 @@ public class BackendRestAPITest {
         }
 
     }
-
-   @Test
-   public void test_keycloak_builder(){
-       Keycloak kc = KeycloakBuilder.builder()
-               .serverUrl("http://localhost:8080/")
-               .realm("forum")
-               .username("helpdesk")
-               .password("test1234")
-               .clientId("forum-client")
-               .build();
-
-       UserRepresentation user = kc.realm("forum").users().get("6625043e-2c1b-46e0-bc95-c8ffa3deee9a").toRepresentation();
-       user.setUsername("test-ciccio_2");
-       kc.realm("forum").users().get("6625043e-2c1b-46e0-bc95-c8ffa3deee9a").update(user);
-
-       UserRepresentation updatedUser = kc.realm("forum").users().get("6625043e-2c1b-46e0-bc95-c8ffa3deee9a").toRepresentation();
-       updatedUser.getUsername();
-
-   }
 
 
     @Test
