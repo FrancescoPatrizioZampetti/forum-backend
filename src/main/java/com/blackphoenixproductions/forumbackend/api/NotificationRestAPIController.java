@@ -50,7 +50,7 @@ public class NotificationRestAPIController {
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(hidden = true)))
     })
-    @Operation(summary = "Restituisce tutte le notifiche di un utente.")
+    @Operation(summary = "Restituisce tutte le notifiche di un utente.", hidden = true)
     @GetMapping(value = "getUserNotificationList")
     public ResponseEntity<CollectionModel<NotificationDTO>> getUserNotificationList(HttpServletRequest req){
         logger.info("Start getUserNotificationList");

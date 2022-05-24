@@ -44,8 +44,6 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
                 .antMatchers("/api/findTopic").permitAll()
                 .antMatchers("/api/getTotalPosts").permitAll()
                 .antMatchers("/api/findPostsByPage").permitAll()
-                .antMatchers("/api/initResetCredentials").permitAll() // init procedura di reset password
-                .antMatchers("/api/finishResetCredentials").permitAll() // end procedura di reset password
                 .anyRequest()
                 .authenticated();
         http.csrf().disable();

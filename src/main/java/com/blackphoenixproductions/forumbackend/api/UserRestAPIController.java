@@ -53,8 +53,8 @@ public class UserRestAPIController {
     }
 
     @Operation(summary = "Cambia l'username dell'utente loggato.")
-    @GetMapping (value = "/changeUserUsername")
-    public ResponseEntity<EntityModel<User>> changeUserUsername (HttpServletRequest req, @Parameter(description = "Il nuovo username") String newUsername){
+    @PostMapping (value = "/changeUserUsername")
+    public ResponseEntity<EntityModel<User>> changeUserUsername (HttpServletRequest req, @Parameter(description = "Il nuovo username") @RequestParam String newUsername){
         logger.info("Start changeUserUsername");
         User user = userService.changeUserUsername(KeycloakUtility.getAccessToken(req), newUsername);
         logger.info("End changeUserUsername");

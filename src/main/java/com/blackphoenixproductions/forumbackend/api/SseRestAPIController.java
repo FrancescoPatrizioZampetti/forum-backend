@@ -41,7 +41,7 @@ public class SseRestAPIController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content(schema = @Schema(hidden = true))),
     })
-    @Operation(summary = "Endpoint per la sottoscrizione delle notifiche push.")
+    @Operation(summary = "Endpoint per la sottoscrizione delle notifiche push.", hidden = true)
     @GetMapping("/subscribe")
     public ResponseEntity<SseEmitter> subscribe(@RequestParam String username){
         // 60000L * 5 = 5 min
