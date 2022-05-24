@@ -58,6 +58,47 @@ public class RepositoryTest {
         assertNotNull(user);
     }
 
+    @Test
+    @Transactional(readOnly = true)
+    public void test_simple_filter(){
+        // esempio filtro semplificato proveniente da front-end
+        List<Filter> listaFiltri = new ArrayList<>();
+        Filter s1 = buildFilter(VTopic_.AUTHOR_USERNAME, "test-user-1", QueryOperator.EQUALS);
+        Filter s2 = buildFilter(VTopic_.TITLE, "prova", QueryOperator.LIKE);
+        listaFiltri.add(s1);
+        listaFiltri.add(s2);
+
+        // creo il filtro di base, ogni filtro sarà in AND
+        List<Filter> filters = getFilters();
+        // aggiungo tutti i filtri
+        Filter filter = null;
+        for (Filter simpleFilter : listaFiltri) {
+            filter = buildFilter(simpleFilter.getField(), simpleFilter.getValue(), simpleFilter.getQueryOperator());
+            filters.add(filter);
+        }
+
+        SpecificationBuilder specificationBuilder = new SpecificationBuilder();
+        Specification<VTopic> spec = specificationBuilder.getSpecification(filter);
+        Page<VTopic> pagedTopics = vtopicRepository.findAll(spec, PageRequest.of(0, 10));
+        assertNotNull(pagedTopics);
+    }
+
+    private List<Filter> getFilters() {
+        Filter rootFilter = Filter.builder()
+                .booleanOperator(BooleanOperator.AND)
+                .build();
+        List<Filter> filters = new ArrayList<>();
+        rootFilter.setFilters(filters);
+        return filters;
+    }
+
+    public Filter buildFilter(String field, String value, QueryOperator queryOperator){
+        return Filter.builder()
+                .queryOperator(queryOperator)
+                .field(field)
+                .value(value)
+                .build();
+    }
 
 
     @Test
@@ -65,7 +106,6 @@ public class RepositoryTest {
     public void test_topic_specification(){
         try {
             CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-
             CriteriaQuery<VTopic> vtopicQuery = builder.createQuery(VTopic.class);
             Root<VTopic> vTopicRoot = vtopicQuery.from(VTopic.class);
 
