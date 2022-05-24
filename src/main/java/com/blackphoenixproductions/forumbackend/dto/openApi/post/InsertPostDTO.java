@@ -12,12 +12,9 @@ public class InsertPostDTO {
     private String message;
     @Schema(description = "L'id del del topic a cui appartiene il post.", required = true)
     private Long topicId;
-    @Schema(description = "L'username dell'autore del post.", required = true)
-    private String username;
 
-    public InsertPostDTO(String message, Long topicId, String username) {
+    public InsertPostDTO(String message, Long topicId) {
         this.message = message;
         this.topicId = topicId;
-        this.username = username;
     }
 }

@@ -7,6 +7,7 @@ import com.blackphoenixproductions.forumbackend.dto.openApi.topic.EditTopicDTO;
 import com.blackphoenixproductions.forumbackend.dto.openApi.topic.InsertTopicDTO;
 import com.blackphoenixproductions.forumbackend.entity.Topic;
 import com.blackphoenixproductions.forumbackend.entity.VTopic;
+import com.blackphoenixproductions.forumbackend.security.KeycloakUtility;
 import com.blackphoenixproductions.forumbackend.service.ITopicService;
 import com.blackphoenixproductions.forumbackend.service.impl.VTopicService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -82,8 +83,8 @@ public class TopicRestAPIController {
     @Operation(summary = "Ricerca di un topic.")
     @GetMapping(value = "/findTopic")
     public ResponseEntity<EntityModel<Topic>> findTopic (@Parameter(description = "L'id del topic da cercare.") @RequestParam Long id){
-        Topic topicDTO = topicService.getTopic(id);
-        EntityModel<Topic> entityModel = EntityModel.of(topicDTO).add(linkTo(methodOn(TopicRestAPIController.class).findTopic(id)).withSelfRel());
+        Topic topic = topicService.getTopic(id);
+        EntityModel<Topic> entityModel = EntityModel.of(topic).add(linkTo(methodOn(TopicRestAPIController.class).findTopic(id)).withSelfRel());
         return new ResponseEntity<EntityModel<Topic>> (entityModel, HttpStatus.OK);
     }
 
@@ -95,7 +96,7 @@ public class TopicRestAPIController {
     @Operation(summary = "Creazione di un topic.")
     @PostMapping(value = "createTopic")
     public ResponseEntity<EntityModel<Topic>> createTopic(@RequestBody InsertTopicDTO insertTopicDTO, HttpServletRequest req){
-        logger.info("Start createTopic - topic owner username : {}", insertTopicDTO.getUsername());
+        logger.info("Start createTopic - topic owner username : {}", KeycloakUtility.getAccessToken(req).getPreferredUsername());
         Topic savedTopic = topicService.createTopic(insertTopicDTO, req);
         EntityModel<Topic> entityModel = EntityModel.of(savedTopic).add(linkTo(methodOn(TopicRestAPIController.class).createTopic(insertTopicDTO, req)).withSelfRel());
         logger.info("End createTopic");

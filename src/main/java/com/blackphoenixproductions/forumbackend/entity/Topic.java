@@ -1,5 +1,6 @@
 package com.blackphoenixproductions.forumbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,6 +48,7 @@ public class Topic {
     @Temporal(TemporalType.TIMESTAMP)
     private Date editDate;
 
+    @JsonIgnoreProperties({"topics", "posts"})
     @ManyToOne
     @JoinColumn(name="USER_ID", nullable=false)
     private User user;

@@ -1,6 +1,7 @@
 package com.blackphoenixproductions.forumbackend.api;
 
 
+import com.blackphoenixproductions.forumbackend.dto.openApi.exception.CustomException;
 import com.blackphoenixproductions.forumbackend.entity.User;
 import com.blackphoenixproductions.forumbackend.security.KeycloakUtility;
 import com.blackphoenixproductions.forumbackend.service.IUserService;
@@ -48,6 +49,9 @@ public class UserRestAPIController {
     public ResponseEntity<EntityModel<User>> findUser (HttpServletRequest req){
         logger.info("Start findUser");
         User findedUser = userService.getUserFromEmail(KeycloakUtility.getAccessToken(req).getEmail());
+        if(findedUser == null){
+            throw new CustomException("Utente non trovato nel database dell'applicativo probabilmente a causa di un email non valida in fase di registrazione.", HttpStatus.NOT_FOUND);
+        }
         logger.info("End findUser");
         return new ResponseEntity<EntityModel<User>>(EntityModel.of(findedUser).add(linkTo(methodOn(UserRestAPIController.class).findUser(req)).withSelfRel()), HttpStatus.OK);
     }

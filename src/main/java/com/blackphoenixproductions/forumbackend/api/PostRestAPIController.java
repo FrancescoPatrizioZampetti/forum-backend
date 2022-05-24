@@ -4,6 +4,7 @@ import com.blackphoenixproductions.forumbackend.assembler.PostAssembler;
 import com.blackphoenixproductions.forumbackend.dto.openApi.post.EditPostDTO;
 import com.blackphoenixproductions.forumbackend.dto.openApi.post.InsertPostDTO;
 import com.blackphoenixproductions.forumbackend.entity.Post;
+import com.blackphoenixproductions.forumbackend.security.KeycloakUtility;
 import com.blackphoenixproductions.forumbackend.service.INotificationService;
 import com.blackphoenixproductions.forumbackend.service.IPostService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -81,7 +82,7 @@ public class PostRestAPIController {
     @Operation(summary = "Crea un nuovo post.")
     @PostMapping(value = "createPost")
     public ResponseEntity<EntityModel<Post>> createPost(@RequestBody InsertPostDTO postDTO, HttpServletRequest req){
-        logger.info("Start createPost - post owner username : {}", postDTO.getUsername());
+        logger.info("Start createPost - post owner username : {}", KeycloakUtility.getAccessToken(req).getPreferredUsername());
         Post savedPost = postService.createPost(postDTO, req);
         notificationService.notifyTopicAuthor(savedPost);
         EntityModel<Post> entityModel = EntityModel.of(savedPost, linkTo(methodOn(PostRestAPIController.class).createPost(postDTO, req)).withSelfRel());
