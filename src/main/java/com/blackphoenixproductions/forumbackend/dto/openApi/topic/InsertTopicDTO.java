@@ -8,8 +8,6 @@ import lombok.Setter;
 @Setter
 @Schema(description = "Il topic da creare.")
 public class InsertTopicDTO {
-    @Schema(description = "L'id del topic.", required = true)
-    private Long id;
     @Schema(description = "Il titolo del topic", required = true)
     private String title;
     @Schema(description = "Il messaggio del topic.", required = true)
