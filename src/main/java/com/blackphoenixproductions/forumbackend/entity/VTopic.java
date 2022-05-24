@@ -53,7 +53,4 @@ public class VTopic {
     @Column
     private String authorEmail;
 
-    @Column
-    private String authorRole;
-
 }
