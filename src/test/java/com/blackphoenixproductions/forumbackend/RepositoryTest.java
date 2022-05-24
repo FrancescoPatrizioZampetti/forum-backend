@@ -69,7 +69,8 @@ public class RepositoryTest {
         listaFiltri.add(s2);
 
         // creo il filtro di base, ogni filtro sarà in AND
-        List<Filter> filters = getFilters();
+        Filter rootFilter = getRootFilter();
+        List<Filter> filters = rootFilter.getFilters();
         // aggiungo tutti i filtri
         Filter filter = null;
         for (Filter simpleFilter : listaFiltri) {
@@ -78,18 +79,18 @@ public class RepositoryTest {
         }
 
         SpecificationBuilder specificationBuilder = new SpecificationBuilder();
-        Specification<VTopic> spec = specificationBuilder.getSpecification(filter);
+        Specification<VTopic> spec = specificationBuilder.getSpecification(rootFilter);
         Page<VTopic> pagedTopics = vtopicRepository.findAll(spec, PageRequest.of(0, 10));
         assertNotNull(pagedTopics);
     }
 
-    private List<Filter> getFilters() {
+    private Filter getRootFilter() {
         Filter rootFilter = Filter.builder()
                 .booleanOperator(BooleanOperator.AND)
                 .build();
         List<Filter> filters = new ArrayList<>();
         rootFilter.setFilters(filters);
-        return filters;
+        return rootFilter;
     }
 
     public Filter buildFilter(String field, String value, QueryOperator queryOperator){
