@@ -4,10 +4,8 @@ import com.blackphoenixproductions.forumbackend.dto.Filter;
 import com.blackphoenixproductions.forumbackend.enums.BooleanOperator;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.springframework.data.jpa.domain.Specification.where;
@@ -70,13 +68,8 @@ public class SpecificationBuilder {
             return Double.valueOf(value);
         }else if(fieldType.isAssignableFrom(Integer.class)){
             return Integer.valueOf(value);
-        }else if(fieldType.isAssignableFrom(Date.class)){
-            try {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                return simpleDateFormat.parse(value);
-            } catch (ParseException e){
-                throw new RuntimeException("Formato di data non supportato.");
-            }
+        }else if(fieldType.isAssignableFrom(LocalDate.class)){
+            return LocalDate.parse(value);
         }
         return value;
     }

@@ -8,7 +8,7 @@ import org.hibernate.annotations.Immutable;
 
 import javax.persistence.Entity;
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -36,16 +36,13 @@ public class VTopic {
     private boolean emailUser;
 
     @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createDate;
+    private LocalDateTime createDate;
 
     @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date deleteDate;
+    private LocalDateTime deleteDate;
 
     @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date editDate;
+    private LocalDateTime editDate;
 
     @Column
     private String authorUsername;

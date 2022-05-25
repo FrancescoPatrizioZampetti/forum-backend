@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 
@@ -53,7 +53,7 @@ public class TopicService implements ITopicService {
         topic.setEmailUser(insertTopicDTO.isEmailUser());
         topic.setPinned(insertTopicDTO.isPinned());
         topic.setUser(userTopic);
-        topic.setCreateDate(new Date());
+        topic.setCreateDate(LocalDateTime.now());
         return topicRepository.save(topic);
     }
 
@@ -68,7 +68,7 @@ public class TopicService implements ITopicService {
             throw new CustomException("Topic con id: " + topicDTO.getId() + " non trovato.", HttpStatus.BAD_REQUEST);
         }
         Topic topicToEdit = topic.get();
-        topicToEdit.setEditDate(new Date());
+        topicToEdit.setEditDate(LocalDateTime.now());
         topicToEdit.setMessage(topicDTO.getMessage());
         return topicRepository.save(topicToEdit);
     }

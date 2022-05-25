@@ -7,7 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+
 
 @Getter
 @Setter
@@ -20,7 +21,7 @@ public class NotificationDTO implements Comparable<NotificationDTO>{
     private User toUser;
     private Topic topic;
     private String message;
-    private Date createDate;
+    private LocalDateTime createDate;
     private String timeDifferenceFromNow;
     private String url;
 

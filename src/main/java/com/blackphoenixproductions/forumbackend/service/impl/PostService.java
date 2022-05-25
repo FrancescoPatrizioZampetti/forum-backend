@@ -10,7 +10,6 @@ import com.blackphoenixproductions.forumbackend.entity.User;
 import com.blackphoenixproductions.forumbackend.enums.Roles;
 import com.blackphoenixproductions.forumbackend.repository.PostRepository;
 import com.blackphoenixproductions.forumbackend.repository.TopicRepository;
-import com.blackphoenixproductions.forumbackend.repository.UserRepository;
 import com.blackphoenixproductions.forumbackend.security.KeycloakUtility;
 import com.blackphoenixproductions.forumbackend.service.IPostService;
 import com.blackphoenixproductions.forumbackend.service.IUserService;
@@ -22,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.*;
 
 
@@ -71,7 +71,7 @@ public class PostService implements IPostService {
         post.setMessage(postDTO.getMessage());
         post.setTopic(topic.get());
         post.setUser(user);
-        post.setCreateDate(new Date());
+        post.setCreateDate(LocalDateTime.now());
         Post savedPost = postRepository.save(post);
         // se la risposta non è del creatore del topic e se emailUser = true allora invia un email al creatore del topic
         if (!savedPost.getUser().equals(savedPost.getTopic().getUser()) && savedPost.getTopic().isEmailUser()){
@@ -91,7 +91,7 @@ public class PostService implements IPostService {
             throw new CustomException("Utente non autorizzato alla modifica del post.", HttpStatus.UNAUTHORIZED);
         }
         Post postToEdit = post.get();
-        postToEdit.setEditDate(new Date());
+        postToEdit.setEditDate(LocalDateTime.now());
         postToEdit.setMessage(postDTO.getMessage());
         return postRepository.save(postToEdit);
     }

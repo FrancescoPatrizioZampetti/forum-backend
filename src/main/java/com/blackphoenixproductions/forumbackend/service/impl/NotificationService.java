@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -62,7 +63,7 @@ public class NotificationService implements INotificationService {
         notification.setFromUser(post.getUser());
         notification.setToUser(post.getTopic().getUser());
         notification.setTopic(post.getTopic());
-        notification.setCreateDate(new Date());
+        notification.setCreateDate(LocalDateTime.now());
         notification.setTimeDifferenceFromNow(DateUtility.setTimeDifferenceFromNow(notification.getCreateDate()));
         notification.setMessage(setNotificationMessage(post.getMessage()));
         int lastTopicPageNumber = postService.getPagedPosts(post.getTopic().getId(), PageRequest.of(0, Math.toIntExact(Pagination.POST_PAGINATION.getValue()), Sort.by("createDate").ascending())).getTotalPages()-1;

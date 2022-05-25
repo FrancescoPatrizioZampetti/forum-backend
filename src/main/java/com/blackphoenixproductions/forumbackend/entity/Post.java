@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -26,16 +26,13 @@ public class Post {
     private String message;
 
     @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createDate;
+    private LocalDateTime createDate;
 
     @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date deleteDate;
+    private LocalDateTime deleteDate;
 
     @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date editDate;
+    private LocalDateTime editDate;
 
     @JsonIgnoreProperties({"user", "posts"})
     @ManyToOne
