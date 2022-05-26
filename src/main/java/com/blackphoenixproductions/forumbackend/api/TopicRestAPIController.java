@@ -1,6 +1,5 @@
 package com.blackphoenixproductions.forumbackend.api;
 
-import com.blackphoenixproductions.forumbackend.assembler.TopicAssembler;
 import com.blackphoenixproductions.forumbackend.assembler.VTopicAssembler;
 import com.blackphoenixproductions.forumbackend.dto.Filter;
 import com.blackphoenixproductions.forumbackend.dto.openApi.topic.EditTopicDTO;
