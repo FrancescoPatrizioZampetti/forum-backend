@@ -44,16 +44,13 @@ public class UserRestAPIController {
         return new ResponseEntity<Long>(totalUsers, HttpStatus.OK);
     }
 
-    @Operation(summary = "Restituisce l'utente loggato.")
-    @GetMapping (value = "/findUser")
-    public ResponseEntity<EntityModel<User>> findUser (HttpServletRequest req){
-        logger.info("Start findUser");
-        User findedUser = userService.getUserFromEmail(KeycloakUtility.getAccessToken(req).getEmail());
-        if(findedUser == null){
-            throw new CustomException("Utente non trovato nel database dell'applicativo probabilmente a causa di un email non valida in fase di registrazione.", HttpStatus.NOT_FOUND);
-        }
-        logger.info("End findUser");
-        return new ResponseEntity<EntityModel<User>>(EntityModel.of(findedUser).add(linkTo(methodOn(UserRestAPIController.class).findUser(req)).withSelfRel()), HttpStatus.OK);
+    @Operation(summary = "Cerca l'utente loggato nell'applicativo.")
+    @GetMapping (value = "/retriveUser")
+    public ResponseEntity<EntityModel<User>> retriveUser (HttpServletRequest req){
+        logger.info("Start retriveUser");
+        User findedUser = userService.retriveUser(KeycloakUtility.getAccessToken(req));
+        logger.info("End retriveUser");
+        return new ResponseEntity<EntityModel<User>>(EntityModel.of(findedUser).add(linkTo(methodOn(UserRestAPIController.class).retriveUser(req)).withSelfRel()), HttpStatus.OK);
     }
 
     @Operation(summary = "Cambia l'username dell'utente loggato.")
