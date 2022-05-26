@@ -20,7 +20,7 @@ public class SpecificationBuilder {
         Specification<T> specification = null;
         // figlio
         if (filter.getBooleanOperator() == null
-                && !filter.getValue().isEmpty()) {
+                && (!filter.getValues().isEmpty() || !filter.getValue().isEmpty()) ) {
             return createSpecification(filter);
         // padre
         } else if (filter.getBooleanOperator() != null) {
@@ -76,7 +76,7 @@ public class SpecificationBuilder {
                 };
 
             default:
-                throw new RuntimeException("Operazione non supportata.");
+                throw new RuntimeException("Operazione: " + input.getQueryOperator() + " non supportata.");
         }
     }
 
@@ -94,12 +94,16 @@ public class SpecificationBuilder {
             resultPredicate =  criteriaBuilder.between(root.get(input.getField()),
                     Integer.valueOf(input.getValues().get(0)),
                     Integer.valueOf(input.getValues().get(1)));
+        } else if (root.get(input.getField()).getJavaType().isAssignableFrom(Long.class)){
+            resultPredicate =  criteriaBuilder.between(root.get(input.getField()),
+                    Long.valueOf(input.getValues().get(0)),
+                    Long.valueOf(input.getValues().get(1)));
         } else if (root.get(input.getField()).getJavaType().isAssignableFrom(Double.class)){
             resultPredicate =  criteriaBuilder.between(root.get(input.getField()),
                     Double.valueOf(input.getValues().get(0)),
                     Double.valueOf(input.getValues().get(1)));
         } else {
-            throw new RuntimeException("Tipo non gestito per operazione BETWEEN.");
+            throw new RuntimeException("Tipo: " + root.get(input.getField()).getJavaType() + " non gestito per operazione BETWEEN.");
         }
         return resultPredicate;
     }
