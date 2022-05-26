@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -68,8 +69,8 @@ public class SpecificationBuilder {
             case EQUALS_TRUNC_DATETIME:
                 return (root, query, criteriaBuilder) -> {
                     LocalDate paramDate = LocalDate.parse(input.getValue());
-                    LocalDateTime startDate = LocalDateTime.of(paramDate.getYear(), paramDate.getMonth(), paramDate.getDayOfMonth(), 0, 0, 0);
-                    LocalDateTime endDate = LocalDateTime.of(paramDate.getYear(), paramDate.getMonth(), paramDate.getDayOfMonth(), 23, 59, 59);
+                    LocalDateTime startDate = LocalDateTime.of(paramDate.getYear(), paramDate.getMonth(), paramDate.getDayOfMonth(), 0, 0, 0, 0);
+                    LocalDateTime endDate = LocalDateTime.of(paramDate.getYear(), paramDate.getMonth(), paramDate.getDayOfMonth(), 23, 59, 59, 999999999);
                     return criteriaBuilder.between(root.get(input.getField()),
                                 startDate,
                                 endDate);
@@ -111,6 +112,8 @@ public class SpecificationBuilder {
             return Integer.valueOf(value);
         }else if(fieldType.isAssignableFrom(LocalDate.class)){
             return LocalDate.parse(value);
+        }else if(fieldType.isAssignableFrom(LocalDateTime.class)){
+            return LocalDateTime.parse(value);
         }
         return value;
     }
