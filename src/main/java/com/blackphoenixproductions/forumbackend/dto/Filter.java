@@ -15,7 +15,6 @@ public class Filter {
     QueryOperator queryOperator;
     String field;
     String value;
-    // in caso di operatore IN
-    List<String> values;
+    List<String> values; // in caso di operatore IN e BETWEEN
     List<Filter> filters;
 }

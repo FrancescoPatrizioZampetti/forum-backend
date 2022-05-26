@@ -6,5 +6,7 @@ public enum QueryOperator {
     EQUALS,
     LIKE,
     NOT_EQ,
-    IN
+    IN,
+    BETWEEN,
+    EQUALS_TRUNC_DATETIME
 }
