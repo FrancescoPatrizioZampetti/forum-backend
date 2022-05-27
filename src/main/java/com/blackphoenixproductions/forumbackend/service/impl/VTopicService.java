@@ -29,7 +29,7 @@ public class VTopicService implements IVTopicService {
     public Page<VTopic> getPagedTopics(Pageable pageable, Filter filter) {
         SpecificationBuilder specificationBuilder = new SpecificationBuilder();
         Specification<VTopic> spec = null;
-        if (filter != null && !filter.getFilters().isEmpty()) {
+        if (filter != null && filter.getFilters() != null && !filter.getFilters().isEmpty()) {
             spec = specificationBuilder.getSpecification(filter);
         }
         return vtopicRepository.findAll(spec, pageable);
