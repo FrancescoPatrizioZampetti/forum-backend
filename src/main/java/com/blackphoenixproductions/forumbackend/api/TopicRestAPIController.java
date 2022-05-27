@@ -2,6 +2,7 @@ package com.blackphoenixproductions.forumbackend.api;
 
 import com.blackphoenixproductions.forumbackend.assembler.VTopicAssembler;
 import com.blackphoenixproductions.forumbackend.dto.Filter;
+import com.blackphoenixproductions.forumbackend.dto.KeyValueDTO;
 import com.blackphoenixproductions.forumbackend.dto.openApi.topic.EditTopicDTO;
 import com.blackphoenixproductions.forumbackend.dto.openApi.topic.InsertTopicDTO;
 import com.blackphoenixproductions.forumbackend.entity.Topic;
@@ -56,9 +57,9 @@ public class TopicRestAPIController {
 
     @Operation(summary = "Restituisce il numero totale dei topic.")
     @GetMapping(value = "/getTotalTopics")
-    public ResponseEntity<Long> getTotalTopics (HttpServletRequest req){
+    public ResponseEntity<KeyValueDTO> getTotalTopics (HttpServletRequest req){
         Long totalTopics = topicService.getTotalTopics();
-        return new ResponseEntity<Long>(totalTopics, HttpStatus.OK);
+        return new ResponseEntity<KeyValueDTO>(new KeyValueDTO("totalTopics", totalTopics), HttpStatus.OK);
     }
 
     @ApiResponses(value = {

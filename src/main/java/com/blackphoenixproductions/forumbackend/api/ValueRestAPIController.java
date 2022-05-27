@@ -1,5 +1,6 @@
 package com.blackphoenixproductions.forumbackend.api;
 
+import com.blackphoenixproductions.forumbackend.dto.KeyValueDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class ValueRestAPIController {
 
     @Operation(summary = "Restituisce la versione del forum-backend.", hidden = true)
     @GetMapping(value = "/getBuildVersionBackEnd")
-    public ResponseEntity<String> getBuildVersionBackEnd (HttpServletRequest req){
-        return new ResponseEntity<String>(buildVersion, HttpStatus.OK);
+    public ResponseEntity<KeyValueDTO> getBuildVersionBackEnd (HttpServletRequest req){
+        return new ResponseEntity<KeyValueDTO>(new KeyValueDTO("buildVersion", buildVersion), HttpStatus.OK);
     }
 }
