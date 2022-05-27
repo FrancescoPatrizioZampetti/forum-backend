@@ -55,9 +55,10 @@ public class PostRestAPIController {
 
     @Operation(summary = "Restituisce il numero totale dei post.")
     @GetMapping(value = "/getTotalPosts")
-    public ResponseEntity<KeyValueDTO> getTotalPosts (HttpServletRequest req){
+    public ResponseEntity<EntityModel<KeyValueDTO>> getTotalPosts (HttpServletRequest req){
         Long totalPosts = postService.getTotalPosts();
-        return new ResponseEntity<KeyValueDTO>(new KeyValueDTO("totalPosts", totalPosts), HttpStatus.OK);
+        EntityModel<KeyValueDTO> entityModel = EntityModel.of(new KeyValueDTO("total_posts", totalPosts)).add(linkTo(methodOn(PostRestAPIController.class).getTotalPosts(req)).withSelfRel());
+        return new ResponseEntity<EntityModel<KeyValueDTO>>(entityModel, HttpStatus.OK);
     }
 
     @ApiResponses(value = {

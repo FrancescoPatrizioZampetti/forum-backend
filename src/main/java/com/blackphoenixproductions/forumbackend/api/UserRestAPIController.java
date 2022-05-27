@@ -39,9 +39,10 @@ public class UserRestAPIController {
 
     @Operation(summary = "Restituisce il numero totale degli utenti.")
     @GetMapping (value = "/getTotalUsers")
-    public ResponseEntity<KeyValueDTO> getTotalUsers (HttpServletRequest req){
+    public ResponseEntity<EntityModel<KeyValueDTO>> getTotalUsers (HttpServletRequest req){
         Long totalUsers = userService.getTotalUsers();
-        return new ResponseEntity<KeyValueDTO>(new KeyValueDTO("totalUsers", totalUsers), HttpStatus.OK);
+        EntityModel<KeyValueDTO> entityModel = EntityModel.of(new KeyValueDTO("total_users", totalUsers)).add(linkTo(methodOn(UserRestAPIController.class).getTotalUsers(req)).withSelfRel());
+        return new ResponseEntity<EntityModel<KeyValueDTO>>(entityModel, HttpStatus.OK);
     }
 
     @Operation(summary = "Cerca l'utente loggato nell'applicativo.")

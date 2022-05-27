@@ -57,9 +57,10 @@ public class TopicRestAPIController {
 
     @Operation(summary = "Restituisce il numero totale dei topic.")
     @GetMapping(value = "/getTotalTopics")
-    public ResponseEntity<KeyValueDTO> getTotalTopics (HttpServletRequest req){
+    public ResponseEntity<EntityModel<KeyValueDTO>> getTotalTopics (HttpServletRequest req){
         Long totalTopics = topicService.getTotalTopics();
-        return new ResponseEntity<KeyValueDTO>(new KeyValueDTO("totalTopics", totalTopics), HttpStatus.OK);
+        EntityModel<KeyValueDTO> entityModel = EntityModel.of(new KeyValueDTO("total_topics", totalTopics)).add(linkTo(methodOn(TopicRestAPIController.class).getTotalTopics(req)).withSelfRel());
+        return new ResponseEntity<EntityModel<KeyValueDTO>>(entityModel, HttpStatus.OK);
     }
 
     @ApiResponses(value = {
