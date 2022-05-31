@@ -1,7 +1,6 @@
 package com.blackphoenixproductions.forumbackend.api;
 
 
-import com.blackphoenixproductions.forumbackend.dto.KeyValueDTO;
 import com.blackphoenixproductions.forumbackend.entity.User;
 import com.blackphoenixproductions.forumbackend.security.KeycloakUtility;
 import com.blackphoenixproductions.forumbackend.service.IUserService;
@@ -39,10 +38,9 @@ public class UserRestAPIController {
 
     @Operation(summary = "Restituisce il numero totale degli utenti.")
     @GetMapping (value = "/getTotalUsers")
-    public ResponseEntity<EntityModel<KeyValueDTO>> getTotalUsers (HttpServletRequest req){
+    public ResponseEntity<Long> getTotalUsers (HttpServletRequest req){
         Long totalUsers = userService.getTotalUsers();
-        EntityModel<KeyValueDTO> entityModel = EntityModel.of(new KeyValueDTO("total_users", totalUsers)).add(linkTo(methodOn(UserRestAPIController.class).getTotalUsers(req)).withSelfRel());
-        return new ResponseEntity<EntityModel<KeyValueDTO>>(entityModel, HttpStatus.OK);
+        return new ResponseEntity<Long>(totalUsers, HttpStatus.OK);
     }
 
     @Operation(summary = "Cerca l'utente loggato nell'applicativo.")

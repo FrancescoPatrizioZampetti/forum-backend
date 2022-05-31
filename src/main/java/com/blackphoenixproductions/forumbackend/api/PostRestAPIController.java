@@ -1,7 +1,6 @@
 package com.blackphoenixproductions.forumbackend.api;
 
 import com.blackphoenixproductions.forumbackend.assembler.PostAssembler;
-import com.blackphoenixproductions.forumbackend.dto.KeyValueDTO;
 import com.blackphoenixproductions.forumbackend.dto.openApi.post.EditPostDTO;
 import com.blackphoenixproductions.forumbackend.dto.openApi.post.InsertPostDTO;
 import com.blackphoenixproductions.forumbackend.entity.Post;
@@ -55,10 +54,9 @@ public class PostRestAPIController {
 
     @Operation(summary = "Restituisce il numero totale dei post.")
     @GetMapping(value = "/getTotalPosts")
-    public ResponseEntity<EntityModel<KeyValueDTO>> getTotalPosts (HttpServletRequest req){
+    public ResponseEntity<Long> getTotalPosts (HttpServletRequest req){
         Long totalPosts = postService.getTotalPosts();
-        EntityModel<KeyValueDTO> entityModel = EntityModel.of(new KeyValueDTO("total_posts", totalPosts)).add(linkTo(methodOn(PostRestAPIController.class).getTotalPosts(req)).withSelfRel());
-        return new ResponseEntity<EntityModel<KeyValueDTO>>(entityModel, HttpStatus.OK);
+        return new ResponseEntity<Long>(totalPosts, HttpStatus.OK);
     }
 
     @ApiResponses(value = {
