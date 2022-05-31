@@ -1,13 +1,12 @@
 package com.blackphoenixproductions.forumbackend.utility;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 public class DateUtility {
 
     public static String setTimeDifferenceFromNow(LocalDateTime dateFrom) {
-        LocalDate dateTo = LocalDate.now();
+        LocalDateTime dateTo = LocalDateTime.now();
         long seconds = ChronoUnit.SECONDS.between(dateFrom, dateTo);
         long minutes = ChronoUnit.MINUTES.between(dateFrom, dateTo);
         long hours = ChronoUnit.HOURS.between(dateFrom, dateTo);
