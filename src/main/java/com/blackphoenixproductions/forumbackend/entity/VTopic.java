@@ -50,4 +50,7 @@ public class VTopic {
     @Column
     private String authorEmail;
 
+    @Column
+    private Long postsNumber;
+
 }
