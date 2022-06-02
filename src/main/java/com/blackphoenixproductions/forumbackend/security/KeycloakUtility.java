@@ -6,9 +6,12 @@ import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.keycloak.representations.AccessToken;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.Set;
 
 public class KeycloakUtility {
+
+    private final static String BEARER = "Bearer ";
 
     public static Set<String> getRoles(HttpServletRequest request){
         AccessToken accessToken = getAccessToken(request);
@@ -22,6 +25,12 @@ public class KeycloakUtility {
         KeycloakSecurityContext session = principal.getKeycloakSecurityContext();
         AccessToken accessToken = session.getToken();
         return accessToken;
+    }
+
+    public static String getAccessTokenString(Principal principal) {
+        KeycloakAuthenticationToken keycloakAuthenticationToken = (KeycloakAuthenticationToken) principal;
+        String token = keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getTokenString();
+        return BEARER + token;
     }
 
 }
