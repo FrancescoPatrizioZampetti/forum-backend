@@ -44,6 +44,7 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
                 .antMatchers("/api/findTopic").permitAll()
                 .antMatchers("/api/getTotalPosts").permitAll()
                 .antMatchers("/api/findPostsByPage").permitAll()
+                .antMatchers("/api/getBuildVersionBackEnd").permitAll()
                 .anyRequest()
                 .authenticated();
         http.csrf().disable();
