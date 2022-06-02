@@ -30,6 +30,12 @@ public class KeycloakUtility {
     public static String getAccessTokenString(Principal principal) {
         KeycloakAuthenticationToken keycloakAuthenticationToken = (KeycloakAuthenticationToken) principal;
         String token = keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getTokenString();
+        return token;
+    }
+
+    public static String getBearerTokenString(Principal principal) {
+        KeycloakAuthenticationToken keycloakAuthenticationToken = (KeycloakAuthenticationToken) principal;
+        String token = keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getTokenString();
         return BEARER + token;
     }
 
