@@ -20,7 +20,8 @@ public class SpecificationBuilder {
         Specification<T> specification = null;
         // figlio
         if (filter.getBooleanOperator() == null
-                && (!filter.getValues().isEmpty() || !filter.getValue().isEmpty()) ) {
+                && ( (filter.getValues() != null && !filter.getValues().isEmpty())
+                || ( filter.getValue() != null && !filter.getValue().isEmpty()) ) ) {
             return createSpecification(filter);
         // padre
         } else if (filter.getBooleanOperator() != null) {
