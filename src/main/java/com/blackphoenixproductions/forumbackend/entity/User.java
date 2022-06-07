@@ -1,5 +1,6 @@
 package com.blackphoenixproductions.forumbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,9 +29,14 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
+    @Column
+    private String role;
+
+    @JsonIgnoreProperties({"user"})
     @OneToMany(mappedBy = "user")
     private Set<Post> posts;
 
+    @JsonIgnoreProperties({"user"})
     @OneToMany(mappedBy = "user")
     private Set<Topic> topics;
 
