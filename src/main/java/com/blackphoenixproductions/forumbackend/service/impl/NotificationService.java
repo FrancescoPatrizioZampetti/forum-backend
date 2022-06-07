@@ -64,7 +64,6 @@ public class NotificationService implements INotificationService {
         notification.setToUser(post.getTopic().getUser());
         notification.setTopic(post.getTopic());
         notification.setCreateDate(LocalDateTime.now());
-        notification.setTimeDifferenceFromNow(DateUtility.setTimeDifferenceFromNow(notification.getCreateDate()));
         notification.setMessage(setNotificationMessage(post.getMessage()));
         int lastTopicPageNumber = postService.getPagedPosts(post.getTopic().getId(), PageRequest.of(0, Math.toIntExact(Pagination.POST_PAGINATION.getValue()), Sort.by("createDate").ascending())).getTotalPages()-1;
         notification.setUrl("/viewtopic?id=" + post.getTopic().getId() + "&page=" + lastTopicPageNumber);
@@ -100,11 +99,6 @@ public class NotificationService implements INotificationService {
     @Override
     public List<NotificationDTO> getUserNotification(User user) {
         List<NotificationDTO> userNotifications = notificationStore.get(user.getUsername());
-        if(userNotifications != null) {
-            userNotifications.stream()
-                    .sorted()
-                    .forEach(userNotification -> userNotification.setTimeDifferenceFromNow(DateUtility.setTimeDifferenceFromNow(userNotification.getCreateDate())));
-        }
         return userNotifications;
     }
 

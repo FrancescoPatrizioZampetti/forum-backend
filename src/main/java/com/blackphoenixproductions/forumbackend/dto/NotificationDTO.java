@@ -26,7 +26,6 @@ public class NotificationDTO implements Comparable<NotificationDTO>{
     private Topic topic;
     private String message;
     private LocalDateTime createDate;
-    private String timeDifferenceFromNow;
     private String url;
 
     @Override
