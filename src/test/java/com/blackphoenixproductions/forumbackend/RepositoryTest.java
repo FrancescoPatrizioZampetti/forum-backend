@@ -85,12 +85,9 @@ public class RepositoryTest {
     }
 
     private Filter getRootFilter() {
-        Filter rootFilter = Filter.builder()
+        return Filter.builder()
                 .booleanOperator(BooleanOperator.AND)
                 .build();
-        List<Filter> filters = new ArrayList<>();
-        rootFilter.setFilters(filters);
-        return rootFilter;
     }
 
     public Filter buildFilter(String field, String value, QueryOperator queryOperator){

@@ -16,5 +16,5 @@ public class Filter {
     String field;
     String value;
     List<String> values; // in caso di operatore IN e BETWEEN
-    List<Filter> filters;
+    @Builder.Default List<Filter> filters;
 }
