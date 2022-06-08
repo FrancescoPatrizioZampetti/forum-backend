@@ -15,7 +15,7 @@ public interface INotificationService {
 
     Boolean getUserNotificationStatus(User user);
 
-    void setReadedNotificationStatus(User user);
+    void setNotificationStatus(String username, boolean showNotificationNotice);
 
     void removeOldestNotification(List<NotificationDTO> userNotificationList);
 

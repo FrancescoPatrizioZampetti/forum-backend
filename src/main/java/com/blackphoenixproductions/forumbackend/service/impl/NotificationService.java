@@ -7,7 +7,6 @@ import com.blackphoenixproductions.forumbackend.enums.Pagination;
 import com.blackphoenixproductions.forumbackend.service.INotificationService;
 import com.blackphoenixproductions.forumbackend.service.IPostService;
 import com.blackphoenixproductions.forumbackend.sse.SsePushNotificationService;
-import com.blackphoenixproductions.forumbackend.utility.DateUtility;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +46,8 @@ public class NotificationService implements INotificationService {
             NotificationDTO notification = createUserNotification(post);
             List<NotificationDTO> userNotificationList = addToUserNotifications(topicAuthorUsername, notification);
             removeOldestNotification(userNotificationList);
-            updateStatusAndstoreUserNotification(topicAuthorUsername, userNotificationList);
+            notificationStore.put(topicAuthorUsername, userNotificationList);
+            setNotificationStatus(topicAuthorUsername, true);
             // invio sse event per notifica push
             ssePushNotificationService.sendNotificationToTopicAuthor(topicAuthorUsername);
         }
@@ -109,8 +109,8 @@ public class NotificationService implements INotificationService {
     }
 
     @Override
-    public void setReadedNotificationStatus(User user) {
-        usersNotificationStatus.put(user.getUsername(), false);
+    public void setNotificationStatus(String username, boolean showNotificationNotice) {
+        usersNotificationStatus.put(username, showNotificationNotice);
     }
 
     @Override

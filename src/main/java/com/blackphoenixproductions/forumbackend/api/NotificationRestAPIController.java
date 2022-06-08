@@ -7,6 +7,7 @@ import com.blackphoenixproductions.forumbackend.security.KeycloakUtility;
 import com.blackphoenixproductions.forumbackend.service.INotificationService;
 import com.blackphoenixproductions.forumbackend.service.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -18,9 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -50,7 +49,7 @@ public class NotificationRestAPIController {
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(hidden = true)))
     })
-    @Operation(summary = "Restituisce tutte le notifiche di un utente.", hidden = true)
+    @Operation(summary = "Restituisce tutte le notifiche di un utente.")
     @GetMapping(value = "getUserNotificationList")
     public ResponseEntity<CollectionModel<NotificationDTO>> getUserNotificationList(HttpServletRequest req){
         logger.info("Start getUserNotificationList");
@@ -70,7 +69,7 @@ public class NotificationRestAPIController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content(schema = @Schema(hidden = true))),
     })
-    @Operation(summary = "Restituisce lo status delle notifiche di un utente. Permette di capire se un utente ha almeno una notfica da leggere.", hidden = true)
+    @Operation(summary = "Restituisce lo status delle notifiche di un utente. Permette di capire se un utente ha almeno una notfica da leggere.")
     @GetMapping(value = "getUserNotificationStatus")
     public ResponseEntity<Boolean> getUserNotificationStatus(HttpServletRequest req){
         logger.info("Start getUserNotificationStatus");
@@ -87,15 +86,15 @@ public class NotificationRestAPIController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content(schema = @Schema(hidden = true))),
     })
-    @Operation(summary = "Imposta lo status delle notifiche di un utente a 'tutte lette'.", hidden = true)
-    @GetMapping(value = "setReadedNotificationStatus")
-    public ResponseEntity<String> setReadedNotificationStatus(HttpServletRequest req){
-        logger.info("Start setReadedNotificationStatus");
+    @Operation(summary = "Imposta lo status delle notifiche di un utente.")
+    @PostMapping(value = "setNotificationStatus")
+    public ResponseEntity<String> setNotificationStatus(HttpServletRequest req, @Parameter(description = "Determina se mostrare l'avviso di una nuova notifica da leggere.") @RequestParam boolean showNotificationNotice){
+        logger.info("Start setNotificationStatus");
         User user = userService.getUserFromEmail(KeycloakUtility.getAccessToken(req).getEmail());
         if(user != null) {
-            notificationService.setReadedNotificationStatus(user);
+            notificationService.setNotificationStatus(user.getUsername(), showNotificationNotice);
         }
-        logger.info("End setReadedNotificationStatus");
+        logger.info("End setNotificationStatus");
         return new ResponseEntity<String>("Le notifiche sono state lette.", HttpStatus.OK);
     }
 
