@@ -14,7 +14,7 @@ A forum back-end created with Spring Boot.
 
 ## A Forum back-end created with Spring Boot. 
 The key features are:
-- Keycloak Authentication with both normal and social login (Google, Facebook, GitHub).
+- Keycloak authentication with both normal and social login (Google, Facebook, GitHub).
 - Server-Sent Events (SSE) for real-time notifications.
 - HATEOAS (Hypermedia as the Engine of Application State) for REST endpoints.
 - Swagger (OAS 3.0) integration.
