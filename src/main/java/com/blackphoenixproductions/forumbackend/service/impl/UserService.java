@@ -58,7 +58,6 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public User retriveUser(AccessToken accessToken) {
-        getApplicationRole(KeycloakUtility.getRoles(accessToken));
         User findedUser = userRepository.findByEmail(accessToken.getEmail());
         if(findedUser == null) {
             logger.warn("Utente non trovato nell'applicativo, procedo a salvarlo...");
