@@ -1,7 +1,9 @@
 package com.blackphoenixproductions.forumbackend.service.impl;
 
 import com.blackphoenixproductions.forumbackend.dto.openApi.exception.CustomException;
+import com.blackphoenixproductions.forumbackend.enums.Roles;
 import com.blackphoenixproductions.forumbackend.repository.UserRepository;
+import com.blackphoenixproductions.forumbackend.security.KeycloakUtility;
 import com.blackphoenixproductions.forumbackend.service.IUserService;
 import com.blackphoenixproductions.forumbackend.entity.User;
 import org.keycloak.admin.client.Keycloak;
@@ -15,6 +17,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Set;
 
 
 @Service
@@ -54,12 +58,22 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public User retriveUser(AccessToken accessToken) {
+        getApplicationRole(KeycloakUtility.getRoles(accessToken));
         User findedUser = userRepository.findByEmail(accessToken.getEmail());
         if(findedUser == null) {
             logger.warn("Utente non trovato nell'applicativo, procedo a salvarlo...");
-            findedUser = userRepository.saveAndFlush(new User(accessToken.getPreferredUsername(), accessToken.getEmail()));
+            findedUser = userRepository.saveAndFlush(new User(accessToken.getPreferredUsername(), accessToken.getEmail(), getApplicationRole(KeycloakUtility.getRoles(accessToken))));
         }
         return findedUser;
+    }
+
+    private String getApplicationRole(Set<String> roles) {
+        if(roles.contains(Roles.ROLE_HELPDESK.getValue())){
+            return Roles.ROLE_HELPDESK.getValue();
+        } else if(roles.contains(Roles.ROLE_STAFF.getValue())){
+            return Roles.ROLE_STAFF.getValue();
+        }
+        return Roles.ROLE_USER.getValue();
     }
 
     @Override

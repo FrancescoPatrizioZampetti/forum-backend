@@ -19,6 +19,11 @@ public class KeycloakUtility {
         return realmAccess.getRoles();
     }
 
+    public static Set<String> getRoles(AccessToken accessToken){
+        AccessToken.Access realmAccess = accessToken.getRealmAccess();
+        return realmAccess.getRoles();
+    }
+
     public static AccessToken getAccessToken(HttpServletRequest request) {
         KeycloakAuthenticationToken token = (KeycloakAuthenticationToken) request.getUserPrincipal();
         KeycloakPrincipal principal = (KeycloakPrincipal) token.getPrincipal();

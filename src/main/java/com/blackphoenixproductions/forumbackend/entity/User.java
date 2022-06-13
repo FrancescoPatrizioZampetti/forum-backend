@@ -40,9 +40,10 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Topic> topics;
 
-    public User(String username, String email) {
+    public User(String username, String email, String role) {
         this.username = username;
         this.email = email;
+        this.role = role;
     }
 
     @Override
