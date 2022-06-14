@@ -1,6 +1,6 @@
 package com.blackphoenixproductions.forumbackend.entity;
 
-import dto.SimpleUserDTO;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,14 +16,6 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@SqlResultSetMapping(name="SimpleUserDTOResult", classes = {
-        @ConstructorResult(targetClass = SimpleUserDTO.class,
-                columns = {@ColumnResult(name="id", type=Long.class), @ColumnResult(name="username", type=String.class),
-                        @ColumnResult(name="email", type=String.class), @ColumnResult(name="role", type=String.class)})
-})
-@NamedNativeQuery(name="User.findAllUsers",
-        resultSetMapping="SimpleUserDTOResult",
-        query="SELECT u.id, u.username, u.email, u.role from users u")
 
 public class User {
 
@@ -38,24 +30,22 @@ public class User {
     private String email;
 
     @Column
-    private String password;
-
-    @Column
     private String role;
 
+    @JsonIgnoreProperties({"user"})
     @OneToMany(mappedBy = "user")
     private Set<Post> posts;
 
+    @JsonIgnoreProperties({"user"})
     @OneToMany(mappedBy = "user")
     private Set<Topic> topics;
 
+    public User(String username, String email, String role) {
+        this.username = username;
+        this.email = email;
+        this.role = role;
+    }
 
-
-    /**
-     * NB: Non è possibile stabilire l'uguaglianza di due instanze transient.
-     * @param o
-     * @return
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

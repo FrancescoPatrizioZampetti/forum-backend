@@ -1,5 +1,5 @@
 package com.blackphoenixproductions.forumbackend.exception;
-import dto.openApi.exception.CustomException;
+import com.blackphoenixproductions.forumbackend.dto.openApi.exception.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -36,7 +36,7 @@ public class GlobalExceptionHandlerController {
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ErrorResponse> handleException(Exception ex) {
     logger.error(ex.getMessage(), ex);
-    return new ResponseEntity<ErrorResponse>(new ErrorResponse("Errore generico.", HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+    return new ResponseEntity<ErrorResponse>(new ErrorResponse(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
 }

@@ -1,20 +1,21 @@
 package com.blackphoenixproductions.forumbackend.service;
 
-import dto.NotificationDTO;
-import dto.PostDTO;
-import dto.SimpleUserDTO;
+
+import com.blackphoenixproductions.forumbackend.dto.NotificationDTO;
+import com.blackphoenixproductions.forumbackend.entity.Post;
+import com.blackphoenixproductions.forumbackend.entity.User;
 
 import java.util.List;
 
 public interface INotificationService {
 
-    void notifyTopicAuthor(PostDTO postDTO);
+    void notifyTopicAuthor(Post post);
 
-    List<NotificationDTO> getUserNotification(SimpleUserDTO simpleUserDTO);
+    List<NotificationDTO> getUserNotification(User user);
 
-    Boolean getUserNotificationStatus(SimpleUserDTO simpleUserDTO);
+    Boolean getUserNotificationStatus(User user);
 
-    void setReadedNotificationStatus(SimpleUserDTO simpleUserDTO);
+    void setNotificationStatus(String username, boolean showNotificationNotice);
 
     void removeOldestNotification(List<NotificationDTO> userNotificationList);
 

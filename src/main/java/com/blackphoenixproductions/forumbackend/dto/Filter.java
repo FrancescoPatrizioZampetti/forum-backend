@@ -1,9 +1,11 @@
 package com.blackphoenixproductions.forumbackend.dto;
 
-import enums.BooleanOperator;
-import enums.QueryOperator;
+
+import com.blackphoenixproductions.forumbackend.enums.BooleanOperator;
+import com.blackphoenixproductions.forumbackend.enums.QueryOperator;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -14,7 +16,6 @@ public class Filter {
     QueryOperator queryOperator;
     String field;
     String value;
-    // in caso di operatore IN
-    List<String> values;
-    List<Filter> filters;
+    List<String> values; // in caso di operatore IN e BETWEEN
+    @Builder.Default List<Filter> filters = new ArrayList<>();
 }

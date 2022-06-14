@@ -1,39 +1,20 @@
 package com.blackphoenixproductions.forumbackend.service;
 
 import com.blackphoenixproductions.forumbackend.entity.User;
-import dto.SimpleUserDTO;
-import dto.UserDTO;
+import org.keycloak.representations.AccessToken;
 
-import javax.servlet.http.HttpServletRequest;
+
 
 public interface IUserService {
 
-    String login(String username, String password);
+    User retriveUser(AccessToken accessToken);
 
-    String signin(UserDTO userDTO);
+    User getUserFromUsername(String username);
 
-    SimpleUserDTO getUserFromToken(HttpServletRequest req);
+    User getUserFromEmail (String email);
 
-    SimpleUserDTO getUserFromUsername(String username);
-
-    UserDTO getUserFromEmail (String email);
-
-    String getJwtToken(String username, String role);
+    User changeUserUsername (AccessToken accessToken, String username);
 
     Long getTotalUsers();
-
-    String refresh(String username);
-
-    String getResetToken (String username, String email);
-
-    String getNewAccessTokenFromRefreshToken(HttpServletRequest req);
-
-    User finishResetCredentials(String password, User user);
-
-    boolean isValidResetToken (String token, User user);
-
-    User getUserFromEmailWithRoleUser (String email);
-
-    User getUserFromUsernameWithRoleUser (String username);
 
 }

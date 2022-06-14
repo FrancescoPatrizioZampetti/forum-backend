@@ -1,12 +1,13 @@
 package com.blackphoenixproductions.forumbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
@@ -36,17 +37,15 @@ public class Topic {
     private boolean emailUser;
 
     @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createDate;
+    private LocalDateTime createDate;
 
     @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date deleteDate;
+    private LocalDateTime deleteDate;
 
     @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date editDate;
+    private LocalDateTime editDate;
 
+    @JsonIgnoreProperties({"topics", "posts"})
     @ManyToOne
     @JoinColumn(name="USER_ID", nullable=false)
     private User user;
@@ -58,11 +57,7 @@ public class Topic {
         this.id = id;
     }
 
-    /**
-     * NB: Non è possibile stabilire l'uguaglianza di due instanze transient.
-     * @param o
-     * @return
-     */
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

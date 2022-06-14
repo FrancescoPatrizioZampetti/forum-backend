@@ -1,8 +1,9 @@
 package com.blackphoenixproductions.forumbackend.service;
 
-import dto.PostDTO;
-import dto.openApi.post.EditPostDTO;
-import dto.openApi.post.InsertPostDTO;
+
+import com.blackphoenixproductions.forumbackend.dto.openApi.post.EditPostDTO;
+import com.blackphoenixproductions.forumbackend.dto.openApi.post.InsertPostDTO;
+import com.blackphoenixproductions.forumbackend.entity.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -12,10 +13,10 @@ public interface IPostService {
 
     Long getTotalPosts();
 
-    Page<PostDTO> getPagedPosts(Long topicId, Pageable pageable);
+    Page<Post> getPagedPosts(Long topicId, Pageable pageable);
 
-    PostDTO createPost(InsertPostDTO postDTO);
+    Post createPost(InsertPostDTO postDTO, HttpServletRequest req);
 
-    PostDTO editPost(EditPostDTO postDTO, HttpServletRequest req);
+    Post editPost(EditPostDTO postDTO, HttpServletRequest req);
 
 }

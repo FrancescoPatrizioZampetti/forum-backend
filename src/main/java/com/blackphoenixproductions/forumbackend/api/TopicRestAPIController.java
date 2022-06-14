@@ -1,22 +1,20 @@
 package com.blackphoenixproductions.forumbackend.api;
 
-import com.blackphoenixproductions.forumbackend.assembler.SimpleTopicDTOAssembler;
 import com.blackphoenixproductions.forumbackend.assembler.VTopicAssembler;
+import com.blackphoenixproductions.forumbackend.dto.Filter;
+import com.blackphoenixproductions.forumbackend.dto.openApi.topic.EditTopicDTO;
+import com.blackphoenixproductions.forumbackend.dto.openApi.topic.InsertTopicDTO;
+import com.blackphoenixproductions.forumbackend.entity.Topic;
 import com.blackphoenixproductions.forumbackend.entity.VTopic;
+import com.blackphoenixproductions.forumbackend.security.KeycloakUtility;
 import com.blackphoenixproductions.forumbackend.service.ITopicService;
 import com.blackphoenixproductions.forumbackend.service.impl.VTopicService;
-import dto.Filter;
-import dto.SimpleTopicDTO;
-import dto.TopicDTO;
-import dto.openApi.topic.EditTopicDTO;
-import dto.openApi.topic.InsertTopicDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +29,6 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,14 +42,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class TopicRestAPIController {
 
     private static final Logger logger = LoggerFactory.getLogger(TopicRestAPIController.class);
-    private final SimpleTopicDTOAssembler simpleTopicDTOAssembler;
     private final ITopicService topicService;
     private final VTopicAssembler vTopicAssembler;
     private final VTopicService vTopicService;
 
     @Autowired
-    public TopicRestAPIController(SimpleTopicDTOAssembler simpleTopicDTOAssembler, ITopicService topicService, VTopicAssembler vTopicAssembler, VTopicService vTopicService) {
-        this.simpleTopicDTOAssembler = simpleTopicDTOAssembler;
+    public TopicRestAPIController(ITopicService topicService, VTopicAssembler vTopicAssembler, VTopicService vTopicService) {
         this.topicService = topicService;
         this.vTopicAssembler = vTopicAssembler;
         this.vTopicService = vTopicService;
@@ -82,29 +77,14 @@ public class TopicRestAPIController {
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "Bad request.", content = @Content(schema = @Schema(hidden = true))),
-    })
-    @Operation(summary = "Ricerca di un topic con paginazione.")
-    @PostMapping(value = "/findTopicsByPage")
-    public ResponseEntity<PagedModel<EntityModel<SimpleTopicDTO>>> findTopicsByPage (@ParameterObject @PageableDefault(sort = {"createDate"}, direction = Sort.Direction.DESC) Pageable pageable,
-                                                                                          @Parameter(description = "Il titolo del topic.") @RequestParam String title,
-                                                                                          @Parameter(description = "Username dell'utente creatore del topic.") @RequestParam (required = false) String username,
-                                                                                          PagedResourcesAssembler<SimpleTopicDTO> pagedResourcesAssembler){
-        Page<SimpleTopicDTO> pagedTopics = topicService.getPagedTopics(pageable, title, username);
-        PagedModel<EntityModel<SimpleTopicDTO>> pagedModel = pagedResourcesAssembler.toModel(pagedTopics, simpleTopicDTOAssembler);
-        return new ResponseEntity<PagedModel<EntityModel<SimpleTopicDTO>>>  (pagedModel, HttpStatus.OK);
-    }
-
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "400", description = "Bad request: topic non trovato.", content = @Content(schema = @Schema(hidden = true))),
     })
     @Operation(summary = "Ricerca di un topic.")
-    @PostMapping(value = "/findTopic")
-    public ResponseEntity<EntityModel<TopicDTO>> findTopic (@Parameter(description = "L'id del topic da cercare.") @RequestParam Long id){
-        TopicDTO topicDTO = topicService.getTopic(id);
-        EntityModel<TopicDTO> entityModel = EntityModel.of(topicDTO).add(linkTo(methodOn(TopicRestAPIController.class).findTopic(id)).withSelfRel());
-        return new ResponseEntity<EntityModel<TopicDTO>> (entityModel, HttpStatus.OK);
+    @GetMapping(value = "/findTopic")
+    public ResponseEntity<EntityModel<Topic>> findTopic (@Parameter(description = "L'id del topic da cercare.") @RequestParam Long id){
+        Topic topic = topicService.getTopic(id);
+        EntityModel<Topic> entityModel = EntityModel.of(topic).add(linkTo(methodOn(TopicRestAPIController.class).findTopic(id)).withSelfRel());
+        return new ResponseEntity<EntityModel<Topic>> (entityModel, HttpStatus.OK);
     }
 
     @ApiResponses(value = {
@@ -112,15 +92,14 @@ public class TopicRestAPIController {
             @ApiResponse(responseCode = "400", description = "Bad request.", content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content(schema = @Schema(hidden = true))),
     })
-    @Operation(summary = "Creazione di un topic.", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Creazione di un topic.")
     @PostMapping(value = "createTopic")
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK') or hasRole('ROLE_GOOGLE')")
-    public ResponseEntity<EntityModel<SimpleTopicDTO>> createTopic(@RequestBody InsertTopicDTO insertTopicDTO){
-        logger.info("Start createTopic - topic owner username : {}", insertTopicDTO.getUsername());
-        SimpleTopicDTO savedTopic = topicService.createTopic(insertTopicDTO);
-        EntityModel<SimpleTopicDTO> entityModel = EntityModel.of(savedTopic).add(linkTo(methodOn(TopicRestAPIController.class).createTopic(insertTopicDTO)).withSelfRel());
+    public ResponseEntity<EntityModel<Topic>> createTopic(@RequestBody InsertTopicDTO insertTopicDTO, HttpServletRequest req){
+        logger.info("Start createTopic - topic owner username : {}", KeycloakUtility.getAccessToken(req).getPreferredUsername());
+        Topic savedTopic = topicService.createTopic(insertTopicDTO, req);
+        EntityModel<Topic> entityModel = EntityModel.of(savedTopic).add(linkTo(methodOn(TopicRestAPIController.class).createTopic(insertTopicDTO, req)).withSelfRel());
         logger.info("End createTopic");
-        return new ResponseEntity<EntityModel<SimpleTopicDTO>>(entityModel, HttpStatus.OK);
+        return new ResponseEntity<EntityModel<Topic>>(entityModel, HttpStatus.OK);
     }
 
 
@@ -130,15 +109,14 @@ public class TopicRestAPIController {
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "401", description = "Unauthorized.", content = @Content(schema = @Schema(hidden = true))),
     })
-    @Operation(summary = "Modifica di un topic.", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Modifica di un topic.")
     @PostMapping(value = "editTopic")
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK') or hasRole('ROLE_GOOGLE')")
-    public ResponseEntity<EntityModel<TopicDTO>> editTopic(@RequestBody EditTopicDTO topicDTO, HttpServletRequest req){
+    public ResponseEntity<EntityModel<Topic>> editTopic(@RequestBody EditTopicDTO topicDTO, HttpServletRequest req){
         logger.info("Start editTopic - topic id: {}", topicDTO.getId());
-        TopicDTO editedTopic = topicService.editTopic(topicDTO, req);
-        EntityModel<TopicDTO> entityModel = EntityModel.of(editedTopic).add(linkTo(methodOn(TopicRestAPIController.class).editTopic(topicDTO, req)).withSelfRel());
+        Topic editedTopic = topicService.editTopic(topicDTO, req);
+        EntityModel<Topic> entityModel = EntityModel.of(editedTopic).add(linkTo(methodOn(TopicRestAPIController.class).editTopic(topicDTO, req)).withSelfRel());
         logger.info("End editTopic");
-        return new ResponseEntity<EntityModel<TopicDTO>>(entityModel, HttpStatus.OK);
+        return new ResponseEntity<EntityModel<Topic>>(entityModel, HttpStatus.OK);
     }
 
 }

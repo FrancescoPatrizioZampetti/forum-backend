@@ -1,26 +1,22 @@
 package com.blackphoenixproductions.forumbackend;
 
+import com.blackphoenixproductions.forumbackend.dto.Filter;
 import com.blackphoenixproductions.forumbackend.entity.User;
 import com.blackphoenixproductions.forumbackend.entity.VTopic;
 import com.blackphoenixproductions.forumbackend.entity.VTopic_;
+import com.blackphoenixproductions.forumbackend.enums.BooleanOperator;
+import com.blackphoenixproductions.forumbackend.enums.Pagination;
+import com.blackphoenixproductions.forumbackend.enums.QueryOperator;
 import com.blackphoenixproductions.forumbackend.repository.TopicRepository;
 import com.blackphoenixproductions.forumbackend.repository.UserRepository;
 import com.blackphoenixproductions.forumbackend.repository.VTopicRepository;
-import com.blackphoenixproductions.forumbackend.repository.projection.IUser;
 import com.blackphoenixproductions.forumbackend.repository.specification.SpecificationBuilder;
-import com.blackphoenixproductions.forumbackend.repository.specification.VTopicSpecification;
-import dto.Filter;
-import dto.SimpleUserDTO;
-import enums.BooleanOperator;
-import enums.Pagination;
-import enums.QueryOperator;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Propagation;
@@ -30,7 +26,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import java.util.*;
@@ -65,31 +60,50 @@ public class RepositoryTest {
 
     @Test
     @Transactional(readOnly = true)
-    public void test_nativeQueryMappingToDTO(){
-        List<SimpleUserDTO> userDTOs = userRepository.findAllUsers();
-        List<IUser> userProjection = userRepository.findUser();
-        String role = userRepository.findUserRole("normal_user");
-        assertNotNull(userDTOs);
-        assertNotNull(userProjection);
-        assertNotNull(role);
+    public void test_simple_filter(){
+        // esempio filtro semplificato proveniente da front-end
+        List<Filter> listaFiltri = new ArrayList<>();
+        Filter s1 = buildFilter(VTopic_.AUTHOR_USERNAME, "test-user-1", QueryOperator.EQUALS);
+        Filter s2 = buildFilter(VTopic_.TITLE, "prova", QueryOperator.LIKE);
+        listaFiltri.add(s1);
+        listaFiltri.add(s2);
+
+        // creo il filtro di base, ogni filtro sarà in AND
+        Filter rootFilter = getRootFilter();
+        List<Filter> filters = rootFilter.getFilters();
+        // aggiungo tutti i filtri
+        Filter filter = null;
+        for (Filter simpleFilter : listaFiltri) {
+            filter = buildFilter(simpleFilter.getField(), simpleFilter.getValue(), simpleFilter.getQueryOperator());
+            filters.add(filter);
+        }
+
+        SpecificationBuilder specificationBuilder = new SpecificationBuilder();
+        Specification<VTopic> spec = specificationBuilder.getSpecification(rootFilter);
+        Page<VTopic> pagedTopics = vtopicRepository.findAll(spec, PageRequest.of(0, 10));
+        assertNotNull(pagedTopics);
     }
 
-    @Test
-    @Transactional(readOnly = true)
-    public void test_nativeQueryMappingToDTO_entityManager(){
-        Query query = entityManager.createNativeQuery("SELECT u.id, u.username, u.email, u.role from users u where u.username = :username", "SimpleUserDTOResult");
-        query.setParameter("username", "normal_user");
-        @SuppressWarnings("unchecked")
-        List<SimpleUserDTO> userDTOs = query.getResultList();
-        assertNotNull(userDTOs);
+    private Filter getRootFilter() {
+        return Filter.builder()
+                .booleanOperator(BooleanOperator.AND)
+                .build();
     }
+
+    public Filter buildFilter(String field, String value, QueryOperator queryOperator){
+        return Filter.builder()
+                .queryOperator(queryOperator)
+                .field(field)
+                .value(value)
+                .build();
+    }
+
 
     @Test
     @Transactional(readOnly = true)
     public void test_topic_specification(){
         try {
             CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-
             CriteriaQuery<VTopic> vtopicQuery = builder.createQuery(VTopic.class);
             Root<VTopic> vTopicRoot = vtopicQuery.from(VTopic.class);
 

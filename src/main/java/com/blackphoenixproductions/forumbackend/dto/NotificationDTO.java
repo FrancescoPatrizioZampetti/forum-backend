@@ -1,14 +1,15 @@
 package com.blackphoenixproductions.forumbackend.dto;
 
-import dto.SimpleTopicDTO;
-import dto.SimpleUserDTO;
+import com.blackphoenixproductions.forumbackend.entity.Topic;
+import com.blackphoenixproductions.forumbackend.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.hateoas.RepresentationModel;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+
 
 @Getter
 @Setter
@@ -17,12 +18,14 @@ import java.util.Date;
 public class NotificationDTO implements Comparable<NotificationDTO>{
 
     private Long id;
-    private dto.SimpleUserDTO fromUser;
-    private SimpleUserDTO toUser;
-    private SimpleTopicDTO topic;
+    @JsonIgnoreProperties({"topics", "posts"})
+    private User fromUser;
+    @JsonIgnoreProperties({"topics", "posts"})
+    private User toUser;
+    @JsonIgnoreProperties({"user", "posts"})
+    private Topic topic;
     private String message;
-    private Date createDate;
-    private String timeDifferenceFromNow;
+    private LocalDateTime createDate;
     private String url;
 
     @Override

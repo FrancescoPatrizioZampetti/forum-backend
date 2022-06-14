@@ -1,12 +1,10 @@
-CREATE DATABASE forum_db;
+CREATE DATABASE forum_db_2;
 
 CREATE TABLE USERS (
 id bigserial primary key not null,
 username varchar(255) UNIQUE not null,
 email varchar(255) UNIQUE not null,
-password varchar(255),
-role varchar(10)
-);
+role varchar(255) default 'USER');
 
 create table TOPICS (
 id bigserial primary key not null,
@@ -33,6 +31,7 @@ topic_id bigint not null references TOPICS(id)
 
 CREATE OR REPLACE VIEW V_TOPICS AS
 select t.id, t.title, t.message, t.pinned, t.email_user,
-       t.create_date, t.delete_date, t.edit_date, u.username as author_username, u.email as author_email, u.role as author_role
+       t.create_date, t.delete_date, t.edit_date, u.username as author_username, u.email as author_email,
+       (select count(*) from posts p, topics t2 where t2.id=t.id) as posts_number
 from TOPICS t, USERS u
 where t.user_id = u.id;
