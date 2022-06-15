@@ -22,7 +22,7 @@ The key features are:
 
 ## Links
 - Forum: https://forum.blackphoenixproductions.com/
-- Forum-API: https://forum.blackphoenixproductions.com:8083/
+- Forum-API: https://forum.blackphoenixproductions.com:8083/swagger-ui/index.html
 
 If you don't want to register you can use the following test user to log in the app:
 - Username: test-user-1
