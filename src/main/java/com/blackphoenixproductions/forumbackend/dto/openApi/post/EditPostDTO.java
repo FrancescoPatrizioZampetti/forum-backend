@@ -6,15 +6,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(description = "Il post da modificare.")
 public class EditPostDTO {
-
+    @NotNull(message = "L'id del post non puo' essere null")
     @Schema(description = "L'id del post.", required = true)
     private Long id;
+    @NotBlank(message = "Il messaggio del post non può essere null/vuoto")
     @Schema(description = "Il messaggio del post.", required = true)
     private String message;
 
