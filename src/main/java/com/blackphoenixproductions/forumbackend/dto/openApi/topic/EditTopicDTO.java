@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -14,7 +16,8 @@ public class EditTopicDTO {
     @NotNull(message = "L'id del topic non puo' essere null")
     @Schema(description = "L'id del topic.", required = true)
     private Long id;
-    @NotBlank(message = "Il messaggio del topic non puo' essere vuoto/null")
+    @NotEmpty(message = "Il messaggio del topic non puo' essere null/vuoto")
+    @Size(max = 20000, message = "Il messaggio del topic ha superato il massimo di 20000 caratteri")
     @Schema(description = "Il messaggio del topic.", required = true)
     private String message;
 }

@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
@@ -16,7 +15,8 @@ public class InsertTopicDTO {
     @Size(min = 5, max = 50, message = "Il titolo del topic puo' avere un minimo di 5 caratteri e un massimo di 50")
     @Schema(description = "Il titolo del topic", required = true)
     private String title;
-    @NotBlank(message = "Il messaggio del topic nnon puo' essere null/vuoto")
+    @NotEmpty(message = "Il messaggio del topic non puo' essere null/vuoto")
+    @Size(max = 20000, message = "Il messaggio del topic ha superato il massimo di 20000 caratteri")
     @Schema(description = "Il messaggio del topic.", required = true)
     private String message;
     @Schema(description = "Indica se dovrà essere messo in evidenza.", required = true)
