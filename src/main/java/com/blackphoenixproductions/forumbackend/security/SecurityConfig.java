@@ -46,6 +46,7 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
                 .antMatchers("/api/getTotalPosts").permitAll()
                 .antMatchers("/api/findPostsByPage").permitAll()
                 .antMatchers("/api/getBuildVersionBackEnd").permitAll()
+                .antMatchers("/swagger-ui/*").hasAnyRole("STAFF", "HELPDESK")
                 .anyRequest()
                 .authenticated();
         http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());

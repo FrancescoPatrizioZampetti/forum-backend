@@ -8,7 +8,7 @@ import com.blackphoenixproductions.forumbackend.service.INotificationService;
 import com.blackphoenixproductions.forumbackend.service.IPostService;
 import com.blackphoenixproductions.forumbackend.sse.SsePushNotificationService;
 import org.jsoup.Jsoup;
-import org.jsoup.safety.Whitelist;
+import org.jsoup.safety.Safelist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -87,7 +87,7 @@ public class NotificationService implements INotificationService {
     }
 
     private String setNotificationMessage(String message) {
-        message = Jsoup.clean(message, Whitelist.none());
+        message = Jsoup.clean(message, Safelist.none());
         int messageSize = message.length();
         if (messageSize > MAX_NOTIFICATION_LENGTH) {
             message = message.substring(0, MAX_NOTIFICATION_LENGTH);

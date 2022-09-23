@@ -32,6 +32,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -94,7 +95,7 @@ public class TopicRestAPIController {
     })
     @Operation(summary = "Creazione di un topic.")
     @PostMapping(value = "createTopic")
-    public ResponseEntity<EntityModel<Topic>> createTopic(@RequestBody InsertTopicDTO insertTopicDTO, HttpServletRequest req){
+    public ResponseEntity<EntityModel<Topic>> createTopic(@RequestBody @Valid InsertTopicDTO insertTopicDTO, HttpServletRequest req){
         logger.info("Start createTopic - topic owner username : {}", KeycloakUtility.getAccessToken(req).getPreferredUsername());
         Topic savedTopic = topicService.createTopic(insertTopicDTO, req);
         EntityModel<Topic> entityModel = EntityModel.of(savedTopic).add(linkTo(methodOn(TopicRestAPIController.class).createTopic(insertTopicDTO, req)).withSelfRel());
@@ -111,7 +112,7 @@ public class TopicRestAPIController {
     })
     @Operation(summary = "Modifica di un topic.")
     @PostMapping(value = "editTopic")
-    public ResponseEntity<EntityModel<Topic>> editTopic(@RequestBody EditTopicDTO topicDTO, HttpServletRequest req){
+    public ResponseEntity<EntityModel<Topic>> editTopic(@RequestBody @Valid EditTopicDTO topicDTO, HttpServletRequest req){
         logger.info("Start editTopic - topic id: {}", topicDTO.getId());
         Topic editedTopic = topicService.editTopic(topicDTO, req);
         EntityModel<Topic> entityModel = EntityModel.of(editedTopic).add(linkTo(methodOn(TopicRestAPIController.class).editTopic(topicDTO, req)).withSelfRel());

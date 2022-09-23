@@ -8,6 +8,7 @@ import com.blackphoenixproductions.forumbackend.security.KeycloakUtility;
 import com.blackphoenixproductions.forumbackend.service.INotificationService;
 import com.blackphoenixproductions.forumbackend.service.IPostService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -29,6 +30,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -66,7 +68,7 @@ public class PostRestAPIController {
     })
     @Operation(summary = "Cerca tutti i post contenuti in una pagina di un topic.")
     @PostMapping(value = "/findPostsByPage")
-    public ResponseEntity<PagedModel<EntityModel<Post>>> findPostsByPage (@RequestParam Long topicId,
+    public ResponseEntity<PagedModel<EntityModel<Post>>> findPostsByPage (@Parameter(description = "L'id del topic.") @RequestParam Long topicId,
                                                                           @ParameterObject @PageableDefault(sort = {"createDate"}, direction = Sort.Direction.ASC) Pageable pageable,
                                                                           PagedResourcesAssembler<Post> pagedResourcesAssembler){
         Page<Post> pagedPosts = postService.getPagedPosts(topicId, pageable);
@@ -81,7 +83,7 @@ public class PostRestAPIController {
     })
     @Operation(summary = "Crea un nuovo post.")
     @PostMapping(value = "createPost")
-    public ResponseEntity<EntityModel<Post>> createPost(@RequestBody InsertPostDTO postDTO, HttpServletRequest req){
+    public ResponseEntity<EntityModel<Post>> createPost(@RequestBody @Valid InsertPostDTO postDTO, HttpServletRequest req){
         logger.info("Start createPost - post owner username : {}", KeycloakUtility.getAccessToken(req).getPreferredUsername());
         Post savedPost = postService.createPost(postDTO, req);
         notificationService.notifyTopicAuthor(savedPost);
@@ -98,7 +100,7 @@ public class PostRestAPIController {
     })
     @Operation(summary = "Modifica un post.")
     @PostMapping(value = "editPost")
-    public ResponseEntity<EntityModel<Post>> editPost(@RequestBody EditPostDTO postDTO, HttpServletRequest req){
+    public ResponseEntity<EntityModel<Post>> editPost(@RequestBody @Valid EditPostDTO postDTO, HttpServletRequest req){
         logger.info("Start editPost - post id : {}", postDTO.getId());
         Post editedPost = postService.editPost(postDTO, req);
         EntityModel<Post> entityModel = EntityModel.of(editedPost, linkTo(methodOn(PostRestAPIController.class).editPost(postDTO, req)).withSelfRel());

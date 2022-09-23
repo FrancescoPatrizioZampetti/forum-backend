@@ -32,6 +32,6 @@ topic_id bigint not null references TOPICS(id)
 CREATE OR REPLACE VIEW V_TOPICS AS
 select t.id, t.title, t.message, t.pinned, t.email_user,
        t.create_date, t.delete_date, t.edit_date, u.username as author_username, u.email as author_email,
-       (select count(*) from posts p, topics t2 where t2.id=t.id) as posts_number
+       (select count(*) from posts p, topics t2 where t2.id = t.id and p.topic_id = t2.id) as posts_number
 from TOPICS t, USERS u
 where t.user_id = u.id;
