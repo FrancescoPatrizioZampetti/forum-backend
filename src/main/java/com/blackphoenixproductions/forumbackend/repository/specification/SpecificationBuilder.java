@@ -58,7 +58,7 @@ public class SpecificationBuilder {
                                 (Number) castToRequiredType(root.get(input.getField()).getJavaType(), input.getValue()));
             case LIKE:
                 return (root, query, criteriaBuilder) ->
-                        criteriaBuilder.like(root.get(input.getField()), "%"+input.getValue()+"%");
+                        criteriaBuilder.like(criteriaBuilder.upper(root.get(input.getField())), "%"+input.getValue().toUpperCase()+"%");
             case IN:
                 return (root, query, criteriaBuilder) ->
                         criteriaBuilder.in(root.get(input.getField()))
