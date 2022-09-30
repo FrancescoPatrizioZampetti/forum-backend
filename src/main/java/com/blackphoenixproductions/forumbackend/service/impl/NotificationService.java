@@ -58,6 +58,13 @@ public class NotificationService implements INotificationService {
     }
 
     private NotificationDTO createUserNotification(Post post) {
+        NotificationDTO notification = getNotificationDTO(post);
+        int lastTopicPageNumber = postService.getPagedPosts(post.getTopic().getId(), PageRequest.of(0, Math.toIntExact(Pagination.POST_PAGINATION.getValue()), Sort.by("createDate").ascending())).getTotalPages()-1;
+        notification.setUrl("/viewtopic?id=" + post.getTopic().getId() + "&page=" + lastTopicPageNumber);
+        return notification;
+    }
+
+    private NotificationDTO getNotificationDTO(Post post) {
         NotificationDTO notification = new NotificationDTO();
         notification.setId(idCounter.getAndIncrement());
         notification.setFromUser(post.getUser());
@@ -65,14 +72,7 @@ public class NotificationService implements INotificationService {
         notification.setTopic(post.getTopic());
         notification.setCreateDate(LocalDateTime.now());
         notification.setMessage(setNotificationMessage(post.getMessage()));
-        int lastTopicPageNumber = postService.getPagedPosts(post.getTopic().getId(), PageRequest.of(0, Math.toIntExact(Pagination.POST_PAGINATION.getValue()), Sort.by("createDate").ascending())).getTotalPages()-1;
-        notification.setUrl("/viewtopic?id=" + post.getTopic().getId() + "&page=" + lastTopicPageNumber);
         return notification;
-    }
-
-    private void updateStatusAndstoreUserNotification(String username, List<NotificationDTO> userNotificationList) {
-        notificationStore.put(username, userNotificationList);
-        usersNotificationStatus.put(username, true);
     }
 
     private List<NotificationDTO> addToUserNotifications(String username, NotificationDTO notification) {

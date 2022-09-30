@@ -59,7 +59,6 @@ public class PostService implements IPostService {
     @Transactional
     @Override
     public Post createPost(InsertPostDTO postDTO, HttpServletRequest req) {
-        Post post = new Post();
         User user = userService.retriveUser(KeycloakUtility.getAccessToken(req));
         if (user == null) {
             throw new CustomException("Utente non trovato.", HttpStatus.NOT_FOUND);
@@ -68,16 +67,22 @@ public class PostService implements IPostService {
         if (!topic.isPresent()){
             throw new CustomException("Topic con id: " + postDTO.getTopicId() + " non trovato.", HttpStatus.NOT_FOUND);
         }
-        post.setMessage(postDTO.getMessage());
-        post.setTopic(topic.get());
-        post.setUser(user);
-        post.setCreateDate(LocalDateTime.now());
+        Post post = getPostEntityFromDTO(postDTO, user, topic);
         Post savedPost = postRepository.save(post);
         // se la risposta non è del creatore del topic e se emailUser = true allora invia un email al creatore del topic
         if (!savedPost.getUser().equals(savedPost.getTopic().getUser()) && savedPost.getTopic().isEmailUser()){
             emailSender.sendTopicReplyEmail(savedPost.getTopic().getUser(), savedPost.getUser(), savedPost) ;
         }
         return savedPost;
+    }
+
+    private static Post getPostEntityFromDTO(InsertPostDTO postDTO, User user, Optional<Topic> topic) {
+        Post post = new Post();
+        post.setMessage(postDTO.getMessage());
+        post.setTopic(topic.get());
+        post.setUser(user);
+        post.setCreateDate(LocalDateTime.now());
+        return post;
     }
 
     @Transactional

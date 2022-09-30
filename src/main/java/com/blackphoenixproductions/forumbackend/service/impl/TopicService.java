@@ -47,6 +47,11 @@ public class TopicService implements ITopicService {
         if (userTopic == null){
             throw new CustomException("Utente non trovato.", HttpStatus.NOT_FOUND);
         }
+        Topic topic = getTopicEntityFromDTO(insertTopicDTO, userTopic);
+        return topicRepository.save(topic);
+    }
+
+    private static Topic getTopicEntityFromDTO(InsertTopicDTO insertTopicDTO, User userTopic) {
         Topic topic = new Topic();
         topic.setTitle(insertTopicDTO.getTitle());
         topic.setMessage(insertTopicDTO.getMessage());
@@ -54,7 +59,7 @@ public class TopicService implements ITopicService {
         topic.setPinned(insertTopicDTO.isPinned());
         topic.setUser(userTopic);
         topic.setCreateDate(LocalDateTime.now());
-        return topicRepository.save(topic);
+        return topic;
     }
 
     @Transactional
