@@ -16,7 +16,6 @@ import org.jsoup.safety.Safelist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +25,6 @@ import java.util.*;
 @Service
 public class NotificationService implements INotificationService {
 
-    private final ISSEPushNotificationService ssePushNotificationService;
     private final int MAX_UNREADED_NOTIFICATIONS = 10;
     private final int MAX_NOTIFICATION_LENGTH = 20;
     private final IPostService postService;
@@ -36,8 +34,7 @@ public class NotificationService implements INotificationService {
 
 
     @Autowired
-    public NotificationService(ISSEPushNotificationService ssePushNotificationService, IPostService postService, NotificationRepository notificationRepository, NotificationStatusRepository notificationStatusRepository, RedisMessagePublisher redisMessagePublisher) {
-        this.ssePushNotificationService = ssePushNotificationService;
+    public NotificationService(IPostService postService, NotificationRepository notificationRepository, NotificationStatusRepository notificationStatusRepository, RedisMessagePublisher redisMessagePublisher) {
         this.postService = postService;
         this.notificationRepository = notificationRepository;
         this.notificationStatusRepository = notificationStatusRepository;
