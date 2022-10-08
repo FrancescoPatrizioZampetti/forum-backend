@@ -92,21 +92,17 @@ public class NotificationService implements INotificationService {
 
     @Override
     public Boolean getUserNotificationStatus(User user) {
-        Boolean notificationsStatus = notificationStatusRepository.findById(user.getUsername()).get().getAllReaded();
-        return notificationsStatus;
+        Optional<NotificationStatusDTO> notificationsStatus = null;
+        notificationsStatus = notificationStatusRepository.findById(user.getUsername());
+        if(notificationsStatus.isPresent()){
+            return notificationsStatus.get().getNewNotification();
+        }
+        return false;
     }
 
     @Override
     public void setNotificationStatus(String username, boolean showNotificationNotice) {
         notificationStatusRepository.save(new NotificationStatusDTO(username, showNotificationNotice));
     }
-
-    @Override
-    public void removeOldestNotification(List<NotificationDTO> userNotificationList) {
-        if(userNotificationList.size() > MAX_UNREADED_NOTIFICATIONS){
-            userNotificationList.remove(userNotificationList.size()-1);
-        }
-    }
-
 
 }

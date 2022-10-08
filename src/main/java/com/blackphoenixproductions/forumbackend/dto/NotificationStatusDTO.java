@@ -16,5 +16,5 @@ public class NotificationStatusDTO {
 
     @Id
     private String username;
-    private Boolean allReaded;
+    private Boolean newNotification;
 }
