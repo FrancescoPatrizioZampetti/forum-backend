@@ -9,6 +9,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -17,9 +18,16 @@ public class SsePushNotificationService {
 
     private final DateFormat DATE_FORMATTER = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
     private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
+    private final Set<String> usernames = ConcurrentHashMap.newKeySet();
     private static final Logger logger = LoggerFactory.getLogger(SsePushNotificationService.class);
 
 
+    public void sendHeartBeatEvent(){
+        usernames.stream().forEach(username -> heartBeatEvent(username));
+    }
+    public void addUsername(String username){
+        usernames.add(username);
+    }
 
     public void addEmitter(String username, final SseEmitter emitter) {
         emitters.put(username, emitter);

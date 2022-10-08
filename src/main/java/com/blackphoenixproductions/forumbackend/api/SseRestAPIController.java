@@ -19,9 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
 
 @RestController
 @RequestMapping("/api")
@@ -29,7 +26,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SseRestAPIController {
 
     private final SsePushNotificationService service;
-    private final Set<String> usernames = ConcurrentHashMap.newKeySet();
     private static final Logger logger = LoggerFactory.getLogger(SseRestAPIController.class);
 
     @Autowired
@@ -49,7 +45,7 @@ public class SseRestAPIController {
         try {
             service.addEmitter(username, emitter);
             service.initEvent(username);
-            usernames.add(username);
+            service.addUsername(username);
             emitter.onCompletion(() -> service.removeEmitter(emitter));
             emitter.onTimeout(() -> service.removeEmitter(emitter));
             emitter.onError((e) -> service.removeEmitter(emitter));
@@ -65,8 +61,7 @@ public class SseRestAPIController {
      */
     @Scheduled(fixedRate = 30000)
     public void sendHeartBeat(){
-        logger.info("Numero utenti notificabili: {}", usernames.size());
-        usernames.stream().forEach(username -> service.heartBeatEvent(username));
+        service.sendHeartBeatEvent();
     }
 
 }
