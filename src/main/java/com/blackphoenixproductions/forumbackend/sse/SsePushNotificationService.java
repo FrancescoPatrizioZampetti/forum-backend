@@ -53,6 +53,8 @@ public class SsePushNotificationService {
             if(userEmitter != null) {
                 userEmitter.send(SseEmitter.event()
                         .data(""));
+            } else {
+                logger.warn("Utente non piu' notificabile");
             }
         } catch (Exception e) {
             logger.warn(e.getMessage());
@@ -65,8 +67,8 @@ public class SsePushNotificationService {
             if(userEmitter != null) {
                 userEmitter.send(SseEmitter.event()
                         .data("new notification"));
-            } else{
-                logger.warn("Utente non notificabile");
+            } else {
+                logger.warn("Utente non piu' notificabile");
             }
         } catch (Exception e) {
             logger.warn(e.getMessage());
