@@ -1,9 +1,13 @@
 package com.blackphoenixproductions.forumbackend.service.impl;
 
 import com.blackphoenixproductions.forumbackend.dto.NotificationDTO;
+import com.blackphoenixproductions.forumbackend.dto.NotificationStatusDTO;
 import com.blackphoenixproductions.forumbackend.entity.Post;
 import com.blackphoenixproductions.forumbackend.entity.User;
 import com.blackphoenixproductions.forumbackend.enums.Pagination;
+import com.blackphoenixproductions.forumbackend.redis.RedisMessagePublisher;
+import com.blackphoenixproductions.forumbackend.repository.NotificationRepository;
+import com.blackphoenixproductions.forumbackend.repository.NotificationStatusRepository;
 import com.blackphoenixproductions.forumbackend.service.INotificationService;
 import com.blackphoenixproductions.forumbackend.service.IPostService;
 import com.blackphoenixproductions.forumbackend.sse.ISSEPushNotificationService;
@@ -12,30 +16,32 @@ import org.jsoup.safety.Safelist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class NotificationService implements INotificationService {
 
-    private static final Map<String, List<NotificationDTO>> notificationStore = new ConcurrentHashMap<>();
-    private static final Map<String, Boolean> usersNotificationStatus = new ConcurrentHashMap<>();
-    private static final AtomicLong idCounter = new AtomicLong();
     private final ISSEPushNotificationService ssePushNotificationService;
     private final int MAX_UNREADED_NOTIFICATIONS = 10;
     private final int MAX_NOTIFICATION_LENGTH = 20;
     private final IPostService postService;
+    private final NotificationRepository notificationRepository;
+    private final NotificationStatusRepository notificationStatusRepository;
+    private final RedisMessagePublisher redisMessagePublisher;
 
 
     @Autowired
-    public NotificationService(ISSEPushNotificationService ssePushNotificationService, IPostService postService) {
+    public NotificationService(ISSEPushNotificationService ssePushNotificationService, IPostService postService, NotificationRepository notificationRepository, NotificationStatusRepository notificationStatusRepository, RedisMessagePublisher redisMessagePublisher) {
         this.ssePushNotificationService = ssePushNotificationService;
         this.postService = postService;
+        this.notificationRepository = notificationRepository;
+        this.notificationStatusRepository = notificationStatusRepository;
+        this.redisMessagePublisher = redisMessagePublisher;
     }
 
     @Transactional
@@ -44,12 +50,10 @@ public class NotificationService implements INotificationService {
         if (userIsNotTopicAuthor(post)){
             String topicAuthorUsername = post.getTopic().getUser().getUsername();
             NotificationDTO notification = createUserNotification(post);
-            List<NotificationDTO> userNotificationList = addToUserNotifications(topicAuthorUsername, notification);
-            removeOldestNotification(userNotificationList);
-            notificationStore.put(topicAuthorUsername, userNotificationList);
-            setNotificationStatus(topicAuthorUsername, true);
-            // invio sse event per notifica push
-            ssePushNotificationService.sendNotification(topicAuthorUsername);
+            // todo valutare durata notifiche ed ordinamento
+            notificationRepository.save(notification);
+            notificationStatusRepository.save(new NotificationStatusDTO(topicAuthorUsername, true));
+            redisMessagePublisher.publish(topicAuthorUsername);
         }
     }
 
@@ -66,24 +70,12 @@ public class NotificationService implements INotificationService {
 
     private NotificationDTO getNotificationDTO(Post post) {
         NotificationDTO notification = new NotificationDTO();
-        notification.setId(idCounter.getAndIncrement());
-        notification.setFromUser(post.getUser());
-        notification.setToUser(post.getTopic().getUser());
-        notification.setTopic(post.getTopic());
+        notification.setFromUser(post.getUser().getUsername());
+        notification.setToUser(post.getTopic().getUser().getUsername());
+        notification.setTopicTitle(post.getTopic().getTitle());
         notification.setCreateDate(LocalDateTime.now());
         notification.setMessage(setNotificationMessage(post.getMessage()));
         return notification;
-    }
-
-    private List<NotificationDTO> addToUserNotifications(String username, NotificationDTO notification) {
-        List<NotificationDTO> userNotificationList = notificationStore.get(username);
-        if(userNotificationList == null){
-            userNotificationList = new ArrayList<>();
-        }
-        userNotificationList.add(notification);
-        // ordino per data crescente
-        Collections.sort(userNotificationList);
-        return userNotificationList;
     }
 
     private String setNotificationMessage(String message) {
@@ -98,19 +90,19 @@ public class NotificationService implements INotificationService {
 
     @Override
     public List<NotificationDTO> getUserNotification(User user) {
-        List<NotificationDTO> userNotifications = notificationStore.get(user.getUsername());
+        List<NotificationDTO> userNotifications = notificationRepository.findAllByFromUser(user.getUsername());
         return userNotifications;
     }
 
     @Override
     public Boolean getUserNotificationStatus(User user) {
-        Boolean notificationsStatus = usersNotificationStatus.get(user.getUsername());
+        Boolean notificationsStatus = notificationStatusRepository.findById(user.getUsername()).get().getAllReaded();
         return notificationsStatus;
     }
 
     @Override
     public void setNotificationStatus(String username, boolean showNotificationNotice) {
-        usersNotificationStatus.put(username, showNotificationNotice);
+        notificationStatusRepository.save(new NotificationStatusDTO(username, showNotificationNotice));
     }
 
     @Override

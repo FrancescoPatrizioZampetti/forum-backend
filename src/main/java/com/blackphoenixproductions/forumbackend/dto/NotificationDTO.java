@@ -1,12 +1,11 @@
 package com.blackphoenixproductions.forumbackend.dto;
 
-import com.blackphoenixproductions.forumbackend.entity.Topic;
-import com.blackphoenixproductions.forumbackend.entity.User;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
 
 import java.time.LocalDateTime;
 
@@ -15,18 +14,18 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@RedisHash("NotificationDTO")
 public class NotificationDTO implements Comparable<NotificationDTO>{
 
-    private Long id;
-    @JsonIgnoreProperties({"topics", "posts"})
-    private User fromUser;
-    @JsonIgnoreProperties({"topics", "posts"})
-    private User toUser;
-    @JsonIgnoreProperties({"user", "posts"})
-    private Topic topic;
+    @Id
+    private String id;
+    private String fromUser;
+    private String fromUserRole;
+    private String toUser;
+    private String topicTitle;
     private String message;
-    private LocalDateTime createDate;
     private String url;
+    private LocalDateTime createDate;
 
     @Override
     public int compareTo(NotificationDTO o) {
