@@ -1,6 +1,6 @@
 package com.blackphoenixproductions.forumbackend.api;
 
-import com.blackphoenixproductions.forumbackend.sse.SsePushNotificationService;
+import com.blackphoenixproductions.forumbackend.sse.ISSEPushNotificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,11 +25,11 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @Tag(name = "5. SSE", description = "endpoints riguardanti gli SSE.")
 public class SseRestAPIController {
 
-    private final SsePushNotificationService service;
+    private final ISSEPushNotificationService service;
     private static final Logger logger = LoggerFactory.getLogger(SseRestAPIController.class);
 
     @Autowired
-    public SseRestAPIController(SsePushNotificationService service) {
+    public SseRestAPIController(ISSEPushNotificationService service) {
         this.service = service;
     }
 

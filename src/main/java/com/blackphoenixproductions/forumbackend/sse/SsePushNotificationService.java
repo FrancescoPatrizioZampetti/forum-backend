@@ -14,7 +14,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-public class SsePushNotificationService {
+public class SsePushNotificationService implements ISSEPushNotificationService{
 
     private final DateFormat DATE_FORMATTER = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
     private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
@@ -61,7 +61,7 @@ public class SsePushNotificationService {
         }
     }
 
-    public void sendNotificationToTopicAuthor(String username) {
+    public void sendNotification(String username) {
         try {
             SseEmitter userEmitter = emitters.get(username);
             if(userEmitter != null) {

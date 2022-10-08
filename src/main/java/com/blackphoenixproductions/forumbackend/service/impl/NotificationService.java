@@ -6,7 +6,7 @@ import com.blackphoenixproductions.forumbackend.entity.User;
 import com.blackphoenixproductions.forumbackend.enums.Pagination;
 import com.blackphoenixproductions.forumbackend.service.INotificationService;
 import com.blackphoenixproductions.forumbackend.service.IPostService;
-import com.blackphoenixproductions.forumbackend.sse.SsePushNotificationService;
+import com.blackphoenixproductions.forumbackend.sse.ISSEPushNotificationService;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +26,14 @@ public class NotificationService implements INotificationService {
     private static final Map<String, List<NotificationDTO>> notificationStore = new ConcurrentHashMap<>();
     private static final Map<String, Boolean> usersNotificationStatus = new ConcurrentHashMap<>();
     private static final AtomicLong idCounter = new AtomicLong();
-    private final SsePushNotificationService ssePushNotificationService;
+    private final ISSEPushNotificationService ssePushNotificationService;
     private final int MAX_UNREADED_NOTIFICATIONS = 10;
     private final int MAX_NOTIFICATION_LENGTH = 20;
     private final IPostService postService;
 
 
     @Autowired
-    public NotificationService(SsePushNotificationService ssePushNotificationService, IPostService postService) {
+    public NotificationService(ISSEPushNotificationService ssePushNotificationService, IPostService postService) {
         this.ssePushNotificationService = ssePushNotificationService;
         this.postService = postService;
     }
@@ -49,7 +49,7 @@ public class NotificationService implements INotificationService {
             notificationStore.put(topicAuthorUsername, userNotificationList);
             setNotificationStatus(topicAuthorUsername, true);
             // invio sse event per notifica push
-            ssePushNotificationService.sendNotificationToTopicAuthor(topicAuthorUsername);
+            ssePushNotificationService.sendNotification(topicAuthorUsername);
         }
     }
 
