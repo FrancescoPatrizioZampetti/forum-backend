@@ -53,8 +53,6 @@ public class SsePushNotificationService implements ISSEPushNotificationService{
             if(userEmitter != null) {
                 userEmitter.send(SseEmitter.event()
                         .data(""));
-            } else {
-                logger.warn("Utente non piu' notificabile");
             }
         } catch (Exception e) {
             logger.warn(e.getMessage());
@@ -65,10 +63,11 @@ public class SsePushNotificationService implements ISSEPushNotificationService{
         try {
             SseEmitter userEmitter = emitters.get(username);
             if(userEmitter != null) {
+                logger.info("Invio notifica ad User : {}", username);
                 userEmitter.send(SseEmitter.event()
                         .data("new notification"));
             } else {
-                logger.warn("Utente non piu' notificabile");
+                logger.warn("Utente non notificabile");
             }
         } catch (Exception e) {
             logger.warn(e.getMessage());
