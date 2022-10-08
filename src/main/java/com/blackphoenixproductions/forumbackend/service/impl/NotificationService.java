@@ -10,7 +10,6 @@ import com.blackphoenixproductions.forumbackend.repository.NotificationRepositor
 import com.blackphoenixproductions.forumbackend.repository.NotificationStatusRepository;
 import com.blackphoenixproductions.forumbackend.service.INotificationService;
 import com.blackphoenixproductions.forumbackend.service.IPostService;
-import com.blackphoenixproductions.forumbackend.sse.ISSEPushNotificationService;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.beans.factory.annotation.Autowired;

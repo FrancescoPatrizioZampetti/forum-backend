@@ -133,6 +133,12 @@
             <version>${version.spring.data.redis}</version>
         </dependency>
 
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <type>jar</type>
+        </dependency>
+
 
     </dependencies>
 
