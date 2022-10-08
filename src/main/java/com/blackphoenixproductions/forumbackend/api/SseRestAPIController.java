@@ -43,6 +43,7 @@ public class SseRestAPIController {
         // 60000L * 5 = 5 min
         final SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
         try {
+            logger.info("Subscribing to SSE : {}", username);
             service.addEmitter(username, emitter);
             service.initEvent(username);
             service.addUsername(username);
