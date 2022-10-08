@@ -23,8 +23,6 @@ import java.util.*;
 
 @Service
 public class NotificationService implements INotificationService {
-
-    private final int MAX_UNREADED_NOTIFICATIONS = 10;
     private final int MAX_NOTIFICATION_LENGTH = 20;
     private final IPostService postService;
     private final NotificationRepository notificationRepository;

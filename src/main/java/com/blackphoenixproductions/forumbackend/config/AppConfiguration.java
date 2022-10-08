@@ -4,6 +4,8 @@ package com.blackphoenixproductions.forumbackend.config;
 import com.blackphoenixproductions.forumbackend.redis.MessagePublisher;
 import com.blackphoenixproductions.forumbackend.redis.RedisMessagePublisher;
 import com.blackphoenixproductions.forumbackend.redis.RedisMessageSubscriber;
+import com.blackphoenixproductions.forumbackend.sse.ISSEPushNotificationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
@@ -17,6 +19,9 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class AppConfiguration {
+
+    @Autowired
+    private ISSEPushNotificationService ssePushNotificationService;
 
     @Bean
     public RestTemplate restTemplate(){
@@ -38,7 +43,7 @@ public class AppConfiguration {
 
     @Bean
     MessageListenerAdapter messageListener() {
-        return new MessageListenerAdapter(new RedisMessageSubscriber());
+        return new MessageListenerAdapter(new RedisMessageSubscriber(ssePushNotificationService));
     }
 
     @Bean
