@@ -18,6 +18,7 @@ public class NotificationDTO {
     @Indexed
     private String fromUser;
     private String fromUserRole;
+    @Indexed
     private String toUser;
     private String topicTitle;
     private String message;

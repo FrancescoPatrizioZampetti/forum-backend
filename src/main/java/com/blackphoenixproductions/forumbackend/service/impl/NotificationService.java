@@ -69,6 +69,7 @@ public class NotificationService implements INotificationService {
         notification.setTopicTitle(post.getTopic().getTitle());
         notification.setCreateDate(LocalDateTime.now());
         notification.setMessage(setNotificationMessage(post.getMessage()));
+        notification.setFromUserRole(post.getUser().getRole());
         return notification;
     }
 
@@ -84,7 +85,7 @@ public class NotificationService implements INotificationService {
 
     @Override
     public List<NotificationDTO> getUserNotification(User user) {
-        List<NotificationDTO> userNotifications = notificationRepository.findAllByFromUser(user.getUsername());
+        List<NotificationDTO> userNotifications = notificationRepository.findAllByToUserOrderByCreateDateAsc(user.getUsername());
         return userNotifications;
     }
 
