@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface NotificationRepository extends CrudRepository<NotificationDTO, String> {
 
-    List<NotificationDTO> findAllByToUserOrderByCreateDateAsc(String username);
+    List<NotificationDTO> findAllByToUserOrderByCreateDateDesc(String username);
 }

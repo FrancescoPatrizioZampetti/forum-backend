@@ -85,18 +85,18 @@ public class NotificationService implements INotificationService {
 
     @Override
     public List<NotificationDTO> getUserNotification(User user) {
-        List<NotificationDTO> userNotifications = notificationRepository.findAllByToUserOrderByCreateDateAsc(user.getUsername());
+        List<NotificationDTO> userNotifications = notificationRepository.findAllByToUserOrderByCreateDateDesc(user.getUsername());
         return userNotifications;
     }
 
     @Override
     public Boolean getUserNotificationStatus(User user) {
-        Optional<NotificationStatusDTO> notificationsStatus = null;
-        notificationsStatus = notificationStatusRepository.findById(user.getUsername());
+        Boolean status = null;
+        Optional<NotificationStatusDTO> notificationsStatus = notificationStatusRepository.findById(user.getUsername());
         if(notificationsStatus.isPresent()){
-            return notificationsStatus.get().getNewNotification();
+            status = notificationsStatus.get().getNewNotification();
         }
-        return false;
+        return status;
     }
 
     @Override
