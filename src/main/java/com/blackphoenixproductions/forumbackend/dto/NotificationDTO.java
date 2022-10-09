@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
 import java.time.LocalDateTime;
 
@@ -15,10 +16,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @RedisHash("NotificationDTO")
-public class NotificationDTO implements Comparable<NotificationDTO>{
+public class NotificationDTO {
 
     @Id
     private String id;
+    @Indexed
     private String fromUser;
     private String fromUserRole;
     private String toUser;
@@ -27,8 +29,4 @@ public class NotificationDTO implements Comparable<NotificationDTO>{
     private String url;
     private LocalDateTime createDate;
 
-    @Override
-    public int compareTo(NotificationDTO o) {
-        return o.createDate.compareTo(this.createDate);
-    }
 }

@@ -45,7 +45,6 @@ public class NotificationService implements INotificationService {
             String topicAuthorUsername = post.getTopic().getUser().getUsername();
             NotificationDTO notification = createUserNotification(post);
             // todo valutare durata notifiche ed ordinamento
-            // todo verificare che la notifica venga salvata correttamente su redis.
             notificationRepository.save(notification);
             notificationStatusRepository.save(new NotificationStatusDTO(topicAuthorUsername, true));
             redisMessagePublisher.publish(topicAuthorUsername);
@@ -85,8 +84,7 @@ public class NotificationService implements INotificationService {
 
     @Override
     public List<NotificationDTO> getUserNotification(User user) {
-        // todo capire se questa query funziona
-        List<NotificationDTO> userNotifications = notificationRepository.findAllByFromUser(user.getUsername());
+        List<NotificationDTO> userNotifications = notificationRepository.findByFromUser(user.getUsername());
         return userNotifications;
     }
 
