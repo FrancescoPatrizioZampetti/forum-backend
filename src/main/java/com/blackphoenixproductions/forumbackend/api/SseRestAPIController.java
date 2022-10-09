@@ -46,7 +46,6 @@ public class SseRestAPIController {
             logger.info("Subscribing to SSE : {}", username);
             service.addEmitter(username, emitter);
             service.initEvent(username);
-            service.addUsername(username);
             emitter.onCompletion(() -> service.removeEmitter(emitter));
             emitter.onTimeout(() -> service.removeEmitter(emitter));
             emitter.onError((e) -> service.removeEmitter(emitter));
