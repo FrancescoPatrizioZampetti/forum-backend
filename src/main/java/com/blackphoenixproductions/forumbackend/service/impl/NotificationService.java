@@ -84,7 +84,7 @@ public class NotificationService implements INotificationService {
 
     @Override
     public List<NotificationDTO> getUserNotification(User user) {
-        List<NotificationDTO> userNotifications = notificationRepository.findByFromUser(user.getUsername());
+        List<NotificationDTO> userNotifications = notificationRepository.findAllByFromUser(user.getUsername());
         return userNotifications;
     }
 

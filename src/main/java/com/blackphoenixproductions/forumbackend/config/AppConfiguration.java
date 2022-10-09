@@ -20,8 +20,12 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class AppConfiguration {
 
+    private final ISSEPushNotificationService ssePushNotificationService;
+
     @Autowired
-    private ISSEPushNotificationService ssePushNotificationService;
+    public AppConfiguration(ISSEPushNotificationService ssePushNotificationService) {
+        this.ssePushNotificationService = ssePushNotificationService;
+    }
 
     @Bean
     public RestTemplate restTemplate(){
