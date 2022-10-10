@@ -1,4 +1,4 @@
-package com.blackphoenixproductions.forumbackend.redis;
+package com.blackphoenixproductions.forumbackend.messagebroker;
 
 import com.blackphoenixproductions.forumbackend.sse.ISSEPushNotificationService;
 import org.springframework.data.redis.connection.Message;

@@ -1,4 +1,4 @@
-package com.blackphoenixproductions.forumbackend.redis;
+package com.blackphoenixproductions.forumbackend.messagebroker;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

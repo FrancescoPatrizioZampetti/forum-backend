@@ -5,7 +5,7 @@ import com.blackphoenixproductions.forumbackend.dto.NotificationStatusDTO;
 import com.blackphoenixproductions.forumbackend.entity.Post;
 import com.blackphoenixproductions.forumbackend.entity.User;
 import com.blackphoenixproductions.forumbackend.enums.Pagination;
-import com.blackphoenixproductions.forumbackend.redis.RedisMessagePublisher;
+import com.blackphoenixproductions.forumbackend.messagebroker.MessagePublisher;
 import com.blackphoenixproductions.forumbackend.repository.NotificationRepository;
 import com.blackphoenixproductions.forumbackend.repository.NotificationStatusRepository;
 import com.blackphoenixproductions.forumbackend.service.INotificationService;
@@ -27,15 +27,15 @@ public class NotificationService implements INotificationService {
     private final IPostService postService;
     private final NotificationRepository notificationRepository;
     private final NotificationStatusRepository notificationStatusRepository;
-    private final RedisMessagePublisher redisMessagePublisher;
+    private final MessagePublisher messagePublisher;
 
 
     @Autowired
-    public NotificationService(IPostService postService, NotificationRepository notificationRepository, NotificationStatusRepository notificationStatusRepository, RedisMessagePublisher redisMessagePublisher) {
+    public NotificationService(IPostService postService, NotificationRepository notificationRepository, NotificationStatusRepository notificationStatusRepository, MessagePublisher messagePublisher) {
         this.postService = postService;
         this.notificationRepository = notificationRepository;
         this.notificationStatusRepository = notificationStatusRepository;
-        this.redisMessagePublisher = redisMessagePublisher;
+        this.messagePublisher = messagePublisher;
     }
 
     @Transactional
@@ -44,10 +44,9 @@ public class NotificationService implements INotificationService {
         if (userIsNotTopicAuthor(post)){
             String topicAuthorUsername = post.getTopic().getUser().getUsername();
             NotificationDTO notification = createUserNotification(post);
-            // todo valutare durata notifiche ed ordinamento
             notificationRepository.save(notification);
             notificationStatusRepository.save(new NotificationStatusDTO(topicAuthorUsername, true));
-            redisMessagePublisher.publish(topicAuthorUsername);
+            messagePublisher.publish(topicAuthorUsername);
         }
     }
 
