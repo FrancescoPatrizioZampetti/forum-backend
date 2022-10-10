@@ -152,12 +152,6 @@
 
     <profiles>
         <profile>
-            <id>demo</id>
-            <properties>
-                <activatedProperties>demo</activatedProperties>
-            </properties>
-        </profile>
-        <profile>
             <id>sviluppo</id>
             <properties>
                 <activatedProperties>sviluppo</activatedProperties>

@@ -33,7 +33,7 @@ public class AppConfiguration {
     }
 
     @Bean
-    JedisConnectionFactory jedisConnectionFactory() {
+    public JedisConnectionFactory jedisConnectionFactory() {
         return new JedisConnectionFactory();
     }
 
@@ -46,7 +46,7 @@ public class AppConfiguration {
     }
 
     @Bean
-    MessageListenerAdapter messageListener() {
+    public MessageListenerAdapter messageListener() {
         return new MessageListenerAdapter(new RedisMessageSubscriber(ssePushNotificationService));
     }
 
@@ -59,12 +59,12 @@ public class AppConfiguration {
     }
 
     @Bean
-    MessagePublisher redisPublisher() {
+    public MessagePublisher redisPublisher() {
         return new RedisMessagePublisher(redisTemplate(), topic());
     }
 
     @Bean
-    ChannelTopic topic() {
+    public ChannelTopic topic() {
         return new ChannelTopic("pubsub:queue");
     }
 
