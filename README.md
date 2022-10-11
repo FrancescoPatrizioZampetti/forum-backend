@@ -11,6 +11,7 @@ A forum back-end created with Spring Boot.
 ![](https://img.shields.io/badge/keycloak-✓-blue.svg)
 ![](https://img.shields.io/badge/OAS_3.0-✓-blue.svg)
 ![](https://img.shields.io/badge/HATEOAS-✓-blue.svg)
+![](https://img.shields.io/badge/Redis-✓-blue.svg)
 
 ## A Forum back-end created with Spring Boot. 
 The key features are:
