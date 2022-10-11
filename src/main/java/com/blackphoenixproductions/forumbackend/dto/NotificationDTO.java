@@ -1,35 +1,28 @@
 package com.blackphoenixproductions.forumbackend.dto;
 
-import com.blackphoenixproductions.forumbackend.entity.Topic;
-import com.blackphoenixproductions.forumbackend.entity.User;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
+import javax.persistence.GeneratedValue;
 import java.time.LocalDateTime;
 
+@Data
+@RedisHash("NotificationDTO")
+public class NotificationDTO {
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class NotificationDTO implements Comparable<NotificationDTO>{
-
-    private Long id;
-    @JsonIgnoreProperties({"topics", "posts"})
-    private User fromUser;
-    @JsonIgnoreProperties({"topics", "posts"})
-    private User toUser;
-    @JsonIgnoreProperties({"user", "posts"})
-    private Topic topic;
+    @Id
+    @GeneratedValue
+    private String id;
+    @Indexed
+    private String fromUser;
+    private String fromUserRole;
+    @Indexed
+    private String toUser;
+    private String topicTitle;
     private String message;
-    private LocalDateTime createDate;
     private String url;
+    private LocalDateTime createDate;
 
-    @Override
-    public int compareTo(NotificationDTO o) {
-        return o.createDate.compareTo(this.createDate);
-    }
 }
