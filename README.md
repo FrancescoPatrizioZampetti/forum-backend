@@ -17,7 +17,7 @@ A forum back-end created with Spring Boot.
 The key features are:
 - Keycloak authentication with both normal and social login (Google, Facebook, GitHub).
 - Server-Sent Events (SSE) for real-time notifications.
-- Redis as message broker for scalability.
+- Redis as message broker and in-memory data store for scalability and performance.
 - HATEOAS (Hypermedia as the Engine of Application State) for REST endpoints.
 - Swagger (OAS 3.0) integration.
 - All the basic features of a forum: topic creation and search, post creation and email notifications.
