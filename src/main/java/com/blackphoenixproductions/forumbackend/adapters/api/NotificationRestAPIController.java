@@ -3,8 +3,8 @@ package com.blackphoenixproductions.forumbackend.adapters.api;
 
 import com.blackphoenixproductions.forumbackend.domain.ports.INotificationService;
 import com.blackphoenixproductions.forumbackend.domain.ports.IUserService;
-import com.blackphoenixproductions.forumbackend.domain.dto.NotificationDTO;
-import com.blackphoenixproductions.forumbackend.domain.entity.User;
+import com.blackphoenixproductions.forumbackend.domain.model.Notification;
+import com.blackphoenixproductions.forumbackend.domain.model.User;
 import com.blackphoenixproductions.forumbackend.config.security.KeycloakUtility;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -51,18 +51,18 @@ public class NotificationRestAPIController {
     })
     @Operation(summary = "Restituisce tutte le notifiche di un utente.")
     @GetMapping(value = "getUserNotificationList")
-    public ResponseEntity<CollectionModel<NotificationDTO>> getUserNotificationList(HttpServletRequest req){
+    public ResponseEntity<CollectionModel<Notification>> getUserNotificationList(HttpServletRequest req){
         logger.info("Start getUserNotificationList");
-        CollectionModel<NotificationDTO> userNotificationModel = null;
+        CollectionModel<Notification> userNotificationModel = null;
         User user = userService.getUserFromEmail(KeycloakUtility.getAccessToken(req).getEmail());
         if(user != null) {
-            List<NotificationDTO> userNotification = notificationService.getUserNotification(user);
+            List<Notification> userNotification = notificationService.getUserNotification(user);
             if (userNotification != null) {
                 userNotificationModel = CollectionModel.of(userNotification, linkTo(methodOn(NotificationRestAPIController.class).getUserNotificationList(req)).withSelfRel());
             }
         }
         logger.info("End getUserNotificationList");
-        return new ResponseEntity<CollectionModel<NotificationDTO>>(userNotificationModel, HttpStatus.OK);
+        return new ResponseEntity<CollectionModel<Notification>>(userNotificationModel, HttpStatus.OK);
     }
 
     @ApiResponses(value = {

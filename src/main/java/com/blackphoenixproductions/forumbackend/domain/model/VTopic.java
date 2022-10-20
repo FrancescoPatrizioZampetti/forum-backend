@@ -1,4 +1,4 @@
-package com.blackphoenixproductions.forumbackend.domain.entity;
+package com.blackphoenixproductions.forumbackend.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

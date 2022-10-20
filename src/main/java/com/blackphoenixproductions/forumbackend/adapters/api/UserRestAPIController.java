@@ -1,7 +1,7 @@
 package com.blackphoenixproductions.forumbackend.adapters.api;
 
 
-import com.blackphoenixproductions.forumbackend.domain.entity.User;
+import com.blackphoenixproductions.forumbackend.domain.model.User;
 import com.blackphoenixproductions.forumbackend.config.security.KeycloakUtility;
 import com.blackphoenixproductions.forumbackend.domain.ports.IUserService;
 import io.swagger.v3.oas.annotations.Operation;

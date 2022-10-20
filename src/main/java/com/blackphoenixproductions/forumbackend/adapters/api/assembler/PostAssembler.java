@@ -2,7 +2,7 @@ package com.blackphoenixproductions.forumbackend.adapters.api.assembler;
 
 import com.blackphoenixproductions.forumbackend.adapters.api.PostRestAPIController;
 import com.blackphoenixproductions.forumbackend.domain.dto.openApi.post.EditPostDTO;
-import com.blackphoenixproductions.forumbackend.domain.entity.Post;
+import com.blackphoenixproductions.forumbackend.domain.model.Post;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;

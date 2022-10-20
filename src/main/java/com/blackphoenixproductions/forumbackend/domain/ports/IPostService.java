@@ -3,7 +3,7 @@ package com.blackphoenixproductions.forumbackend.domain.ports;
 
 import com.blackphoenixproductions.forumbackend.domain.dto.openApi.post.EditPostDTO;
 import com.blackphoenixproductions.forumbackend.domain.dto.openApi.post.InsertPostDTO;
-import com.blackphoenixproductions.forumbackend.domain.entity.Post;
+import com.blackphoenixproductions.forumbackend.domain.model.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

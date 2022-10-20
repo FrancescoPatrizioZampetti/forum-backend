@@ -1,7 +1,7 @@
 package com.blackphoenixproductions.forumbackend.domain.ports.repository;
 
-import com.blackphoenixproductions.forumbackend.domain.dto.NotificationStatusDTO;
+import com.blackphoenixproductions.forumbackend.domain.model.NotificationStatus;
 import org.springframework.data.repository.CrudRepository;
 
-public interface NotificationStatusRepository extends CrudRepository<NotificationStatusDTO, String> {
+public interface NotificationStatusRepository extends CrudRepository<NotificationStatus, String> {
 }

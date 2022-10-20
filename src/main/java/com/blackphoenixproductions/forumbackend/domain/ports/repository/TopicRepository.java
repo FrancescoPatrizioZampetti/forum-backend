@@ -1,7 +1,7 @@
 package com.blackphoenixproductions.forumbackend.domain.ports.repository;
 
-import com.blackphoenixproductions.forumbackend.domain.entity.Topic;
-import com.blackphoenixproductions.forumbackend.domain.entity.User;
+import com.blackphoenixproductions.forumbackend.domain.model.Topic;
+import com.blackphoenixproductions.forumbackend.domain.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

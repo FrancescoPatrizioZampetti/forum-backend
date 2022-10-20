@@ -3,10 +3,10 @@ package com.blackphoenixproductions.forumbackend.domain.service;
 import com.blackphoenixproductions.forumbackend.domain.ports.INotificationService;
 import com.blackphoenixproductions.forumbackend.domain.ports.IPostService;
 import com.blackphoenixproductions.forumbackend.domain.ports.MessagePublisher;
-import com.blackphoenixproductions.forumbackend.domain.dto.NotificationDTO;
-import com.blackphoenixproductions.forumbackend.domain.dto.NotificationStatusDTO;
-import com.blackphoenixproductions.forumbackend.domain.entity.Post;
-import com.blackphoenixproductions.forumbackend.domain.entity.User;
+import com.blackphoenixproductions.forumbackend.domain.model.Notification;
+import com.blackphoenixproductions.forumbackend.domain.model.NotificationStatus;
+import com.blackphoenixproductions.forumbackend.domain.model.Post;
+import com.blackphoenixproductions.forumbackend.domain.model.User;
 import com.blackphoenixproductions.forumbackend.domain.enums.Pagination;
 import com.blackphoenixproductions.forumbackend.domain.ports.repository.NotificationRepository;
 import com.blackphoenixproductions.forumbackend.domain.ports.repository.NotificationStatusRepository;
@@ -44,9 +44,9 @@ public class NotificationService implements INotificationService {
     public void notifyTopicAuthor(Post post) {
         if (userIsNotTopicAuthor(post)){
             String topicAuthorUsername = post.getTopic().getUser().getUsername();
-            NotificationDTO notification = createUserNotification(post);
+            Notification notification = createUserNotification(post);
             notificationRepository.save(notification);
-            notificationStatusRepository.save(new NotificationStatusDTO(topicAuthorUsername, true));
+            notificationStatusRepository.save(new NotificationStatus(topicAuthorUsername, true));
             messagePublisher.publish(topicAuthorUsername);
         }
     }
@@ -55,15 +55,15 @@ public class NotificationService implements INotificationService {
         return !post.getUser().equals(post.getTopic().getUser());
     }
 
-    private NotificationDTO createUserNotification(Post post) {
-        NotificationDTO notification = getNotificationDTO(post);
+    private Notification createUserNotification(Post post) {
+        Notification notification = getNotificationDTO(post);
         int lastTopicPageNumber = postService.getPagedPosts(post.getTopic().getId(), PageRequest.of(0, Math.toIntExact(Pagination.POST_PAGINATION.getValue()), Sort.by("createDate").ascending())).getTotalPages()-1;
         notification.setUrl("/viewtopic?id=" + post.getTopic().getId() + "&page=" + lastTopicPageNumber);
         return notification;
     }
 
-    private NotificationDTO getNotificationDTO(Post post) {
-        NotificationDTO notification = new NotificationDTO();
+    private Notification getNotificationDTO(Post post) {
+        Notification notification = new Notification();
         notification.setFromUser(post.getUser().getUsername());
         notification.setToUser(post.getTopic().getUser().getUsername());
         notification.setTopicTitle(post.getTopic().getTitle());
@@ -84,15 +84,15 @@ public class NotificationService implements INotificationService {
     }
 
     @Override
-    public List<NotificationDTO> getUserNotification(User user) {
-        List<NotificationDTO> userNotifications = notificationRepository.findAllByToUserOrderByCreateDateDesc(user.getUsername());
+    public List<Notification> getUserNotification(User user) {
+        List<Notification> userNotifications = notificationRepository.findAllByToUserOrderByCreateDateDesc(user.getUsername());
         return userNotifications;
     }
 
     @Override
     public Boolean getUserNotificationStatus(User user) {
         Boolean status = null;
-        Optional<NotificationStatusDTO> notificationsStatus = notificationStatusRepository.findById(user.getUsername());
+        Optional<NotificationStatus> notificationsStatus = notificationStatusRepository.findById(user.getUsername());
         if(notificationsStatus.isPresent()){
             status = notificationsStatus.get().getNewNotification();
         }
@@ -101,7 +101,7 @@ public class NotificationService implements INotificationService {
 
     @Override
     public void setNotificationStatus(String username, boolean showNotificationNotice) {
-        notificationStatusRepository.save(new NotificationStatusDTO(username, showNotificationNotice));
+        notificationStatusRepository.save(new NotificationStatus(username, showNotificationNotice));
     }
 
 }

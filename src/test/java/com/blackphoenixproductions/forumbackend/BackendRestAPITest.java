@@ -1,8 +1,8 @@
 package com.blackphoenixproductions.forumbackend;
 
 
-import com.blackphoenixproductions.forumbackend.domain.entity.Topic;
-import com.blackphoenixproductions.forumbackend.domain.entity.User;
+import com.blackphoenixproductions.forumbackend.domain.model.Topic;
+import com.blackphoenixproductions.forumbackend.domain.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

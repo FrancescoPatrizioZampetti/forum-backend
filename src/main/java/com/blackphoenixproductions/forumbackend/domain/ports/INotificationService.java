@@ -1,9 +1,9 @@
 package com.blackphoenixproductions.forumbackend.domain.ports;
 
 
-import com.blackphoenixproductions.forumbackend.domain.dto.NotificationDTO;
-import com.blackphoenixproductions.forumbackend.domain.entity.Post;
-import com.blackphoenixproductions.forumbackend.domain.entity.User;
+import com.blackphoenixproductions.forumbackend.domain.model.Notification;
+import com.blackphoenixproductions.forumbackend.domain.model.Post;
+import com.blackphoenixproductions.forumbackend.domain.model.User;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ public interface INotificationService {
 
     void notifyTopicAuthor(Post post);
 
-    List<NotificationDTO> getUserNotification(User user);
+    List<Notification> getUserNotification(User user);
 
     Boolean getUserNotificationStatus(User user);
 

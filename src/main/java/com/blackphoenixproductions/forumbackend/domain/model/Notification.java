@@ -1,4 +1,4 @@
-package com.blackphoenixproductions.forumbackend.domain.dto;
+package com.blackphoenixproductions.forumbackend.domain.model;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Data
 @RedisHash("NotificationDTO")
-public class NotificationDTO {
+public class Notification {
 
     @Id
     @GeneratedValue

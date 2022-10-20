@@ -1,8 +1,8 @@
 package com.blackphoenixproductions.forumbackend;
 
 import com.blackphoenixproductions.forumbackend.domain.dto.Filter;
-import com.blackphoenixproductions.forumbackend.domain.entity.User;
-import com.blackphoenixproductions.forumbackend.domain.entity.VTopic;
+import com.blackphoenixproductions.forumbackend.domain.model.User;
+import com.blackphoenixproductions.forumbackend.domain.model.VTopic;
 import com.blackphoenixproductions.forumbackend.entity.VTopic_;
 import com.blackphoenixproductions.forumbackend.domain.enums.BooleanOperator;
 import com.blackphoenixproductions.forumbackend.domain.enums.Pagination;

@@ -1,7 +1,7 @@
 package com.blackphoenixproductions.forumbackend.adapters.api.assembler;
 
 import com.blackphoenixproductions.forumbackend.adapters.api.TopicRestAPIController;
-import com.blackphoenixproductions.forumbackend.domain.entity.Topic;
+import com.blackphoenixproductions.forumbackend.domain.model.Topic;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;

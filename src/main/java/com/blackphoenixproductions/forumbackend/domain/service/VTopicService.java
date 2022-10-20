@@ -3,7 +3,7 @@ package com.blackphoenixproductions.forumbackend.domain.service;
 import com.blackphoenixproductions.forumbackend.domain.ports.IVTopicService;
 import com.blackphoenixproductions.forumbackend.domain.ports.ISpecificationBuilder;
 import com.blackphoenixproductions.forumbackend.domain.dto.Filter;
-import com.blackphoenixproductions.forumbackend.domain.entity.VTopic;
+import com.blackphoenixproductions.forumbackend.domain.model.VTopic;
 import com.blackphoenixproductions.forumbackend.domain.ports.repository.VTopicRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

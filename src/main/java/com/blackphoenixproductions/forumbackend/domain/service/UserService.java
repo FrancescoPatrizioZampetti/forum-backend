@@ -2,7 +2,7 @@ package com.blackphoenixproductions.forumbackend.domain.service;
 
 import com.blackphoenixproductions.forumbackend.domain.ports.IUserService;
 import com.blackphoenixproductions.forumbackend.domain.dto.openApi.exception.CustomException;
-import com.blackphoenixproductions.forumbackend.domain.entity.User;
+import com.blackphoenixproductions.forumbackend.domain.model.User;
 import com.blackphoenixproductions.forumbackend.domain.enums.Roles;
 import com.blackphoenixproductions.forumbackend.domain.ports.repository.UserRepository;
 import com.blackphoenixproductions.forumbackend.config.security.KeycloakUtility;
