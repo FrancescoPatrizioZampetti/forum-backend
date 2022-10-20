@@ -6,7 +6,7 @@ import org.springframework.data.redis.core.RedisHash;
 
 @AllArgsConstructor
 @Data
-@RedisHash("UserNotificationStatusDTO")
+@RedisHash("NotificationStatus")
 public class NotificationStatus {
 
     @Id

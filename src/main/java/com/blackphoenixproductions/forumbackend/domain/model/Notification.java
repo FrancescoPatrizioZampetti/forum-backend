@@ -9,7 +9,7 @@ import javax.persistence.GeneratedValue;
 import java.time.LocalDateTime;
 
 @Data
-@RedisHash("NotificationDTO")
+@RedisHash("Notification")
 public class Notification {
 
     @Id
