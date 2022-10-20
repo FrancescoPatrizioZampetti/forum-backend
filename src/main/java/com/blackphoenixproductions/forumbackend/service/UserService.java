@@ -4,7 +4,7 @@ import com.blackphoenixproductions.forumbackend.api.IUserService;
 import com.blackphoenixproductions.forumbackend.dto.openApi.exception.CustomException;
 import com.blackphoenixproductions.forumbackend.entity.User;
 import com.blackphoenixproductions.forumbackend.enums.Roles;
-import com.blackphoenixproductions.forumbackend.service.repository.UserRepository;
+import com.blackphoenixproductions.forumbackend.repository.UserRepository;
 import com.blackphoenixproductions.forumbackend.security.KeycloakUtility;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;

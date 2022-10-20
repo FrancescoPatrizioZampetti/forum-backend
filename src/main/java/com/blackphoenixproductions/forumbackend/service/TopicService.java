@@ -8,7 +8,7 @@ import com.blackphoenixproductions.forumbackend.dto.openApi.topic.InsertTopicDTO
 import com.blackphoenixproductions.forumbackend.entity.Topic;
 import com.blackphoenixproductions.forumbackend.entity.User;
 import com.blackphoenixproductions.forumbackend.enums.Roles;
-import com.blackphoenixproductions.forumbackend.service.repository.TopicRepository;
+import com.blackphoenixproductions.forumbackend.repository.TopicRepository;
 import com.blackphoenixproductions.forumbackend.security.KeycloakUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.blackphoenixproductions.forumbackend.service.repository;
+package com.blackphoenixproductions.forumbackend.service;
 
 import com.blackphoenixproductions.forumbackend.dto.Filter;
 import org.springframework.data.jpa.domain.Specification;

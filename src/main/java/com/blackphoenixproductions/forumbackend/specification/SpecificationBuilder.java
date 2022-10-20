@@ -2,7 +2,7 @@ package com.blackphoenixproductions.forumbackend.specification;
 
 import com.blackphoenixproductions.forumbackend.dto.Filter;
 import com.blackphoenixproductions.forumbackend.enums.BooleanOperator;
-import com.blackphoenixproductions.forumbackend.service.repository.ISpecificationBuilder;
+import com.blackphoenixproductions.forumbackend.service.ISpecificationBuilder;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
