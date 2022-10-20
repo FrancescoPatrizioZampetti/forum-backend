@@ -1,16 +1,16 @@
 package com.blackphoenixproductions.forumbackend;
 
-import com.blackphoenixproductions.forumbackend.dto.Filter;
-import com.blackphoenixproductions.forumbackend.entity.User;
-import com.blackphoenixproductions.forumbackend.entity.VTopic;
+import com.blackphoenixproductions.forumbackend.domain.dto.Filter;
+import com.blackphoenixproductions.forumbackend.domain.entity.User;
+import com.blackphoenixproductions.forumbackend.domain.entity.VTopic;
 import com.blackphoenixproductions.forumbackend.entity.VTopic_;
-import com.blackphoenixproductions.forumbackend.enums.BooleanOperator;
-import com.blackphoenixproductions.forumbackend.enums.Pagination;
-import com.blackphoenixproductions.forumbackend.enums.QueryOperator;
-import com.blackphoenixproductions.forumbackend.repository.TopicRepository;
-import com.blackphoenixproductions.forumbackend.repository.UserRepository;
-import com.blackphoenixproductions.forumbackend.repository.VTopicRepository;
-import com.blackphoenixproductions.forumbackend.specification.SpecificationBuilder;
+import com.blackphoenixproductions.forumbackend.domain.enums.BooleanOperator;
+import com.blackphoenixproductions.forumbackend.domain.enums.Pagination;
+import com.blackphoenixproductions.forumbackend.domain.enums.QueryOperator;
+import com.blackphoenixproductions.forumbackend.domain.ports.repository.TopicRepository;
+import com.blackphoenixproductions.forumbackend.domain.ports.repository.UserRepository;
+import com.blackphoenixproductions.forumbackend.domain.ports.repository.VTopicRepository;
+import com.blackphoenixproductions.forumbackend.adapters.specification.SpecificationBuilder;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
