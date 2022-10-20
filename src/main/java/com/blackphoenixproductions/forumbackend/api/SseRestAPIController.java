@@ -1,6 +1,6 @@
 package com.blackphoenixproductions.forumbackend.api;
 
-import com.blackphoenixproductions.forumbackend.sse.ISSEPushNotificationService;
+import com.blackphoenixproductions.forumbackend.notification.ISSEPushNotificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

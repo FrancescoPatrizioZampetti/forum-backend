@@ -1,4 +1,4 @@
-package com.blackphoenixproductions.forumbackend.messagebroker;
+package com.blackphoenixproductions.forumbackend.service;
 
 public interface MessagePublisher {
     void publish(final String message);

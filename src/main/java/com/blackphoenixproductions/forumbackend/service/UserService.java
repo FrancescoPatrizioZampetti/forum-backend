@@ -1,11 +1,11 @@
-package com.blackphoenixproductions.forumbackend.service.impl;
+package com.blackphoenixproductions.forumbackend.service;
 
+import com.blackphoenixproductions.forumbackend.api.IUserService;
 import com.blackphoenixproductions.forumbackend.dto.openApi.exception.CustomException;
-import com.blackphoenixproductions.forumbackend.enums.Roles;
-import com.blackphoenixproductions.forumbackend.repository.UserRepository;
-import com.blackphoenixproductions.forumbackend.security.KeycloakUtility;
-import com.blackphoenixproductions.forumbackend.service.IUserService;
 import com.blackphoenixproductions.forumbackend.entity.User;
+import com.blackphoenixproductions.forumbackend.enums.Roles;
+import com.blackphoenixproductions.forumbackend.service.repository.UserRepository;
+import com.blackphoenixproductions.forumbackend.security.KeycloakUtility;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.representations.AccessToken;
@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

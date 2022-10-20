@@ -1,4 +1,4 @@
-package com.blackphoenixproductions.forumbackend.sse;
+package com.blackphoenixproductions.forumbackend.notification;
 
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 

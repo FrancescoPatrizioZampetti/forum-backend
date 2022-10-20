@@ -1,15 +1,14 @@
-package com.blackphoenixproductions.forumbackend.service.impl;
+package com.blackphoenixproductions.forumbackend.service;
 
+import com.blackphoenixproductions.forumbackend.api.INotificationService;
+import com.blackphoenixproductions.forumbackend.api.IPostService;
 import com.blackphoenixproductions.forumbackend.dto.NotificationDTO;
 import com.blackphoenixproductions.forumbackend.dto.NotificationStatusDTO;
 import com.blackphoenixproductions.forumbackend.entity.Post;
 import com.blackphoenixproductions.forumbackend.entity.User;
 import com.blackphoenixproductions.forumbackend.enums.Pagination;
-import com.blackphoenixproductions.forumbackend.messagebroker.MessagePublisher;
-import com.blackphoenixproductions.forumbackend.repository.NotificationRepository;
-import com.blackphoenixproductions.forumbackend.repository.NotificationStatusRepository;
-import com.blackphoenixproductions.forumbackend.service.INotificationService;
-import com.blackphoenixproductions.forumbackend.service.IPostService;
+import com.blackphoenixproductions.forumbackend.service.repository.NotificationRepository;
+import com.blackphoenixproductions.forumbackend.service.repository.NotificationStatusRepository;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NotificationService implements INotificationService {

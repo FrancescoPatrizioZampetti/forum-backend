@@ -1,4 +1,4 @@
-package com.blackphoenixproductions.forumbackend.repository.specification;
+package com.blackphoenixproductions.forumbackend.specification;
 
 import com.blackphoenixproductions.forumbackend.entity.VTopic;
 import com.blackphoenixproductions.forumbackend.entity.VTopic_;

@@ -1,18 +1,17 @@
-package com.blackphoenixproductions.forumbackend.service.impl;
+package com.blackphoenixproductions.forumbackend.service;
 
+import com.blackphoenixproductions.forumbackend.api.IPostService;
+import com.blackphoenixproductions.forumbackend.api.IUserService;
 import com.blackphoenixproductions.forumbackend.dto.openApi.exception.CustomException;
 import com.blackphoenixproductions.forumbackend.dto.openApi.post.EditPostDTO;
 import com.blackphoenixproductions.forumbackend.dto.openApi.post.InsertPostDTO;
-import com.blackphoenixproductions.forumbackend.email.EmailSender;
 import com.blackphoenixproductions.forumbackend.entity.Post;
 import com.blackphoenixproductions.forumbackend.entity.Topic;
 import com.blackphoenixproductions.forumbackend.entity.User;
 import com.blackphoenixproductions.forumbackend.enums.Roles;
-import com.blackphoenixproductions.forumbackend.repository.PostRepository;
-import com.blackphoenixproductions.forumbackend.repository.TopicRepository;
+import com.blackphoenixproductions.forumbackend.service.repository.PostRepository;
+import com.blackphoenixproductions.forumbackend.service.repository.TopicRepository;
 import com.blackphoenixproductions.forumbackend.security.KeycloakUtility;
-import com.blackphoenixproductions.forumbackend.service.IPostService;
-import com.blackphoenixproductions.forumbackend.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Optional;
 
 
 @Service
@@ -31,11 +30,11 @@ public class PostService implements IPostService {
     private final PostRepository postRepository;
     private final IUserService userService;
     private final TopicRepository topicRepository;
-    private final EmailSender emailSender;
+    private final IEmailSender emailSender;
 
 
     @Autowired
-    public PostService(PostRepository postRepository, IUserService userService, TopicRepository topicRepository, EmailSender emailSender) {
+    public PostService(PostRepository postRepository, IUserService userService, TopicRepository topicRepository, IEmailSender emailSender) {
         this.postRepository = postRepository;
         this.userService = userService;
         this.emailSender = emailSender;

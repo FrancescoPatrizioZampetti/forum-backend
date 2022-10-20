@@ -4,8 +4,6 @@ package com.blackphoenixproductions.forumbackend.api;
 import com.blackphoenixproductions.forumbackend.dto.NotificationDTO;
 import com.blackphoenixproductions.forumbackend.entity.User;
 import com.blackphoenixproductions.forumbackend.security.KeycloakUtility;
-import com.blackphoenixproductions.forumbackend.service.INotificationService;
-import com.blackphoenixproductions.forumbackend.service.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

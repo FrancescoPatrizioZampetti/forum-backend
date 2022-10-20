@@ -1,5 +1,6 @@
 package com.blackphoenixproductions.forumbackend.messagebroker;
 
+import com.blackphoenixproductions.forumbackend.service.MessagePublisher;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 

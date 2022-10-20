@@ -3,6 +3,7 @@ package com.blackphoenixproductions.forumbackend.email;
 
 import com.blackphoenixproductions.forumbackend.entity.Post;
 import com.blackphoenixproductions.forumbackend.entity.User;
+import com.blackphoenixproductions.forumbackend.service.IEmailSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component;
 import javax.mail.internet.MimeMessage;
 
 @Component
-public class EmailSender {
+public class EmailSender implements IEmailSender {
 
     private final JavaMailSender javaMailSender;
     private final String domain;

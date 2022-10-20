@@ -1,15 +1,15 @@
-package com.blackphoenixproductions.forumbackend.service.impl;
+package com.blackphoenixproductions.forumbackend.service;
 
+import com.blackphoenixproductions.forumbackend.api.ITopicService;
+import com.blackphoenixproductions.forumbackend.api.IUserService;
 import com.blackphoenixproductions.forumbackend.dto.openApi.exception.CustomException;
 import com.blackphoenixproductions.forumbackend.dto.openApi.topic.EditTopicDTO;
 import com.blackphoenixproductions.forumbackend.dto.openApi.topic.InsertTopicDTO;
 import com.blackphoenixproductions.forumbackend.entity.Topic;
 import com.blackphoenixproductions.forumbackend.entity.User;
 import com.blackphoenixproductions.forumbackend.enums.Roles;
-import com.blackphoenixproductions.forumbackend.repository.TopicRepository;
+import com.blackphoenixproductions.forumbackend.service.repository.TopicRepository;
 import com.blackphoenixproductions.forumbackend.security.KeycloakUtility;
-import com.blackphoenixproductions.forumbackend.service.ITopicService;
-import com.blackphoenixproductions.forumbackend.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

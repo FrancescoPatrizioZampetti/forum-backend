@@ -5,8 +5,6 @@ import com.blackphoenixproductions.forumbackend.dto.openApi.post.EditPostDTO;
 import com.blackphoenixproductions.forumbackend.dto.openApi.post.InsertPostDTO;
 import com.blackphoenixproductions.forumbackend.entity.Post;
 import com.blackphoenixproductions.forumbackend.security.KeycloakUtility;
-import com.blackphoenixproductions.forumbackend.service.INotificationService;
-import com.blackphoenixproductions.forumbackend.service.IPostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

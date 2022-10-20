@@ -1,5 +1,6 @@
 package com.blackphoenixproductions.forumbackend.sse;
 
+import com.blackphoenixproductions.forumbackend.notification.ISSEPushNotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -9,12 +10,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-public class SsePushNotificationService implements ISSEPushNotificationService{
+public class SsePushNotificationService implements ISSEPushNotificationService {
 
     private final DateFormat DATE_FORMATTER = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
     private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();

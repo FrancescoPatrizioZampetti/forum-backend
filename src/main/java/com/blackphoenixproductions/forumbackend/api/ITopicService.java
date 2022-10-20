@@ -1,4 +1,4 @@
-package com.blackphoenixproductions.forumbackend.service;
+package com.blackphoenixproductions.forumbackend.api;
 
 import com.blackphoenixproductions.forumbackend.dto.openApi.topic.EditTopicDTO;
 import com.blackphoenixproductions.forumbackend.dto.openApi.topic.InsertTopicDTO;

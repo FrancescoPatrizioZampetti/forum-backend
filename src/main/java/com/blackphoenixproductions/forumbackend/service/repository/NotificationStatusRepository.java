@@ -1,4 +1,4 @@
-package com.blackphoenixproductions.forumbackend.repository;
+package com.blackphoenixproductions.forumbackend.service.repository;
 
 import com.blackphoenixproductions.forumbackend.dto.NotificationStatusDTO;
 import org.springframework.data.repository.CrudRepository;

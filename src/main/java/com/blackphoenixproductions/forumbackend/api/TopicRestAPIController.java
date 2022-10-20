@@ -7,8 +7,7 @@ import com.blackphoenixproductions.forumbackend.dto.openApi.topic.InsertTopicDTO
 import com.blackphoenixproductions.forumbackend.entity.Topic;
 import com.blackphoenixproductions.forumbackend.entity.VTopic;
 import com.blackphoenixproductions.forumbackend.security.KeycloakUtility;
-import com.blackphoenixproductions.forumbackend.service.ITopicService;
-import com.blackphoenixproductions.forumbackend.service.impl.VTopicService;
+import com.blackphoenixproductions.forumbackend.service.VTopicService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

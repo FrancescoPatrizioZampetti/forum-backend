@@ -1,4 +1,4 @@
-package com.blackphoenixproductions.forumbackend.repository;
+package com.blackphoenixproductions.forumbackend.service.repository;
 
 import com.blackphoenixproductions.forumbackend.entity.Topic;
 import com.blackphoenixproductions.forumbackend.entity.User;

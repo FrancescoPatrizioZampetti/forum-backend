@@ -1,8 +1,10 @@
-package com.blackphoenixproductions.forumbackend.repository.specification;
+package com.blackphoenixproductions.forumbackend.specification;
 
 import com.blackphoenixproductions.forumbackend.dto.Filter;
 import com.blackphoenixproductions.forumbackend.enums.BooleanOperator;
+import com.blackphoenixproductions.forumbackend.service.repository.ISpecificationBuilder;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
@@ -14,7 +16,8 @@ import java.util.List;
 
 import static org.springframework.data.jpa.domain.Specification.where;
 
-public class SpecificationBuilder {
+@Component
+public class SpecificationBuilder implements ISpecificationBuilder {
 
     public <T> Specification<T> getSpecification(Filter filter){
         Specification<T> specification = null;
@@ -38,7 +41,7 @@ public class SpecificationBuilder {
     }
 
 
-    public <T> Specification<T> createSpecification(Filter input) {
+    private <T> Specification<T> createSpecification(Filter input) {
         switch (input.getQueryOperator()){
             case EQUALS:
                 return (root, query, criteriaBuilder) ->

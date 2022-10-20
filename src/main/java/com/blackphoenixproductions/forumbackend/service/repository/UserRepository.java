@@ -1,7 +1,7 @@
-package com.blackphoenixproductions.forumbackend.repository;
+package com.blackphoenixproductions.forumbackend.service.repository;
 
 import com.blackphoenixproductions.forumbackend.entity.User;
-import com.blackphoenixproductions.forumbackend.repository.projection.IUser;
+import com.blackphoenixproductions.forumbackend.service.repository.projection.IUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
