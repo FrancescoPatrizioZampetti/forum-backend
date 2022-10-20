@@ -14,11 +14,11 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-public class SsePushNotificationService implements ISSEPushNotificationService {
+public class SSEPushNotificationService implements ISSEPushNotificationService {
 
     private final DateFormat DATE_FORMATTER = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
     private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
-    private static final Logger logger = LoggerFactory.getLogger(SsePushNotificationService.class);
+    private static final Logger logger = LoggerFactory.getLogger(SSEPushNotificationService.class);
 
 
     public void sendHeartBeatEvent(){

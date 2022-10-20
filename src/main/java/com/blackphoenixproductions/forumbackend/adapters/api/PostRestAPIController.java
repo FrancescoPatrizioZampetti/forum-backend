@@ -3,8 +3,8 @@ package com.blackphoenixproductions.forumbackend.adapters.api;
 import com.blackphoenixproductions.forumbackend.adapters.api.assembler.PostAssembler;
 import com.blackphoenixproductions.forumbackend.domain.ports.INotificationService;
 import com.blackphoenixproductions.forumbackend.domain.ports.IPostService;
-import com.blackphoenixproductions.forumbackend.domain.dto.post.EditPostDTO;
-import com.blackphoenixproductions.forumbackend.domain.dto.post.InsertPostDTO;
+import com.blackphoenixproductions.forumbackend.adapters.dto.post.EditPostDTO;
+import com.blackphoenixproductions.forumbackend.adapters.dto.post.InsertPostDTO;
 import com.blackphoenixproductions.forumbackend.domain.model.Post;
 import com.blackphoenixproductions.forumbackend.config.security.KeycloakUtility;
 import io.swagger.v3.oas.annotations.Operation;
@@ -85,6 +85,7 @@ public class PostRestAPIController {
     @PostMapping(value = "createPost")
     public ResponseEntity<EntityModel<Post>> createPost(@RequestBody @Valid InsertPostDTO postDTO, HttpServletRequest req){
         logger.info("Start createPost - post owner username : {}", KeycloakUtility.getAccessToken(req).getPreferredUsername());
+        // todo usare mapper
         Post savedPost = postService.createPost(postDTO, req);
         notificationService.notifyTopicAuthor(savedPost);
         EntityModel<Post> entityModel = EntityModel.of(savedPost, linkTo(methodOn(PostRestAPIController.class).createPost(postDTO, req)).withSelfRel());
@@ -102,6 +103,7 @@ public class PostRestAPIController {
     @PostMapping(value = "editPost")
     public ResponseEntity<EntityModel<Post>> editPost(@RequestBody @Valid EditPostDTO postDTO, HttpServletRequest req){
         logger.info("Start editPost - post id : {}", postDTO.getId());
+        // todo usare mapper
         Post editedPost = postService.editPost(postDTO, req);
         EntityModel<Post> entityModel = EntityModel.of(editedPost, linkTo(methodOn(PostRestAPIController.class).editPost(postDTO, req)).withSelfRel());
         logger.info("End editPost");

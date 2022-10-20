@@ -1,6 +1,6 @@
 package com.blackphoenixproductions.forumbackend.adapters.api;
 import com.blackphoenixproductions.forumbackend.adapters.api.exception.ErrorResponse;
-import com.blackphoenixproductions.forumbackend.domain.dto.CustomException;
+import com.blackphoenixproductions.forumbackend.adapters.dto.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

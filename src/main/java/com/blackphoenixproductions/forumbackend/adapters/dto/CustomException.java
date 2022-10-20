@@ -1,4 +1,4 @@
-package com.blackphoenixproductions.forumbackend.domain.dto;
+package com.blackphoenixproductions.forumbackend.adapters.dto;
 
 import org.springframework.http.HttpStatus;
 

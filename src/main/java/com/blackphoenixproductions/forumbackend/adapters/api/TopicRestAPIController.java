@@ -2,9 +2,9 @@ package com.blackphoenixproductions.forumbackend.adapters.api;
 
 import com.blackphoenixproductions.forumbackend.adapters.api.assembler.VTopicAssembler;
 import com.blackphoenixproductions.forumbackend.domain.ports.ITopicService;
-import com.blackphoenixproductions.forumbackend.domain.dto.Filter;
-import com.blackphoenixproductions.forumbackend.domain.dto.topic.EditTopicDTO;
-import com.blackphoenixproductions.forumbackend.domain.dto.topic.InsertTopicDTO;
+import com.blackphoenixproductions.forumbackend.adapters.dto.Filter;
+import com.blackphoenixproductions.forumbackend.adapters.dto.topic.EditTopicDTO;
+import com.blackphoenixproductions.forumbackend.adapters.dto.topic.InsertTopicDTO;
 import com.blackphoenixproductions.forumbackend.domain.model.Topic;
 import com.blackphoenixproductions.forumbackend.domain.model.VTopic;
 import com.blackphoenixproductions.forumbackend.config.security.KeycloakUtility;
@@ -97,6 +97,7 @@ public class TopicRestAPIController {
     @PostMapping(value = "createTopic")
     public ResponseEntity<EntityModel<Topic>> createTopic(@RequestBody @Valid InsertTopicDTO insertTopicDTO, HttpServletRequest req){
         logger.info("Start createTopic - topic owner username : {}", KeycloakUtility.getAccessToken(req).getPreferredUsername());
+        // todo usare mapper
         Topic savedTopic = topicService.createTopic(insertTopicDTO, req);
         EntityModel<Topic> entityModel = EntityModel.of(savedTopic).add(linkTo(methodOn(TopicRestAPIController.class).createTopic(insertTopicDTO, req)).withSelfRel());
         logger.info("End createTopic");
@@ -114,6 +115,7 @@ public class TopicRestAPIController {
     @PostMapping(value = "editTopic")
     public ResponseEntity<EntityModel<Topic>> editTopic(@RequestBody @Valid EditTopicDTO topicDTO, HttpServletRequest req){
         logger.info("Start editTopic - topic id: {}", topicDTO.getId());
+        // todo usare mapper
         Topic editedTopic = topicService.editTopic(topicDTO, req);
         EntityModel<Topic> entityModel = EntityModel.of(editedTopic).add(linkTo(methodOn(TopicRestAPIController.class).editTopic(topicDTO, req)).withSelfRel());
         logger.info("End editTopic");

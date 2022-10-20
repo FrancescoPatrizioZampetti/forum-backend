@@ -1,6 +1,6 @@
 package com.blackphoenixproductions.forumbackend.adapters.specification;
 
-import com.blackphoenixproductions.forumbackend.domain.dto.Filter;
+import com.blackphoenixproductions.forumbackend.adapters.dto.Filter;
 import com.blackphoenixproductions.forumbackend.domain.enums.BooleanOperator;
 import com.blackphoenixproductions.forumbackend.domain.ports.ISpecificationBuilder;
 import org.springframework.data.jpa.domain.Specification;

@@ -1,8 +1,8 @@
 package com.blackphoenixproductions.forumbackend.domain.ports;
 
 
-import com.blackphoenixproductions.forumbackend.domain.dto.post.EditPostDTO;
-import com.blackphoenixproductions.forumbackend.domain.dto.post.InsertPostDTO;
+import com.blackphoenixproductions.forumbackend.adapters.dto.post.EditPostDTO;
+import com.blackphoenixproductions.forumbackend.adapters.dto.post.InsertPostDTO;
 import com.blackphoenixproductions.forumbackend.domain.model.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

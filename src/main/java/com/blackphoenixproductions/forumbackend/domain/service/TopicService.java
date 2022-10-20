@@ -2,9 +2,9 @@ package com.blackphoenixproductions.forumbackend.domain.service;
 
 import com.blackphoenixproductions.forumbackend.domain.ports.ITopicService;
 import com.blackphoenixproductions.forumbackend.domain.ports.IUserService;
-import com.blackphoenixproductions.forumbackend.domain.dto.CustomException;
-import com.blackphoenixproductions.forumbackend.domain.dto.topic.EditTopicDTO;
-import com.blackphoenixproductions.forumbackend.domain.dto.topic.InsertTopicDTO;
+import com.blackphoenixproductions.forumbackend.adapters.dto.CustomException;
+import com.blackphoenixproductions.forumbackend.adapters.dto.topic.EditTopicDTO;
+import com.blackphoenixproductions.forumbackend.adapters.dto.topic.InsertTopicDTO;
 import com.blackphoenixproductions.forumbackend.domain.model.Topic;
 import com.blackphoenixproductions.forumbackend.domain.model.User;
 import com.blackphoenixproductions.forumbackend.domain.enums.Roles;

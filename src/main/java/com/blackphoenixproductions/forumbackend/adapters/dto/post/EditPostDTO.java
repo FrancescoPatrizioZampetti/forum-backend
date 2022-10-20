@@ -1,4 +1,4 @@
-package com.blackphoenixproductions.forumbackend.domain.dto.post;
+package com.blackphoenixproductions.forumbackend.adapters.dto.post;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

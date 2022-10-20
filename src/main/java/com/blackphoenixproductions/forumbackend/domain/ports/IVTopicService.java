@@ -1,6 +1,6 @@
 package com.blackphoenixproductions.forumbackend.domain.ports;
 
-import com.blackphoenixproductions.forumbackend.domain.dto.Filter;
+import com.blackphoenixproductions.forumbackend.adapters.dto.Filter;
 import com.blackphoenixproductions.forumbackend.domain.model.VTopic;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

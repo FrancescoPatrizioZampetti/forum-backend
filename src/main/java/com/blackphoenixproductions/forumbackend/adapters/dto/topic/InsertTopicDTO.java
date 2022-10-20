@@ -1,4 +1,4 @@
-package com.blackphoenixproductions.forumbackend.domain.dto.topic;
+package com.blackphoenixproductions.forumbackend.adapters.dto.topic;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;

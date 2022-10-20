@@ -1,7 +1,7 @@
 package com.blackphoenixproductions.forumbackend.domain.ports;
 
-import com.blackphoenixproductions.forumbackend.domain.dto.topic.EditTopicDTO;
-import com.blackphoenixproductions.forumbackend.domain.dto.topic.InsertTopicDTO;
+import com.blackphoenixproductions.forumbackend.adapters.dto.topic.EditTopicDTO;
+import com.blackphoenixproductions.forumbackend.adapters.dto.topic.InsertTopicDTO;
 import com.blackphoenixproductions.forumbackend.domain.model.Topic;
 
 import javax.servlet.http.HttpServletRequest;

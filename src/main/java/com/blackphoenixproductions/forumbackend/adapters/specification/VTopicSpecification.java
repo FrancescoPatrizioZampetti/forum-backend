@@ -1,7 +1,7 @@
 package com.blackphoenixproductions.forumbackend.adapters.specification;
 
 import com.blackphoenixproductions.forumbackend.domain.model.VTopic;
-import com.blackphoenixproductions.forumbackend.entity.VTopic_;
+import com.blackphoenixproductions.forumbackend.domain.model.VTopic_;
 import org.springframework.data.jpa.domain.Specification;
 
 
