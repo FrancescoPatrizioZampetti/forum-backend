@@ -1,6 +1,5 @@
 package com.blackphoenixproductions.forumbackend.domain.service;
 
-import com.blackphoenixproductions.forumbackend.domain.ports.IKeycloakProxy;
 import com.blackphoenixproductions.forumbackend.domain.ports.IUserService;
 import com.blackphoenixproductions.forumbackend.domain.model.User;
 import com.blackphoenixproductions.forumbackend.domain.ports.repository.UserRepository;
@@ -17,13 +16,10 @@ public class UserService implements IUserService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
-    private final IKeycloakProxy keycloakProxy;
 
     @Autowired
-    public UserService(UserRepository userRepository,
-                       IKeycloakProxy keycloakProxy)  {
+    public UserService(UserRepository userRepository)  {
         this.userRepository = userRepository;
-        this.keycloakProxy = keycloakProxy;
     }
 
     @Override
