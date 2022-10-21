@@ -2,7 +2,7 @@ package com.blackphoenixproductions.forumbackend.adapters.mappers;
 
 import com.blackphoenixproductions.forumbackend.adapters.api.dto.post.EditPostDTO;
 import com.blackphoenixproductions.forumbackend.adapters.api.dto.post.InsertPostDTO;
-import com.blackphoenixproductions.forumbackend.domain.model.Post;
+import com.blackphoenixproductions.forumbackend.domain.entity.Post;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

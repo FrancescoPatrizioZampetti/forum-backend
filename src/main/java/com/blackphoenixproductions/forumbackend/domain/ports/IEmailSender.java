@@ -1,7 +1,7 @@
 package com.blackphoenixproductions.forumbackend.domain.ports;
 
-import com.blackphoenixproductions.forumbackend.domain.model.Post;
-import com.blackphoenixproductions.forumbackend.domain.model.User;
+import com.blackphoenixproductions.forumbackend.domain.entity.Post;
+import com.blackphoenixproductions.forumbackend.domain.entity.User;
 
 public interface IEmailSender {
 

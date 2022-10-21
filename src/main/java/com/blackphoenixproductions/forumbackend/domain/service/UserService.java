@@ -1,7 +1,7 @@
 package com.blackphoenixproductions.forumbackend.domain.service;
 
 import com.blackphoenixproductions.forumbackend.domain.ports.IUserService;
-import com.blackphoenixproductions.forumbackend.domain.model.User;
+import com.blackphoenixproductions.forumbackend.domain.entity.User;
 import com.blackphoenixproductions.forumbackend.domain.ports.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

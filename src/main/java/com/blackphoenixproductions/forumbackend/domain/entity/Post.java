@@ -1,4 +1,4 @@
-package com.blackphoenixproductions.forumbackend.domain.model;
+package com.blackphoenixproductions.forumbackend.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -9,32 +9,21 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Set;
-
 
 @Entity
-@Table(name = "TOPICS")
+@Table(name = "POSTS")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Topic {
+public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
-    private String title;
-
-    @Column
     private String message;
-
-    @Column
-    private boolean pinned;
-
-    @Column
-    private boolean emailUser;
 
     @Column
     private LocalDateTime createDate;
@@ -45,25 +34,23 @@ public class Topic {
     @Column
     private LocalDateTime editDate;
 
+    @JsonIgnoreProperties({"user", "posts"})
+    @ManyToOne
+    @JoinColumn(name="TOPIC_ID", nullable=false)
+    private Topic topic;
+
     @JsonIgnoreProperties({"topics", "posts"})
     @ManyToOne
     @JoinColumn(name="USER_ID", nullable=false)
     private User user;
-
-    @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL)
-    private Set<Post> posts;
-
-    public Topic(Long id) {
-        this.id = id;
-    }
 
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Topic topic = (Topic) o;
-        return id.equals(topic.id);
+        Post post = (Post) o;
+        return id.equals(post.id);
     }
 
     @Override

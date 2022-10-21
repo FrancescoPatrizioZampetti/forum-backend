@@ -3,8 +3,8 @@ package com.blackphoenixproductions.forumbackend.adapters.api;
 
 import com.blackphoenixproductions.forumbackend.domain.ports.INotificationService;
 import com.blackphoenixproductions.forumbackend.domain.ports.IUserService;
-import com.blackphoenixproductions.forumbackend.domain.model.Notification;
-import com.blackphoenixproductions.forumbackend.domain.model.User;
+import com.blackphoenixproductions.forumbackend.domain.entity.Notification;
+import com.blackphoenixproductions.forumbackend.domain.entity.User;
 import com.blackphoenixproductions.forumbackend.config.security.KeycloakUtility;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

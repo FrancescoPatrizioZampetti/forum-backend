@@ -1,4 +1,4 @@
-package com.blackphoenixproductions.forumbackend.domain.model;
+package com.blackphoenixproductions.forumbackend.domain.entity;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;

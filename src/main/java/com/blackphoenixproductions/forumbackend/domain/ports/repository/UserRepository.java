@@ -1,6 +1,6 @@
 package com.blackphoenixproductions.forumbackend.domain.ports.repository;
 
-import com.blackphoenixproductions.forumbackend.domain.model.User;
+import com.blackphoenixproductions.forumbackend.domain.entity.User;
 import com.blackphoenixproductions.forumbackend.domain.ports.repository.projection.IUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

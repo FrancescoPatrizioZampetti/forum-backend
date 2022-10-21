@@ -1,9 +1,6 @@
 package com.blackphoenixproductions.forumbackend.domain.ports;
 
-import com.blackphoenixproductions.forumbackend.domain.model.User;
-import org.keycloak.representations.AccessToken;
-
-import java.util.Set;
+import com.blackphoenixproductions.forumbackend.domain.entity.User;
 
 
 public interface IUserService {

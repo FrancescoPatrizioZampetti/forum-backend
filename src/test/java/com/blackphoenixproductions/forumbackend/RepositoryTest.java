@@ -1,12 +1,12 @@
 package com.blackphoenixproductions.forumbackend;
 
 import com.blackphoenixproductions.forumbackend.adapters.api.dto.Filter;
-import com.blackphoenixproductions.forumbackend.domain.model.User;
-import com.blackphoenixproductions.forumbackend.domain.model.VTopic;
+import com.blackphoenixproductions.forumbackend.domain.entity.User;
+import com.blackphoenixproductions.forumbackend.domain.entity.VTopic;
 import com.blackphoenixproductions.forumbackend.domain.enums.BooleanOperator;
 import com.blackphoenixproductions.forumbackend.domain.enums.Pagination;
 import com.blackphoenixproductions.forumbackend.domain.enums.QueryOperator;
-import com.blackphoenixproductions.forumbackend.domain.model.VTopic_;
+import com.blackphoenixproductions.forumbackend.domain.entity.VTopic_;
 import com.blackphoenixproductions.forumbackend.domain.ports.repository.TopicRepository;
 import com.blackphoenixproductions.forumbackend.domain.ports.repository.UserRepository;
 import com.blackphoenixproductions.forumbackend.domain.ports.repository.VTopicRepository;

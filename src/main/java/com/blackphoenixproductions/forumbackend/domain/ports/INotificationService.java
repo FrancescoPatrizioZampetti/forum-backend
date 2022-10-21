@@ -1,9 +1,9 @@
 package com.blackphoenixproductions.forumbackend.domain.ports;
 
 
-import com.blackphoenixproductions.forumbackend.domain.model.Notification;
-import com.blackphoenixproductions.forumbackend.domain.model.Post;
-import com.blackphoenixproductions.forumbackend.domain.model.User;
+import com.blackphoenixproductions.forumbackend.domain.entity.Notification;
+import com.blackphoenixproductions.forumbackend.domain.entity.Post;
+import com.blackphoenixproductions.forumbackend.domain.entity.User;
 
 import java.util.List;
 

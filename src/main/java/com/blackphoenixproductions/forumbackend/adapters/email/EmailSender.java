@@ -1,8 +1,8 @@
 package com.blackphoenixproductions.forumbackend.adapters.email;
 
 
-import com.blackphoenixproductions.forumbackend.domain.model.Post;
-import com.blackphoenixproductions.forumbackend.domain.model.User;
+import com.blackphoenixproductions.forumbackend.domain.entity.Post;
+import com.blackphoenixproductions.forumbackend.domain.entity.User;
 import com.blackphoenixproductions.forumbackend.domain.ports.IEmailSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

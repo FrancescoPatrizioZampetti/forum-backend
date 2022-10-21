@@ -6,7 +6,7 @@ import com.blackphoenixproductions.forumbackend.domain.ports.INotificationServic
 import com.blackphoenixproductions.forumbackend.domain.ports.IPostService;
 import com.blackphoenixproductions.forumbackend.adapters.api.dto.post.EditPostDTO;
 import com.blackphoenixproductions.forumbackend.adapters.api.dto.post.InsertPostDTO;
-import com.blackphoenixproductions.forumbackend.domain.model.Post;
+import com.blackphoenixproductions.forumbackend.domain.entity.Post;
 import com.blackphoenixproductions.forumbackend.config.security.KeycloakUtility;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
