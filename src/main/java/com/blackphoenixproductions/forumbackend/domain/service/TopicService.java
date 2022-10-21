@@ -1,5 +1,8 @@
 package com.blackphoenixproductions.forumbackend.domain.service;
 
+import com.blackphoenixproductions.forumbackend.adapters.api.dto.Filter;
+import com.blackphoenixproductions.forumbackend.domain.model.VTopic;
+import com.blackphoenixproductions.forumbackend.domain.ports.ISpecificationBuilder;
 import com.blackphoenixproductions.forumbackend.domain.ports.ITopicService;
 import com.blackphoenixproductions.forumbackend.domain.ports.IUserService;
 import com.blackphoenixproductions.forumbackend.adapters.api.dto.CustomException;
@@ -7,8 +10,11 @@ import com.blackphoenixproductions.forumbackend.domain.model.Topic;
 import com.blackphoenixproductions.forumbackend.domain.model.User;
 import com.blackphoenixproductions.forumbackend.domain.enums.Roles;
 import com.blackphoenixproductions.forumbackend.domain.ports.repository.TopicRepository;
-import com.blackphoenixproductions.forumbackend.config.security.KeycloakUtility;
+import com.blackphoenixproductions.forumbackend.domain.ports.repository.VTopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,11 +29,16 @@ public class TopicService implements ITopicService {
 
     private final TopicRepository topicRepository;
     private final IUserService userService;
+    private final VTopicRepository vtopicRepository;
+    private final ISpecificationBuilder specificationBuilder;
 
     @Autowired
-    public TopicService(TopicRepository topicRepository, IUserService userService) {
+    public TopicService(TopicRepository topicRepository, IUserService userService,
+                        VTopicRepository vtopicRepository, ISpecificationBuilder specificationBuilder) {
         this.topicRepository = topicRepository;
         this.userService = userService;
+        this.vtopicRepository = vtopicRepository;
+        this.specificationBuilder = specificationBuilder;
     }
 
     @Transactional(readOnly=true)
@@ -72,6 +83,15 @@ public class TopicService implements ITopicService {
             throw new CustomException("Topic con id: " + id + " non trovato.", HttpStatus.BAD_REQUEST);
         }
         return topic.get();
+    }
+
+    @Override
+    public Page<VTopic> getPagedTopics(Pageable pageable, Filter filter) {
+        Specification<VTopic> spec = null;
+        if (filter != null && filter.getFilters() != null && !filter.getFilters().isEmpty()) {
+            spec = specificationBuilder.getSpecification(filter);
+        }
+        return vtopicRepository.findAll(spec, pageable);
     }
 
 

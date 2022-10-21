@@ -9,7 +9,6 @@ import com.blackphoenixproductions.forumbackend.adapters.api.dto.topic.InsertTop
 import com.blackphoenixproductions.forumbackend.domain.model.Topic;
 import com.blackphoenixproductions.forumbackend.domain.model.VTopic;
 import com.blackphoenixproductions.forumbackend.config.security.KeycloakUtility;
-import com.blackphoenixproductions.forumbackend.domain.service.VTopicService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -47,14 +46,12 @@ public class TopicRestAPIController {
     private static final Logger logger = LoggerFactory.getLogger(TopicRestAPIController.class);
     private final ITopicService topicService;
     private final VTopicAssembler vTopicAssembler;
-    private final VTopicService vTopicService;
     private final TopicMapper topicMapper;
 
     @Autowired
-    public TopicRestAPIController(ITopicService topicService, VTopicAssembler vTopicAssembler, VTopicService vTopicService, TopicMapper topicMapper) {
+    public TopicRestAPIController(ITopicService topicService, VTopicAssembler vTopicAssembler, TopicMapper topicMapper) {
         this.topicService = topicService;
         this.vTopicAssembler = vTopicAssembler;
-        this.vTopicService = vTopicService;
         this.topicMapper = topicMapper;
     }
 
@@ -75,7 +72,7 @@ public class TopicRestAPIController {
     public ResponseEntity<PagedModel<EntityModel<VTopic>>> findFilteredTopicsByPage (@ParameterObject @PageableDefault(sort = {"createDate"}, direction = Sort.Direction.DESC) Pageable pageable,
                                                                                      @RequestBody (required = false) Filter filter,
                                                                                      PagedResourcesAssembler<VTopic> pagedResourcesAssembler){
-        Page<VTopic> pagedTopics = vTopicService.getPagedTopics(pageable, filter);
+        Page<VTopic> pagedTopics = topicService.getPagedTopics(pageable, filter);
         PagedModel<EntityModel<VTopic>> pagedModel = pagedResourcesAssembler.toModel(pagedTopics, vTopicAssembler);
         return new ResponseEntity<PagedModel<EntityModel<VTopic>>>  (pagedModel, HttpStatus.OK);
     }
