@@ -1,4 +1,4 @@
-package com.blackphoenixproductions.forumbackend.domain.ports.notification;
+package com.blackphoenixproductions.forumbackend.domain.ports;
 
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 

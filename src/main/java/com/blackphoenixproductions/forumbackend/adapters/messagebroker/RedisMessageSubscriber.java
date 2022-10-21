@@ -1,6 +1,6 @@
 package com.blackphoenixproductions.forumbackend.adapters.messagebroker;
 
-import com.blackphoenixproductions.forumbackend.domain.ports.notification.ISSEPushNotificationService;
+import com.blackphoenixproductions.forumbackend.domain.ports.ISSEPushNotificationService;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 

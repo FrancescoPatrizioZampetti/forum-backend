@@ -1,6 +1,6 @@
 package com.blackphoenixproductions.forumbackend.adapters.sse;
 
-import com.blackphoenixproductions.forumbackend.domain.ports.notification.ISSEPushNotificationService;
+import com.blackphoenixproductions.forumbackend.domain.ports.ISSEPushNotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
