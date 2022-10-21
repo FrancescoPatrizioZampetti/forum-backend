@@ -64,8 +64,9 @@ public class PostService implements IPostService {
             throw new CustomException("Topic con id: " + post.getTopic().getId() + " non trovato.", HttpStatus.NOT_FOUND);
         }
         post.setUser(user);
+        post.setTopic(topic.get());
         post.setCreateDate(LocalDateTime.now());
-        Post savedPost = postRepository.save(post);
+        Post savedPost = postRepository.saveAndFlush(post);
         if (!isTopicCreatorPost(savedPost) && savedPost.getTopic().isEmailUser()){
             emailSender.sendTopicReplyEmail(savedPost.getTopic().getUser(), savedPost.getUser(), savedPost) ;
         }
