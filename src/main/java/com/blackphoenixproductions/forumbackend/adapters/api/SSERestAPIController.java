@@ -23,13 +23,13 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @RestController
 @RequestMapping("/api")
 @Tag(name = "5. SSE", description = "endpoints riguardanti gli SSE.")
-public class SseRestAPIController {
+public class SSERestAPIController {
 
     private final ISSEPushNotificationService service;
-    private static final Logger logger = LoggerFactory.getLogger(SseRestAPIController.class);
+    private static final Logger logger = LoggerFactory.getLogger(SSERestAPIController.class);
 
     @Autowired
-    public SseRestAPIController(ISSEPushNotificationService service) {
+    public SSERestAPIController(ISSEPushNotificationService service) {
         this.service = service;
     }
 
