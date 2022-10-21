@@ -4,7 +4,6 @@ import com.blackphoenixproductions.forumbackend.domain.ports.IKeycloakProxy;
 import com.blackphoenixproductions.forumbackend.domain.ports.IUserService;
 import com.blackphoenixproductions.forumbackend.domain.model.User;
 import com.blackphoenixproductions.forumbackend.domain.ports.repository.UserRepository;
-import org.keycloak.representations.AccessToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,12 +44,10 @@ public class UserService implements IUserService {
     }
 
     @Override
-    @Transactional
-    public User changeUserUsername(AccessToken accessToken, String username) {
-        User user = retriveUser(username);
-        user.setUsername(username);
+    public User changeUserUsername(String email, String newUsername) {
+        User user = getUserFromEmail(email);
+        user.setUsername(newUsername);
         user = userRepository.saveAndFlush(user);
-        keycloakProxy.changeUserUsername(accessToken, username);
         return user;
     }
 

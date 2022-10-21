@@ -3,6 +3,7 @@ package com.blackphoenixproductions.forumbackend.adapters.api;
 
 import com.blackphoenixproductions.forumbackend.domain.model.User;
 import com.blackphoenixproductions.forumbackend.config.security.KeycloakUtility;
+import com.blackphoenixproductions.forumbackend.domain.ports.IKeycloakProxy;
 import com.blackphoenixproductions.forumbackend.domain.ports.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -27,12 +28,14 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class UserRestAPIController {
 
     private final IUserService userService;
+    private final IKeycloakProxy keycloakProxy;
 
     private static final Logger logger = LoggerFactory.getLogger(UserRestAPIController.class);
 
     @Autowired
-    public UserRestAPIController(IUserService userService) {
-        this.userService = userService;;
+    public UserRestAPIController(IUserService userService, IKeycloakProxy keycloakProxy) {
+        this.userService = userService;
+        this.keycloakProxy = keycloakProxy;
     }
 
 
@@ -56,7 +59,7 @@ public class UserRestAPIController {
     @PostMapping (value = "/changeUserUsername")
     public ResponseEntity<EntityModel<User>> changeUserUsername (HttpServletRequest req, @Parameter(description = "Il nuovo username") @RequestParam String newUsername){
         logger.info("Start changeUserUsername");
-        User user = userService.changeUserUsername(KeycloakUtility.getAccessToken(req), newUsername);
+        User user = keycloakProxy.changeUserUsername(KeycloakUtility.getAccessToken(req), newUsername);
         logger.info("End changeUserUsername");
         return new ResponseEntity<EntityModel<User>>(EntityModel.of(user).add(linkTo(methodOn(UserRestAPIController.class).changeUserUsername(req, newUsername)).withSelfRel()), HttpStatus.OK);
     }
