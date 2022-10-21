@@ -1,6 +1,6 @@
 package com.blackphoenixproductions.forumbackend;
 
-import com.blackphoenixproductions.forumbackend.adapters.dto.Filter;
+import com.blackphoenixproductions.forumbackend.adapters.api.dto.Filter;
 import com.blackphoenixproductions.forumbackend.domain.model.User;
 import com.blackphoenixproductions.forumbackend.domain.model.VTopic;
 import com.blackphoenixproductions.forumbackend.domain.enums.BooleanOperator;

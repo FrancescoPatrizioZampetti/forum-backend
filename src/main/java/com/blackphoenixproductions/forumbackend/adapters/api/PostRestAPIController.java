@@ -1,10 +1,11 @@
 package com.blackphoenixproductions.forumbackend.adapters.api;
 
 import com.blackphoenixproductions.forumbackend.adapters.api.assembler.PostAssembler;
+import com.blackphoenixproductions.forumbackend.adapters.mappers.PostMapper;
 import com.blackphoenixproductions.forumbackend.domain.ports.INotificationService;
 import com.blackphoenixproductions.forumbackend.domain.ports.IPostService;
-import com.blackphoenixproductions.forumbackend.adapters.dto.post.EditPostDTO;
-import com.blackphoenixproductions.forumbackend.adapters.dto.post.InsertPostDTO;
+import com.blackphoenixproductions.forumbackend.adapters.api.dto.post.EditPostDTO;
+import com.blackphoenixproductions.forumbackend.adapters.api.dto.post.InsertPostDTO;
 import com.blackphoenixproductions.forumbackend.domain.model.Post;
 import com.blackphoenixproductions.forumbackend.config.security.KeycloakUtility;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.keycloak.representations.AccessToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springdoc.api.annotations.ParameterObject;
@@ -45,12 +47,14 @@ public class PostRestAPIController {
     private final IPostService postService;
     private final INotificationService notificationService;
     private final PostAssembler postDTOAssembler;
+    private final PostMapper postMapper;
 
     @Autowired
-    public PostRestAPIController(IPostService postService, INotificationService notificationService, PostAssembler postDTOAssembler) {
+    public PostRestAPIController(IPostService postService, INotificationService notificationService, PostAssembler postDTOAssembler, PostMapper postMapper) {
         this.postService = postService;
         this.notificationService = notificationService;
         this.postDTOAssembler = postDTOAssembler;
+        this.postMapper = postMapper;
     }
 
 
@@ -85,8 +89,8 @@ public class PostRestAPIController {
     @PostMapping(value = "createPost")
     public ResponseEntity<EntityModel<Post>> createPost(@RequestBody @Valid InsertPostDTO postDTO, HttpServletRequest req){
         logger.info("Start createPost - post owner username : {}", KeycloakUtility.getAccessToken(req).getPreferredUsername());
-        // todo usare mapper
-        Post savedPost = postService.createPost(postDTO, req);
+        AccessToken accessToken = KeycloakUtility.getAccessToken(req);
+        Post savedPost = postService.createPost(postMapper.insertPostDTOtoPost(postDTO), accessToken.getEmail());
         notificationService.notifyTopicAuthor(savedPost);
         EntityModel<Post> entityModel = EntityModel.of(savedPost, linkTo(methodOn(PostRestAPIController.class).createPost(postDTO, req)).withSelfRel());
         logger.info("End createPost");
@@ -103,8 +107,8 @@ public class PostRestAPIController {
     @PostMapping(value = "editPost")
     public ResponseEntity<EntityModel<Post>> editPost(@RequestBody @Valid EditPostDTO postDTO, HttpServletRequest req){
         logger.info("Start editPost - post id : {}", postDTO.getId());
-        // todo usare mapper
-        Post editedPost = postService.editPost(postDTO, req);
+        AccessToken accessToken = KeycloakUtility.getAccessToken(req);
+        Post editedPost = postService.editPost(postMapper.editPostDTOtoPost(postDTO), accessToken.getEmail(), KeycloakUtility.getRoles(accessToken));
         EntityModel<Post> entityModel = EntityModel.of(editedPost, linkTo(methodOn(PostRestAPIController.class).editPost(postDTO, req)).withSelfRel());
         logger.info("End editPost");
         return new ResponseEntity<EntityModel<Post>>(entityModel, HttpStatus.OK);

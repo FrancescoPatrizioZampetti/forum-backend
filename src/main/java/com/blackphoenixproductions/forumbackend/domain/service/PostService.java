@@ -3,16 +3,13 @@ package com.blackphoenixproductions.forumbackend.domain.service;
 import com.blackphoenixproductions.forumbackend.domain.ports.IPostService;
 import com.blackphoenixproductions.forumbackend.domain.ports.IUserService;
 import com.blackphoenixproductions.forumbackend.domain.ports.IEmailSender;
-import com.blackphoenixproductions.forumbackend.adapters.dto.CustomException;
-import com.blackphoenixproductions.forumbackend.adapters.dto.post.EditPostDTO;
-import com.blackphoenixproductions.forumbackend.adapters.dto.post.InsertPostDTO;
+import com.blackphoenixproductions.forumbackend.adapters.api.dto.CustomException;
 import com.blackphoenixproductions.forumbackend.domain.model.Post;
 import com.blackphoenixproductions.forumbackend.domain.model.Topic;
 import com.blackphoenixproductions.forumbackend.domain.model.User;
 import com.blackphoenixproductions.forumbackend.domain.enums.Roles;
 import com.blackphoenixproductions.forumbackend.domain.ports.repository.PostRepository;
 import com.blackphoenixproductions.forumbackend.domain.ports.repository.TopicRepository;
-import com.blackphoenixproductions.forumbackend.config.security.KeycloakUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,9 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.Set;
 
 
 @Service
@@ -55,19 +52,19 @@ public class PostService implements IPostService {
         return postRepository.findByTopicAndDeleteDateIsNull(topic, pageable);
     }
 
-
     @Transactional
     @Override
-    public Post createPost(InsertPostDTO postDTO, HttpServletRequest req) {
-        User user = userService.retriveUser(KeycloakUtility.getAccessToken(req));
+    public Post createPost(Post post, String email) {
+        User user = userService.retriveUser(email);
         if (user == null) {
             throw new CustomException("Utente non trovato.", HttpStatus.NOT_FOUND);
         }
-        Optional<Topic> topic = topicRepository.findById(postDTO.getTopicId());
+        Optional<Topic> topic = topicRepository.findById(post.getTopic().getId());
         if (!topic.isPresent()){
-            throw new CustomException("Topic con id: " + postDTO.getTopicId() + " non trovato.", HttpStatus.NOT_FOUND);
+            throw new CustomException("Topic con id: " + post.getTopic().getId() + " non trovato.", HttpStatus.NOT_FOUND);
         }
-        Post post = getPostEntityFromDTO(postDTO, user, topic);
+        post.setUser(user);
+        post.setCreateDate(LocalDateTime.now());
         Post savedPost = postRepository.save(post);
         // se la risposta non è del creatore del topic e se emailUser = true allora invia un email al creatore del topic
         if (!savedPost.getUser().equals(savedPost.getTopic().getUser()) && savedPost.getTopic().isEmailUser()){
@@ -76,30 +73,21 @@ public class PostService implements IPostService {
         return savedPost;
     }
 
-    private static Post getPostEntityFromDTO(InsertPostDTO postDTO, User user, Optional<Topic> topic) {
-        Post post = new Post();
-        post.setMessage(postDTO.getMessage());
-        post.setTopic(topic.get());
-        post.setUser(user);
-        post.setCreateDate(LocalDateTime.now());
-        return post;
-    }
-
     @Transactional
-    public Post editPost(EditPostDTO postDTO, HttpServletRequest req) {
-        Optional<Post> post = postRepository.findById(postDTO.getId());
-        if(!post.isPresent()){
-            throw new CustomException("Post con id: " + postDTO.getId() + " non trovato.", HttpStatus.BAD_REQUEST);
+    @Override
+    public Post editPost(Post post, String email, Set<String> roles) {
+        Optional<Post> dbPost = postRepository.findById(post.getId());
+        if(!dbPost.isPresent()){
+            throw new CustomException("Post con id: " + post.getId() + " non trovato.", HttpStatus.BAD_REQUEST);
         }
-        if(!KeycloakUtility.getRoles(req).contains(Roles.ROLE_STAFF.getValue())
-                && !post.get().getUser().getEmail().equals(KeycloakUtility.getAccessToken(req).getEmail())){
+        if(!roles.contains(Roles.ROLE_STAFF.getValue())
+                && !dbPost.get().getUser().getEmail().equals(email)){
             throw new CustomException("Utente non autorizzato alla modifica del post.", HttpStatus.UNAUTHORIZED);
         }
-        Post postToEdit = post.get();
+        Post postToEdit = dbPost.get();
         postToEdit.setEditDate(LocalDateTime.now());
-        postToEdit.setMessage(postDTO.getMessage());
+        postToEdit.setMessage(post.getMessage());
         return postRepository.save(postToEdit);
     }
-
 
 }

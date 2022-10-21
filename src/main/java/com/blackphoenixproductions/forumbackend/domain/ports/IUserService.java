@@ -3,11 +3,10 @@ package com.blackphoenixproductions.forumbackend.domain.ports;
 import com.blackphoenixproductions.forumbackend.domain.model.User;
 import org.keycloak.representations.AccessToken;
 
+import java.util.Set;
 
 
 public interface IUserService {
-
-    User retriveUser(AccessToken accessToken);
 
     User getUserFromUsername(String username);
 
@@ -16,5 +15,7 @@ public interface IUserService {
     User changeUserUsername (AccessToken accessToken, String username);
 
     Long getTotalUsers();
+
+    User retriveUser(String username);
 
 }

@@ -1,13 +1,11 @@
 package com.blackphoenixproductions.forumbackend.domain.ports;
 
 
-import com.blackphoenixproductions.forumbackend.adapters.dto.post.EditPostDTO;
-import com.blackphoenixproductions.forumbackend.adapters.dto.post.InsertPostDTO;
 import com.blackphoenixproductions.forumbackend.domain.model.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.Set;
 
 public interface IPostService {
 
@@ -15,8 +13,7 @@ public interface IPostService {
 
     Page<Post> getPagedPosts(Long topicId, Pageable pageable);
 
-    Post createPost(InsertPostDTO postDTO, HttpServletRequest req);
+    Post createPost(Post post, String email);
 
-    Post editPost(EditPostDTO postDTO, HttpServletRequest req);
-
+    Post editPost(Post post, String email, Set<String> roles);
 }

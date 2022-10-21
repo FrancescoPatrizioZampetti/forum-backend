@@ -2,9 +2,7 @@ package com.blackphoenixproductions.forumbackend.domain.service;
 
 import com.blackphoenixproductions.forumbackend.domain.ports.ITopicService;
 import com.blackphoenixproductions.forumbackend.domain.ports.IUserService;
-import com.blackphoenixproductions.forumbackend.adapters.dto.CustomException;
-import com.blackphoenixproductions.forumbackend.adapters.dto.topic.EditTopicDTO;
-import com.blackphoenixproductions.forumbackend.adapters.dto.topic.InsertTopicDTO;
+import com.blackphoenixproductions.forumbackend.adapters.api.dto.CustomException;
 import com.blackphoenixproductions.forumbackend.domain.model.Topic;
 import com.blackphoenixproductions.forumbackend.domain.model.User;
 import com.blackphoenixproductions.forumbackend.domain.enums.Roles;
@@ -15,10 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.Optional;
-
+import java.util.Set;
 
 
 @Service
@@ -39,42 +36,31 @@ public class TopicService implements ITopicService {
         return topicRepository.count();
     }
 
-
     @Transactional
     @Override
-    public Topic createTopic(InsertTopicDTO insertTopicDTO, HttpServletRequest req) {
-        User userTopic = userService.retriveUser(KeycloakUtility.getAccessToken(req));
+    public Topic createTopic(Topic topic, String email) {
+        User userTopic = userService.retriveUser(email);
         if (userTopic == null){
             throw new CustomException("Utente non trovato.", HttpStatus.NOT_FOUND);
         }
-        Topic topic = getTopicEntityFromDTO(insertTopicDTO, userTopic);
-        return topicRepository.save(topic);
-    }
-
-    private static Topic getTopicEntityFromDTO(InsertTopicDTO insertTopicDTO, User userTopic) {
-        Topic topic = new Topic();
-        topic.setTitle(insertTopicDTO.getTitle());
-        topic.setMessage(insertTopicDTO.getMessage());
-        topic.setEmailUser(insertTopicDTO.isEmailUser());
-        topic.setPinned(insertTopicDTO.isPinned());
         topic.setUser(userTopic);
         topic.setCreateDate(LocalDateTime.now());
-        return topic;
+        return topicRepository.save(topic);
     }
 
     @Transactional
     @Override
-    public Topic editTopic(EditTopicDTO topicDTO, HttpServletRequest req) {
-        if(!KeycloakUtility.getRoles(req).contains(Roles.ROLE_STAFF.getValue())){
+    public Topic editTopic(Topic topic, Set<String> roles) {
+        if(!roles.contains(Roles.ROLE_STAFF.getValue())){
             throw new CustomException("Utente non autorizzato alla modifica di un topic.", HttpStatus.UNAUTHORIZED);
         }
-        Optional<Topic> topic = topicRepository.findById(topicDTO.getId());
-        if(!topic.isPresent()){
-            throw new CustomException("Topic con id: " + topicDTO.getId() + " non trovato.", HttpStatus.BAD_REQUEST);
+        Optional<Topic> topicDB = topicRepository.findById(topic.getId());
+        if(!topicDB.isPresent()){
+            throw new CustomException("Topic con id: " + topic.getId() + " non trovato.", HttpStatus.BAD_REQUEST);
         }
-        Topic topicToEdit = topic.get();
+        Topic topicToEdit = topicDB.get();
         topicToEdit.setEditDate(LocalDateTime.now());
-        topicToEdit.setMessage(topicDTO.getMessage());
+        topicToEdit.setMessage(topic.getMessage());
         return topicRepository.save(topicToEdit);
     }
 

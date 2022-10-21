@@ -1,4 +1,4 @@
-package com.blackphoenixproductions.forumbackend.adapters.dto;
+package com.blackphoenixproductions.forumbackend.adapters.api.dto;
 
 
 import com.blackphoenixproductions.forumbackend.domain.enums.BooleanOperator;

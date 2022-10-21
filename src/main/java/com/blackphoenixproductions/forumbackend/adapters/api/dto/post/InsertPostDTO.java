@@ -1,9 +1,7 @@
-package com.blackphoenixproductions.forumbackend.adapters.dto.post;
+package com.blackphoenixproductions.forumbackend.adapters.api.dto.post;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
@@ -12,19 +10,18 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Schema(description = "Il post da modificare.")
-public class EditPostDTO {
-    @NotNull(message = "L'id del post non puo' essere null")
-    @Schema(description = "L'id del post.", required = true)
-    private Long id;
+@Schema(description = "Il post da creare.")
+public class InsertPostDTO {
     @NotEmpty(message = "Il messaggio del post non puo' essere null/vuoto")
     @Size(max = 20000, message = "Il messaggio del post ha superato il massimo di 20000 caratteri")
     @Schema(description = "Il messaggio del post.", required = true)
     private String message;
+    @NotNull(message = "L'id del topic non puo' essere null")
+    @Schema(description = "L'id del del topic a cui appartiene il post.", required = true)
+    private Long topicId;
 
-    public EditPostDTO(Long id) {
-        this.id = id;
+    public InsertPostDTO(String message, Long topicId) {
+        this.message = message;
+        this.topicId = topicId;
     }
 }

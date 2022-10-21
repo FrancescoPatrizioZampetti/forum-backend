@@ -1,10 +1,11 @@
 package com.blackphoenixproductions.forumbackend.adapters.api;
 
 import com.blackphoenixproductions.forumbackend.adapters.api.assembler.VTopicAssembler;
+import com.blackphoenixproductions.forumbackend.adapters.mappers.TopicMapper;
 import com.blackphoenixproductions.forumbackend.domain.ports.ITopicService;
-import com.blackphoenixproductions.forumbackend.adapters.dto.Filter;
-import com.blackphoenixproductions.forumbackend.adapters.dto.topic.EditTopicDTO;
-import com.blackphoenixproductions.forumbackend.adapters.dto.topic.InsertTopicDTO;
+import com.blackphoenixproductions.forumbackend.adapters.api.dto.Filter;
+import com.blackphoenixproductions.forumbackend.adapters.api.dto.topic.EditTopicDTO;
+import com.blackphoenixproductions.forumbackend.adapters.api.dto.topic.InsertTopicDTO;
 import com.blackphoenixproductions.forumbackend.domain.model.Topic;
 import com.blackphoenixproductions.forumbackend.domain.model.VTopic;
 import com.blackphoenixproductions.forumbackend.config.security.KeycloakUtility;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.keycloak.representations.AccessToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springdoc.api.annotations.ParameterObject;
@@ -46,12 +48,14 @@ public class TopicRestAPIController {
     private final ITopicService topicService;
     private final VTopicAssembler vTopicAssembler;
     private final VTopicService vTopicService;
+    private final TopicMapper topicMapper;
 
     @Autowired
-    public TopicRestAPIController(ITopicService topicService, VTopicAssembler vTopicAssembler, VTopicService vTopicService) {
+    public TopicRestAPIController(ITopicService topicService, VTopicAssembler vTopicAssembler, VTopicService vTopicService, TopicMapper topicMapper) {
         this.topicService = topicService;
         this.vTopicAssembler = vTopicAssembler;
         this.vTopicService = vTopicService;
+        this.topicMapper = topicMapper;
     }
 
 
@@ -97,8 +101,8 @@ public class TopicRestAPIController {
     @PostMapping(value = "createTopic")
     public ResponseEntity<EntityModel<Topic>> createTopic(@RequestBody @Valid InsertTopicDTO insertTopicDTO, HttpServletRequest req){
         logger.info("Start createTopic - topic owner username : {}", KeycloakUtility.getAccessToken(req).getPreferredUsername());
-        // todo usare mapper
-        Topic savedTopic = topicService.createTopic(insertTopicDTO, req);
+        AccessToken accessToken = KeycloakUtility.getAccessToken(req);
+        Topic savedTopic = topicService.createTopic(topicMapper.insertTopicDTOtoTopic(insertTopicDTO), accessToken.getEmail());
         EntityModel<Topic> entityModel = EntityModel.of(savedTopic).add(linkTo(methodOn(TopicRestAPIController.class).createTopic(insertTopicDTO, req)).withSelfRel());
         logger.info("End createTopic");
         return new ResponseEntity<EntityModel<Topic>>(entityModel, HttpStatus.OK);
@@ -115,8 +119,8 @@ public class TopicRestAPIController {
     @PostMapping(value = "editTopic")
     public ResponseEntity<EntityModel<Topic>> editTopic(@RequestBody @Valid EditTopicDTO topicDTO, HttpServletRequest req){
         logger.info("Start editTopic - topic id: {}", topicDTO.getId());
-        // todo usare mapper
-        Topic editedTopic = topicService.editTopic(topicDTO, req);
+        AccessToken accessToken = KeycloakUtility.getAccessToken(req);
+        Topic editedTopic = topicService.editTopic(topicMapper.editTopicDTOtoTopic(topicDTO), KeycloakUtility.getRoles(accessToken));
         EntityModel<Topic> entityModel = EntityModel.of(editedTopic).add(linkTo(methodOn(TopicRestAPIController.class).editTopic(topicDTO, req)).withSelfRel());
         logger.info("End editTopic");
         return new ResponseEntity<EntityModel<Topic>>(entityModel, HttpStatus.OK);

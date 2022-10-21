@@ -47,7 +47,7 @@ public class UserRestAPIController {
     @GetMapping (value = "/retriveUser")
     public ResponseEntity<EntityModel<User>> retriveUser (HttpServletRequest req){
         logger.info("Start retriveUser");
-        User findedUser = userService.retriveUser(KeycloakUtility.getAccessToken(req));
+        User findedUser = userService.retriveUser(KeycloakUtility.getAccessToken(req).getEmail());
         logger.info("End retriveUser");
         return new ResponseEntity<EntityModel<User>>(EntityModel.of(findedUser).add(linkTo(methodOn(UserRestAPIController.class).retriveUser(req)).withSelfRel()), HttpStatus.OK);
     }

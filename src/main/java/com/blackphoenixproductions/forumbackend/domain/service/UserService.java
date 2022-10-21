@@ -1,7 +1,7 @@
 package com.blackphoenixproductions.forumbackend.domain.service;
 
 import com.blackphoenixproductions.forumbackend.domain.ports.IUserService;
-import com.blackphoenixproductions.forumbackend.adapters.dto.CustomException;
+import com.blackphoenixproductions.forumbackend.adapters.api.dto.CustomException;
 import com.blackphoenixproductions.forumbackend.domain.model.User;
 import com.blackphoenixproductions.forumbackend.domain.enums.Roles;
 import com.blackphoenixproductions.forumbackend.domain.ports.repository.UserRepository;
@@ -48,31 +48,9 @@ public class UserService implements IUserService {
         this.SERVICE_USER_PASSWORD = SERVICE_USER_PASSWORD;
     }
 
-    /**
-     * Recupera l'utente registrato.
-     * Nota bene: l'utente viene persistito nell'applicativo durante la registrazione con Keycloak tramite un plugin custom,
-     * tuttavia se non dovesse trovarlo (anomalia o demo) lo salva ora.
-     * @param accessToken
-     * @return
-     */
     @Override
-    @Transactional
-    public User retriveUser(AccessToken accessToken) {
-        User findedUser = userRepository.findByEmail(accessToken.getEmail());
-        if(findedUser == null) {
-            logger.warn("Utente non trovato nell'applicativo, procedo a salvarlo...");
-            findedUser = userRepository.saveAndFlush(new User(accessToken.getPreferredUsername(), accessToken.getEmail(), getApplicationRole(KeycloakUtility.getRoles(accessToken))));
-        }
-        return findedUser;
-    }
-
-    private String getApplicationRole(Set<String> roles) {
-        if(roles.contains(Roles.ROLE_HELPDESK.getValue())){
-            return Roles.ROLE_HELPDESK.getValue();
-        } else if(roles.contains(Roles.ROLE_STAFF.getValue())){
-            return Roles.ROLE_STAFF.getValue();
-        }
-        return Roles.ROLE_USER.getValue();
+    public User retriveUser(String email) {
+        return userRepository.findByEmail(email);
     }
 
     @Override
@@ -90,7 +68,7 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public User changeUserUsername(AccessToken accessToken, String username) {
-        User user = retriveUser(accessToken);
+        User user = retriveUser(username);
         user.setUsername(username);
         user = userRepository.saveAndFlush(user);
         try {
