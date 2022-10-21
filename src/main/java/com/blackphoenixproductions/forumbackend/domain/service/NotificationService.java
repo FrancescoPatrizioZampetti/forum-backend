@@ -56,13 +56,13 @@ public class NotificationService implements INotificationService {
     }
 
     private Notification createUserNotification(Post post) {
-        Notification notification = getNotificationDTO(post);
+        Notification notification = createNotification(post);
         int lastTopicPageNumber = postService.getPagedPosts(post.getTopic().getId(), PageRequest.of(0, Math.toIntExact(Pagination.POST_PAGINATION.getValue()), Sort.by("createDate").ascending())).getTotalPages()-1;
         notification.setUrl("/viewtopic?id=" + post.getTopic().getId() + "&page=" + lastTopicPageNumber);
         return notification;
     }
 
-    private Notification getNotificationDTO(Post post) {
+    private Notification createNotification(Post post) {
         Notification notification = new Notification();
         notification.setFromUser(post.getUser().getUsername());
         notification.setToUser(post.getTopic().getUser().getUsername());
