@@ -66,11 +66,13 @@ public class PostService implements IPostService {
         post.setUser(user);
         post.setCreateDate(LocalDateTime.now());
         Post savedPost = postRepository.save(post);
-        // se la risposta non è del creatore del topic e se emailUser = true allora invia un email al creatore del topic
-        if (!savedPost.getUser().equals(savedPost.getTopic().getUser()) && savedPost.getTopic().isEmailUser()){
+        if (!isTopicCreatorPost(savedPost) && savedPost.getTopic().isEmailUser()){
             emailSender.sendTopicReplyEmail(savedPost.getTopic().getUser(), savedPost.getUser(), savedPost) ;
         }
         return savedPost;
+    }
+    private static boolean isTopicCreatorPost(Post savedPost) {
+        return savedPost.getUser().equals(savedPost.getTopic().getUser());
     }
 
     @Transactional
