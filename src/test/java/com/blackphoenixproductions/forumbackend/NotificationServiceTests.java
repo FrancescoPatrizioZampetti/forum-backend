@@ -4,9 +4,9 @@
 //import com.blackphoenixproductions.forumbackend.entity.Post;
 //import com.blackphoenixproductions.forumbackend.entity.Topic;
 //import com.blackphoenixproductions.forumbackend.entity.User;
-//import com.blackphoenixproductions.forumbackend.repository.PostRepository;
-//import com.blackphoenixproductions.forumbackend.repository.TopicRepository;
-//import com.blackphoenixproductions.forumbackend.repository.UserRepository;
+//import com.blackphoenixproductions.forumbackend.domain.ports.repository.PostRepository;
+//import com.blackphoenixproductions.forumbackend.domain.ports.repository.TopicRepository;
+//import com.blackphoenixproductions.forumbackend.domain.ports.repository.UserRepository;
 //import com.blackphoenixproductions.forumbackend.service.INotificationService;
 //import com.blackphoenixproductions.forumbackend.service.IPostService;
 //import com.blackphoenixproductions.forumbackend.service.ITopicService;

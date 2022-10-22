@@ -1,10 +1,10 @@
 package com.blackphoenixproductions.forumbackend.config;
 
 
-import com.blackphoenixproductions.forumbackend.messagebroker.MessagePublisher;
-import com.blackphoenixproductions.forumbackend.messagebroker.RedisMessagePublisher;
-import com.blackphoenixproductions.forumbackend.messagebroker.RedisMessageSubscriber;
-import com.blackphoenixproductions.forumbackend.sse.ISSEPushNotificationService;
+import com.blackphoenixproductions.forumbackend.domain.ports.MessagePublisher;
+import com.blackphoenixproductions.forumbackend.adapters.messagebroker.RedisMessagePublisher;
+import com.blackphoenixproductions.forumbackend.adapters.messagebroker.RedisMessageSubscriber;
+import com.blackphoenixproductions.forumbackend.domain.ports.ISSEPushNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
