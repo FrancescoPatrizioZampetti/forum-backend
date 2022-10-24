@@ -3,7 +3,7 @@ package com.blackphoenixproductions.forumbackend.domain.factory;
 import com.blackphoenixproductions.forumbackend.domain.entity.Notification;
 import com.blackphoenixproductions.forumbackend.domain.entity.Post;
 import com.blackphoenixproductions.forumbackend.domain.enums.Pagination;
-import com.blackphoenixproductions.forumbackend.domain.ports.IPostService;
+import com.blackphoenixproductions.forumbackend.domain.IPostService;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.beans.factory.annotation.Autowired;

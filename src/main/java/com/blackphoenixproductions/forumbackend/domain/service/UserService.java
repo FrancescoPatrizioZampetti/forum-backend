@@ -1,8 +1,8 @@
 package com.blackphoenixproductions.forumbackend.domain.service;
 
-import com.blackphoenixproductions.forumbackend.domain.ports.IUserService;
+import com.blackphoenixproductions.forumbackend.domain.IUserService;
 import com.blackphoenixproductions.forumbackend.domain.entity.User;
-import com.blackphoenixproductions.forumbackend.domain.ports.repository.UserRepository;
+import com.blackphoenixproductions.forumbackend.domain.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

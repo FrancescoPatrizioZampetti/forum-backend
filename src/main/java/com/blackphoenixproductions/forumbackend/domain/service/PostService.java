@@ -1,15 +1,15 @@
 package com.blackphoenixproductions.forumbackend.domain.service;
 
-import com.blackphoenixproductions.forumbackend.domain.ports.IPostService;
-import com.blackphoenixproductions.forumbackend.domain.ports.IUserService;
-import com.blackphoenixproductions.forumbackend.domain.ports.IEmailSender;
-import com.blackphoenixproductions.forumbackend.adapters.api.dto.CustomException;
+import com.blackphoenixproductions.forumbackend.domain.IPostService;
+import com.blackphoenixproductions.forumbackend.domain.IUserService;
+import com.blackphoenixproductions.forumbackend.domain.IEmailSender;
+import com.blackphoenixproductions.forumbackend.infrastructure.api.dto.CustomException;
 import com.blackphoenixproductions.forumbackend.domain.entity.Post;
 import com.blackphoenixproductions.forumbackend.domain.entity.Topic;
 import com.blackphoenixproductions.forumbackend.domain.entity.User;
 import com.blackphoenixproductions.forumbackend.domain.enums.Roles;
-import com.blackphoenixproductions.forumbackend.domain.ports.repository.PostRepository;
-import com.blackphoenixproductions.forumbackend.domain.ports.repository.TopicRepository;
+import com.blackphoenixproductions.forumbackend.domain.repository.PostRepository;
+import com.blackphoenixproductions.forumbackend.domain.repository.TopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

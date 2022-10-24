@@ -1,14 +1,14 @@
 package com.blackphoenixproductions.forumbackend.domain.service;
 
 import com.blackphoenixproductions.forumbackend.domain.factory.NotificationSimpleFactory;
-import com.blackphoenixproductions.forumbackend.domain.ports.INotificationService;
-import com.blackphoenixproductions.forumbackend.domain.ports.MessagePublisher;
+import com.blackphoenixproductions.forumbackend.domain.INotificationService;
+import com.blackphoenixproductions.forumbackend.domain.MessagePublisher;
 import com.blackphoenixproductions.forumbackend.domain.entity.Notification;
 import com.blackphoenixproductions.forumbackend.domain.entity.NotificationStatus;
 import com.blackphoenixproductions.forumbackend.domain.entity.Post;
 import com.blackphoenixproductions.forumbackend.domain.entity.User;
-import com.blackphoenixproductions.forumbackend.domain.ports.repository.NotificationRepository;
-import com.blackphoenixproductions.forumbackend.domain.ports.repository.NotificationStatusRepository;
+import com.blackphoenixproductions.forumbackend.domain.repository.NotificationRepository;
+import com.blackphoenixproductions.forumbackend.domain.repository.NotificationStatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
