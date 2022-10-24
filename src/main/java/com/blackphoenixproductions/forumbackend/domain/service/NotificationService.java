@@ -2,7 +2,6 @@ package com.blackphoenixproductions.forumbackend.domain.service;
 
 import com.blackphoenixproductions.forumbackend.domain.factory.NotificationSimpleFactory;
 import com.blackphoenixproductions.forumbackend.domain.ports.INotificationService;
-import com.blackphoenixproductions.forumbackend.domain.ports.IPostService;
 import com.blackphoenixproductions.forumbackend.domain.ports.MessagePublisher;
 import com.blackphoenixproductions.forumbackend.domain.entity.Notification;
 import com.blackphoenixproductions.forumbackend.domain.entity.NotificationStatus;
