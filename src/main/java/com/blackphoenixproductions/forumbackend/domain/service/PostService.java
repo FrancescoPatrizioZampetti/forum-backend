@@ -3,7 +3,7 @@ package com.blackphoenixproductions.forumbackend.domain.service;
 import com.blackphoenixproductions.forumbackend.domain.IPostService;
 import com.blackphoenixproductions.forumbackend.domain.IUserService;
 import com.blackphoenixproductions.forumbackend.domain.IEmailSender;
-import com.blackphoenixproductions.forumbackend.infrastructure.api.dto.CustomException;
+import com.blackphoenixproductions.forumbackend.domain.exception.CustomException;
 import com.blackphoenixproductions.forumbackend.domain.entity.Post;
 import com.blackphoenixproductions.forumbackend.domain.entity.Topic;
 import com.blackphoenixproductions.forumbackend.domain.entity.User;

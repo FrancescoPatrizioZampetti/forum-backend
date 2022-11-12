@@ -5,7 +5,7 @@ import com.blackphoenixproductions.forumbackend.domain.entity.VTopic;
 import com.blackphoenixproductions.forumbackend.domain.ISpecificationBuilder;
 import com.blackphoenixproductions.forumbackend.domain.ITopicService;
 import com.blackphoenixproductions.forumbackend.domain.IUserService;
-import com.blackphoenixproductions.forumbackend.infrastructure.api.dto.CustomException;
+import com.blackphoenixproductions.forumbackend.domain.exception.CustomException;
 import com.blackphoenixproductions.forumbackend.domain.entity.Topic;
 import com.blackphoenixproductions.forumbackend.domain.entity.User;
 import com.blackphoenixproductions.forumbackend.domain.enums.Roles;

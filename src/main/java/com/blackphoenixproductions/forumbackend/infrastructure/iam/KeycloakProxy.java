@@ -1,6 +1,6 @@
 package com.blackphoenixproductions.forumbackend.infrastructure.iam;
 
-import com.blackphoenixproductions.forumbackend.infrastructure.api.dto.CustomException;
+import com.blackphoenixproductions.forumbackend.domain.exception.CustomException;
 import com.blackphoenixproductions.forumbackend.domain.IKeycloakProxy;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;

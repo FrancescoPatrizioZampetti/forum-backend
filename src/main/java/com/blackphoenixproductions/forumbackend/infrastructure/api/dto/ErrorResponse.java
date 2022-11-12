@@ -1,4 +1,4 @@
-package com.blackphoenixproductions.forumbackend.infrastructure.api.exception;
+package com.blackphoenixproductions.forumbackend.infrastructure.api.dto;
 
 import lombok.Getter;
 import lombok.Setter;

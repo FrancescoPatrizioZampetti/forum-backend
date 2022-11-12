@@ -1,4 +1,4 @@
-package com.blackphoenixproductions.forumbackend.infrastructure.api.dto;
+package com.blackphoenixproductions.forumbackend.domain.exception;
 
 import org.springframework.http.HttpStatus;
 
