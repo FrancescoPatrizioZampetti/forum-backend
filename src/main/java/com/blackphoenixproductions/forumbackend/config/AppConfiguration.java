@@ -6,8 +6,10 @@ import com.blackphoenixproductions.forumbackend.infrastructure.messagebroker.Red
 import com.blackphoenixproductions.forumbackend.infrastructure.messagebroker.RedisMessageSubscriber;
 import com.blackphoenixproductions.forumbackend.domain.ISSEPushNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -19,6 +21,13 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class AppConfiguration {
+
+    @Value("${spring.redis.host}")
+    private String redisHost;
+
+    @Value("${spring.redis.port}")
+    private Integer redisPort;
+
 
     private final ISSEPushNotificationService ssePushNotificationService;
 
@@ -34,7 +43,8 @@ public class AppConfiguration {
 
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
-        return new JedisConnectionFactory();
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(redisHost, redisPort);
+        return new JedisConnectionFactory(redisStandaloneConfiguration);
     }
 
     @Bean
