@@ -5,6 +5,8 @@ import com.blackphoenixproductions.forumbackend.domain.MessagePublisher;
 import com.blackphoenixproductions.forumbackend.infrastructure.messagebroker.RedisMessagePublisher;
 import com.blackphoenixproductions.forumbackend.infrastructure.messagebroker.RedisMessageSubscriber;
 import com.blackphoenixproductions.forumbackend.domain.ISSEPushNotificationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +32,8 @@ public class AppConfiguration {
 
 
     private final ISSEPushNotificationService ssePushNotificationService;
+    private static final Logger logger = LoggerFactory.getLogger(AppConfiguration.class);
+
 
     @Autowired
     public AppConfiguration(ISSEPushNotificationService ssePushNotificationService) {
@@ -43,6 +47,8 @@ public class AppConfiguration {
 
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
+        logger.info("-----------------------> redis host : "+redisHost);
+        logger.info("-----------------------> redis port : "+redisPort);
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(redisHost, redisPort);
         return new JedisConnectionFactory(redisStandaloneConfiguration);
     }
