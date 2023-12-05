@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile:experimental
 FROM eclipse-temurin:17-jdk-alpine as build
 WORKDIR /workspace/app
 
@@ -8,7 +7,7 @@ COPY pom.xml .
 COPY src src
 
 ARG MVN_PROFILE
-RUN --mount=type=cache,target=/root/.m2 ./mvnw install -DskipTests -P${MVN_PROFILE}
+RUN ./mvnw install -DskipTests -P${MVN_PROFILE}
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
 FROM eclipse-temurin:17-jdk-alpine
