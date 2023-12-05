@@ -24,21 +24,22 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class AppConfiguration {
 
-    @Value("${spring.redis.host}")
-    private String redisHost;
-
-    @Value("${spring.redis.port}")
-    private Integer redisPort;
-
-
+    private final String redisHost;
+    private final Integer redisPort;
     private final ISSEPushNotificationService ssePushNotificationService;
+
     private static final Logger logger = LoggerFactory.getLogger(AppConfiguration.class);
 
 
     @Autowired
-    public AppConfiguration(ISSEPushNotificationService ssePushNotificationService) {
+    public AppConfiguration(@Value("${spring.redis.host}") String redisHost,
+                            @Value("${spring.redis.port}") Integer redisPort,
+                            ISSEPushNotificationService ssePushNotificationService) {
+        this.redisHost = redisHost;
+        this.redisPort = redisPort;
         this.ssePushNotificationService = ssePushNotificationService;
     }
+
 
     @Bean
     public RestTemplate restTemplate(){
@@ -47,8 +48,8 @@ public class AppConfiguration {
 
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
-        logger.info("-----------------------> redis host : "+redisHost);
-        logger.info("-----------------------> redis port : "+redisPort);
+        logger.info("-----------------------> redis host : {}", redisHost);
+        logger.info("-----------------------> redis port : {}", redisPort);
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(redisHost, redisPort);
         return new JedisConnectionFactory(redisStandaloneConfiguration);
     }
