@@ -31,8 +31,8 @@ services:
             
 secrets:
    db_password:
-     file: /home/francesco/secrets/db_password.txt
+     file: {PATH_SECRETS}db_password.txt
    mail_password:
-     file: /home/francesco/secrets/mail_password.txt
+     file: {PATH_SECRETS}mail_password.txt
    mail_password:
-     file: /home/francesco/secrets/redis_password.txt
+     file: {PATH_SECRETS}redis_password.txt
