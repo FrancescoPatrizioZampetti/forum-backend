@@ -6,7 +6,7 @@ services:
   forum-backend:
     image: blackfox89/myrepository:forum-backend
     build:
-      context: forum-backend
+      context: .
       dockerfile: Dockerfile_development
     container_name: forum-backend
     ports:
@@ -31,8 +31,8 @@ services:
 
 secrets:
   db_password:
-    file: { PATH_SECRETS }db_password.txt
+    file: ${PATH_SECRETS}db_password.txt
   mail_password:
-    file: { PATH_SECRETS }mail_password.txt
+    file: ${PATH_SECRETS}mail_password.txt
   redis_password:
-    file: { PATH_SECRETS }redis_password.txt
+    file: ${PATH_SECRETS}redis_password.txt
