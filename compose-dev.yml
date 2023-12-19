@@ -9,18 +9,17 @@ services:
       context: .
       dockerfile: Dockerfile_development
       args:
-        - MVN_PROFILE=collaudo
+        - MVN_PROFILE=sviluppo
     container_name: forum-backend
     ports:
       - 8083:8083
-#    extra_hosts:
-#      - "host.docker.internal:host-gateway"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       spring.datasource.username: postgres
       spring.datasource.password: /run/secrets/db_password
       spring.mail.username: test@test.com
       spring.mail.password: /run/secrets/mail_password
-      spring.redis.host: localhost
       spring.redis.password: /run/secrets/redis_password
     secrets:
       - db_password
